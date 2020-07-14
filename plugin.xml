@@ -1,0 +1,87 @@
+<root>
+   <name>GDPR Records of Processing Activities</name>
+   <key>GDPRROPA</key>
+   <state>stable</state>
+   <logo>gdprropa_logo.png</logo>
+   <description>
+      <short>
+         <en>GDPR Records of Processing Activities</en>
+         <pl>RODO Rejestr Czynności Przetwarzania</pl>
+      </short>
+      <long>
+         <en><![CDATA[
+         Be complient with GDPR article 30. Create and maintain Records of Processing Activities required by UE regulations regarding personal data processing. Record hierarchical per entity or flat.
+         
+         Main features:
+         * Processing activiity information
+         * Dictionary of personal data categories (can be nested)
+         * Multiple data subjects per record
+         * Data retention (legal basis, contract, other)
+         * Assign contracts, by selected contract type: processor, controller, thirdcountry, other, internal
+         * Multiple legal bases per record
+         * Dictionary of security measures (can be separate by entity)
+         * Assign software
+         * PDF output
+         * Each entity can have separated controller info: legal representative, DPO and name, different contract types
+         * additional configuration
+         
+         Based on DPO Register plugin, by Karhel Tmarr plugin. Some code was included or is similar to DPO Register.
+         ]]></en>
+         <pl><![CDATA[
+         Spełnij wymogi 30 artykułu RODO. Stwórz i zarządzaj Rejestrem Czynności Przetwarzania wymaganym przez regulacje UE w zakresie przetwarzania danych osobowych. Rejest dla jednostki lub płaski.
+         
+         Główne opcje:
+         * Informacje o przetwarzaniu
+         * Słownik kategorii danych osobowych (
+         * Wiele kategorii osób dla rekordu
+         * Retencja danych (wg podstawy prawnej, umowy, inne)
+         * Przypisanie umowy wg wskazanych typów umów: procesor, administrator, państwo trzecie, inne, wewnętrzne
+         * Wiele podstaw prawnych dla rekordu
+         * Słownik metod zabezpieczeń (każda jednostka może mieć osobną)
+         * Przypisanie oprogramowania
+         * Generowanie PDF
+         * Każda jednostka może mieć osobne informacje: przedstawiciel prawny, IOD, nazwę, inne typy umów
+         * dodatkowa konfiguracja
+         
+         Na podstawie pluginu DPO Register napisanego przez Karhel Tmarr. Część kodu została wykorzystana lub jest podobna do DPO Register.
+         ]]></pl>
+         </en>
+         <pl>
+         </pl>
+      </long>
+   </description>
+   <homepage>https://github.com/yild/gdprropa/</homepage>
+   <download>https://github.com/yild/gdprropa/</download>
+   <issues>https://github.com/yild/gdprropa/</issues>
+   <readme>https://github.com/yild/gdprropa/</readme>
+   <authors>
+      <author>Yild</author>
+   </authors>
+   <versions>
+      <version>
+         <num>1.0</num>
+         <compatibility>9.4.5</compatibility>
+      </version>
+   </versions>
+   <langs>
+      <lang>en_GB</lang>
+      <lang>pl_PL</lang>
+   </langs>
+   <license>GPL v3+</license>
+   <tags>
+      <en>
+         <tag>GDPR</tag>
+         <tag>Inventory</tag>
+         <tag>Management</tag>
+      </en>
+      <pl>
+         <tag>RODO</tag>
+         <tag>Inwentaryzacja</tag>
+         <tag>Zarządzanie</tag>
+      </pl>
+   </tags>
+   <screenshots>
+      <screenshot>gdprropa_screenshot1.png</screenshot>
+      <screenshot>gdprropa_screenshot2.png</screenshot>
+   </screenshots>
+</root>
