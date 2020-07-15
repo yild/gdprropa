@@ -44,21 +44,21 @@ By default, super admin will have full access rights to GDPRRoPA. Additional pro
 Dropdowns (dictionaries), can be created for each and every (recursive) entity:
 
 * Legal bases - can be of type:
-** Undefined,
-** GDPR Article,
-** Local law regulation (country, state, etc.),
-** International regulations (ie. treaties),
-** Controller internal regulations (ie. rules, procedures),
-** Other... as other than above.
+ ** Undefined,
+ ** GDPR Article,
+ ** Local law regulation (country, state, etc.),
+ ** International regulations (ie. treaties),
+ ** Controller internal regulations (ie. rules, procedures),
+ ** Other... as other than above.
 
 * Categories of data subjects - employees, patients, clients, etc.
 
 * Personal data category - categories of personal data ie (surname, firstname, addresses, ID number, blood type, etc.), can be hierarchical to group items in larger categories.
 
 * Security measures - can be of type:
-** Organizational - ie. internal regulations, rules, procedures, etc.,
-** Physical - locks, fire systems, theft detection, cctv, etc.,
-** IT - firewalls, antyvirus apps, VLANs, authorisation by passwords and login, etc.
+ ** Organizational - ie. internal regulations, rules, procedures, etc.,
+ ** Physical - locks, fire systems, theft detection, cctv, etc.,
+ ** IT - firewalls, antyvirus apps, VLANs, authorisation by passwords and login, etc.
 
 ### Assign contracts to RoPA
 
