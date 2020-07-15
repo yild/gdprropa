@@ -2,7 +2,7 @@
    <name>GDPR Records of Processing Activities</name>
    <key>gdprropa</key>
    <state>stable</state>
-   <logo>gdprropa_logo.png</logo>
+   <logo>https://raw.githubusercontent.com/yild/GDPRRoPA/master/images/gdprropa_logo.png</logo>
    <description>
       <short>
          <en>GDPR Records of Processing Activities</en>
@@ -78,7 +78,7 @@
       </pl>
    </tags>
    <screenshots>
-      <screenshot>https://github.com/yild/gdprropa/blob/master/gdprropa_screenshot1.png</screenshot>
-      <screenshot>https://github.com/yild/gdprropa/blob/master/gdprropa_screenshot2.png</screenshot>
+      <screenshot>https://raw.githubusercontent.com/yild/GDPRRoPA/master/gdprropa_screenshot1.png</screenshot>
+      <screenshot>https://raw.githubusercontent.com/yild/GDPRRoPA/master/gdprropa_screenshot2.png</screenshot>
    </screenshots>
 </root>
