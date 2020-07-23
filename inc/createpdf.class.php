@@ -212,7 +212,7 @@ class PluginGdprropaCreatePDF extends PluginGdprropaCreatePDFBase {
       $orientation['P'] = __("Portrait", 'gdprropa');
       $orientation['L'] = __("Landscape", 'gdprropa');
       Dropdown::showFromArray('page_orientation', $orientation,
-         ['value' => '', 'display' => true]);
+         ['value' => $config['page_orientation'], 'display' => true]);
       echo "</td>";
       echo "</tr>";
 
