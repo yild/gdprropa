@@ -59,7 +59,7 @@ if (array_key_exists('type', $_POST)) {
          PluginGdprropaRecord_Retention::showContractInputs($_POST);
          break;
 
-      case PluginGdprropaRecord_Retention::RETENTION_TYPE_LEGALBASES:
+      case PluginGdprropaRecord_Retention::RETENTION_TYPE_LEGALBASISACT:
          PluginGdprropaRecord_Retention::showLegalBasesInputs($_POST);
          break;
 

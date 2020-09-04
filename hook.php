@@ -256,7 +256,6 @@ function plugin_gdprropa_install() {
 
                      PRIMARY KEY  (`id`),
                      KEY `name` (`name`),
-                     KEY `status` (`status`),
                      UNIQUE `un_per_record` (`name`, `entities_id`)
                    ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
          $DB->queryOrDie($query, $DB->error());

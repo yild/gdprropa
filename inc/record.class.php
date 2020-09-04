@@ -82,6 +82,8 @@ class PluginGdprropaRecord extends CommonDBTM {
 
    function showForm($id, $options = []) {
 
+      global $CFG_GLPI;
+
       $this->initForm($id, $options);
       $this->showFormHeader($options);
 
@@ -121,8 +123,8 @@ class PluginGdprropaRecord extends CommonDBTM {
       ];
       Ajax::updateItemOnSelectEvent(
          "dropdown_pia_required$rand",
-         "pia_status_td",
-         "/plugins/gdprropa/ajax/record_pia_required_dropdown.php",
+         'pia_status_td',
+         $CFG_GLPI['root_doc'] . '/plugins/gdprropa/ajax/record_pia_required_dropdown.php',
          $params
       );
 
@@ -141,8 +143,8 @@ class PluginGdprropaRecord extends CommonDBTM {
       ];
       Ajax::updateItemOnSelectEvent(
          "dropdown_consent_required$rand",
-         "consent_storage_tr",
-         "/plugins/gdprropa/ajax/record_consent_required_dropdown.php",
+         'consent_storage_tr',
+         $CFG_GLPI['root_doc'] . '/plugins/gdprropa/ajax/record_consent_required_dropdown.php',
          $params
       );
 

@@ -66,7 +66,7 @@ class PluginGdprropaConfig extends CommonDBTM {
       'zapfdingbats'=>'ZapfDingbats'
    ];
 
-    public static function getTypeName($nb = 0) {
+   public static function getTypeName($nb = 0) {
 
       return _n("Config", "Config", $nb, 'gdprropa');
    }

@@ -50,7 +50,7 @@ class PluginGdprropaRecord_Retention extends CommonDBTM {
 
    const RETENTION_TYPE_NONE = 0;
    const RETENTION_TYPE_CONTRACT = 1;
-   const RETENTION_TYPE_LEGALBASES = 2;
+   const RETENTION_TYPE_LEGALBASISACT = 2;
    const RETENTION_TYPE_OTHER = 99;
 
    static function getTypeName($nb = 0) {
@@ -102,6 +102,8 @@ class PluginGdprropaRecord_Retention extends CommonDBTM {
    }
 
    public function showForRecord(PluginGdprropaRecord $record, $withtemplate = 0) {
+
+      global $CFG_GLPI;
 
       if ($record->fields['id']) {
          $this->getFromDBByCrit(['plugin_gdprropa_records_id' => $record->fields['id']]);
@@ -157,7 +159,7 @@ class PluginGdprropaRecord_Retention extends CommonDBTM {
       Ajax::updateItemOnSelectEvent(
          "dropdown_type$rand",
          'retention_type_div',
-         '/plugins/gdprropa/ajax/record_retention_retention_type_dropdown.php',
+         $CFG_GLPI['root_doc'] . '/plugins/gdprropa/ajax/record_retention_retention_type_dropdown.php',
          $params
       );
 
@@ -170,7 +172,7 @@ class PluginGdprropaRecord_Retention extends CommonDBTM {
             case PluginGdprropaRecord_Retention::RETENTION_TYPE_CONTRACT:
                self::showContractInputs($this->fields);
                break;
-            case PluginGdprropaRecord_Retention::RETENTION_TYPE_LEGALBASES:
+            case PluginGdprropaRecord_Retention::RETENTION_TYPE_LEGALBASISACT:
                self::showLegalBasesInputs($this->fields);
                break;
             case PluginGdprropaRecord_Retention::RETENTION_TYPE_OTHER:
@@ -203,6 +205,8 @@ class PluginGdprropaRecord_Retention extends CommonDBTM {
 
    static function showContractInputs($data = []) {
 
+      global $CFG_GLPI;
+
       $rand = mt_rand(1, mt_getrandmax());
 
       $value = null;
@@ -232,7 +236,7 @@ class PluginGdprropaRecord_Retention extends CommonDBTM {
          //'entity' => $data['is_record_recursive'] ? getSonsOf('glpi_entities', $data['entities_id']) : $data['entities_id'],
          'entity' => $data['is_record_recursive'] ? getSonsOf('glpi_entities', $data['entities_id']) : $data['entities_id'],
          'entity_sons' => !$data['is_record_recursive'],
-         'expired' => true,
+         'expired' => PluginGdprropaConfig::getConfig('system', 'allow_select_expired_contracts'),
          'nochecklimit' => true,
          'width'            => '100%',
          'value' => $value,
@@ -263,7 +267,7 @@ class PluginGdprropaRecord_Retention extends CommonDBTM {
       Ajax::updateItemOnEvent(
          "dropdown_contract_until_is_valid$rand",
          'retention_contract_after',
-         '/plugins/gdprropa/ajax/record_retention_contract_until_is_valid.php',
+         $CFG_GLPI['root_doc'] . '/plugins/gdprropa/ajax/record_retention_contract_until_is_valid.php',
          $params
       );
 
@@ -346,7 +350,7 @@ class PluginGdprropaRecord_Retention extends CommonDBTM {
          '' => Dropdown::EMPTY_VALUE,
          self::RETENTION_TYPE_NONE => __("Not required", 'gdprropa'),
          self::RETENTION_TYPE_CONTRACT => __("Contractual term", 'gdprropa'),
-         self::RETENTION_TYPE_LEGALBASES => __("Legal basis", 'gdprropa'),
+         self::RETENTION_TYPE_LEGALBASISACT => __("Legal basis", 'gdprropa'),
          self::RETENTION_TYPE_OTHER => __("Other regulations", 'gdprropa'),
       ];
    }
@@ -413,7 +417,7 @@ class PluginGdprropaRecord_Retention extends CommonDBTM {
             }
             break;
 
-         case PluginGdprropaRecord_Retention::RETENTION_TYPE_LEGALBASES:
+         case PluginGdprropaRecord_Retention::RETENTION_TYPE_LEGALBASISACT:
 
             $input['contracts_id'] = 0;
             $input['contract_until_is_valid'] = 0;

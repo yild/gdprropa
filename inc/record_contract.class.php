@@ -213,9 +213,11 @@ class PluginGdprropaRecord_Contract extends CommonDBRelation {
          $header_end .= "<th>" . __("Name") . "</th>";
          $header_end .= "<th>" . __("Supplier") . "</th>";
          $header_end .= "<th>" . __("Type") . "</th>";
+         $header_end .= "<th>" . __("Number") . "</th>";
          $header_end .= "<th>" . __("Begin date") . "</th>";
          $header_end .= "<th>" . __("Introduced in", 'gdprropa') . "</th>";
          $header_end .= "<th>" . __("Comment") . "</th>";
+         $header_end .= "<th>" . __("Expiry") . "</th>";
          $header_end .= "</tr>";
 
          echo $header_begin . $header_top . $header_end;
@@ -267,6 +269,7 @@ class PluginGdprropaRecord_Contract extends CommonDBRelation {
 
             echo "<td class='center'>" . $out . "</td>";
             echo "<td class='center'>" . Dropdown::getDropdownName('glpi_contracttypes', $data['contracttypes_id']) . "</td>";
+            echo "<td>" . $data['num'] . "</td>";
             echo "<td class='left'>" . $data['begin_date'] . "</td>";
 
             echo "<td class='left'>";
@@ -276,6 +279,12 @@ class PluginGdprropaRecord_Contract extends CommonDBRelation {
             echo "</td>";
 
             echo "<td class='left'>" . $data['comment'] . "</td>";
+
+            echo "<td>";
+            if ($data["notice"] > 0) {
+               echo Infocom::getWarrantyExpir($data['begin_date'], $data['duration'], $data['notice'], true);
+            }
+            echo "</td>";
 
             echo "</tr>";
          }
@@ -414,7 +423,6 @@ class PluginGdprropaRecord_Contract extends CommonDBRelation {
                ORDER BY `glpi_entities`.`completename`,
                   `glpi_contracts`.`name` ASC,
                   `glpi_contracts`.`begin_date` DESC";
-
       $result = $DB->query($query);
 
       $group  = '';
@@ -456,7 +464,7 @@ class PluginGdprropaRecord_Contract extends CommonDBRelation {
       ]);
    }
 
-   static function getContracts($record, $type = null) {
+   static function getContracts($record, $type = null, $get_expired = false) {
 
       global $DB;
 
@@ -490,13 +498,13 @@ class PluginGdprropaRecord_Contract extends CommonDBRelation {
 
       }
 
-      $iterator = $DB->request([
-         'SELECT'       => [
+      $query['SELECT'] = [
             'glpi_contracts.name AS contracts_name',
             'glpi_contracts.num AS contracts_num',
             'glpi_contracts.begin_date AS contracts_begin_date',
             'glpi_contracts.duration AS contracts_duration',
             'glpi_contracts.periodicity AS contracts_periodicity',
+            'glpi_contracts.notice AS contracts_notice',
             'glpi_contracts.comment AS contracts_comment',
             'glpi_contracts.contracttypes_id AS contracttypes_id',
             'glpi_suppliers.name AS suppliers_name',
@@ -512,9 +520,9 @@ class PluginGdprropaRecord_Contract extends CommonDBRelation {
             'glpi_suppliers.comment AS suppliers_comment',
             'glpi_contracttypes.name AS contractypes_name',
             'glpi_contracttypes.comment AS contractypes_comment',
-         ],
-         'FROM' => ['glpi_contracts'],
-         'LEFT JOIN'   => [
+      ];
+      $query['FROM'] = ['glpi_contracts'];
+      $query['LEFT JOIN'] = [
             'glpi_plugin_gdprropa_records_contracts' => [
                'FKEY' => [
                   'glpi_contracts'   => 'id',
@@ -538,13 +546,20 @@ class PluginGdprropaRecord_Contract extends CommonDBRelation {
                   'glpi_contracts' => 'contracttypes_id'
                ]
             ],
-         ],
-         'WHERE' => [
+         ];
+      $query['WHERE'] = [
             'glpi_plugin_gdprropa_records_contracts.plugin_gdprropa_records_id' => $record->fields['id'],
             'glpi_contracttypes.id' => $contract_type,
-            'glpi_contracts.is_deleted' => 0
-            ],
-      ]);
+            'glpi_contracts.is_deleted' => 0,
+      ];
+
+      if (!$get_expired) {
+         $query['WHERE'][] = "DATEDIFF(ADDDATE(`glpi_contracts`.`begin_date`, INTERVAL `glpi_contracts`.`duration` MONTH), CURDATE()) > '0' OR
+                `glpi_contracts`.`begin_date` IS NULL OR (`glpi_contracts`.`duration` = 0 AND
+                DATEDIFF(`glpi_contracts`.`begin_date`, CURDATE() ) < '0' ) OR
+                `glpi_contracts`.`renewal` = 1";
+       }
+      $iterator = $DB->request($query);
 
       return $iterator;
    }

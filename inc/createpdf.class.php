@@ -82,6 +82,7 @@ class PluginGdprropaCreatePDF extends PluginGdprropaCreatePDFBase {
       'show_is_deleted_header' => 1,
       'show_status_in_header' => 1,
       'show_full_personaldatacategorylist' => 1,
+      'show_expired_contracts' => 1,
       'show_contracs_types_header_if_empty' => 0,
       'show_record_owner' => 1,
       'show_assets_owners' => 1,
@@ -120,7 +121,10 @@ class PluginGdprropaCreatePDF extends PluginGdprropaCreatePDFBase {
       $this->entity = new Entity();
 
       $this->controller_info = PluginGdprropaControllerInfo::getFirstControllerInfo($entity_id);
-      $this->entity->getFromDB($this->controller_info->fields['entities_id']);
+      if (is_null($this->controller_info)) {
+      } else {
+         $this->entity->getFromDB($this->controller_info->fields['entities_id']);
+      }
 
    }
 
@@ -180,6 +184,13 @@ class PluginGdprropaCreatePDF extends PluginGdprropaCreatePDFBase {
       echo "<td>" . __("Show full personal data category list", 'gdprropa') . "</td>";
       echo "<td>";
       Dropdown::showYesNo('show_full_personaldatacategorylist', $config['show_full_personaldatacategorylist']);
+      echo "</td>";
+      echo "</tr>";
+
+      echo "<tr class='tab_bg_1'>";
+      echo "<td>" . __("Show expired contracts", 'gdprropa') . "</td>";
+      echo "<td>";
+      Dropdown::showYesNo('show_expired_contracts', $config['show_expired_contracts']);
       echo "</td>";
       echo "</tr>";
 
@@ -363,13 +374,12 @@ class PluginGdprropaCreatePDF extends PluginGdprropaCreatePDFBase {
 
    protected function prepareControllerInfo() {
 
+      $controller_name = __("Controller name not set.", 'gdprropa');
+      $info = "<strong>" . $controller_name . "</strong>";
       if (isset($this->controller_info->fields['id'])) {
 
          $controller_name = trim($this->controller_info->fields['controllername']);
-         if (empty($controller_name)) {
-            $controller_name = __("Controller name not set.", 'gdprropa');
-            $info = "<strong>" . $controller_name . "</strong>";
-         } else {
+         if (!empty($controller_name)) {
 
             $info = "<ul>";
             $info .= "<li>" . __("Name") . ": <strong>" . $controller_name . "</strong>" . "</li>";
@@ -640,6 +650,10 @@ class PluginGdprropaCreatePDF extends PluginGdprropaCreatePDFBase {
    protected function printActivitiesList($records) {
 
       if ($records) {
+
+         $display_introduced_in = $this->print_options['show_inherited_from'];
+         $col_width = 42 + 50 * (int)!$display_introduced_in;
+
          $this->writeInternal(
             "<h2>" . __("List of processing activities for which entity deals with personal data", 'gdprropa') . "</h2>", [
                'linebefore' => 8
@@ -654,9 +668,11 @@ class PluginGdprropaCreatePDF extends PluginGdprropaCreatePDFBase {
             $tbl = '<table border="1" cellpadding="3" cellspacing="0">' .
                '<thead><tr>' .
                '<th width="8%" style="background-color:#323232;color:#FFF;text-align:center;"><h3>' . __("No", 'gdprropa') . '</h3></th>' .
-               '<th width="42%" style="background-color:#323232;color:#FFF;"><h3>' . __("Description of the activity", 'gdprropa') . '</h3></th>' .
-               '<th width="50%" style="background-color:#323232;color:#FFF;"><h3>' . __("Introduced in", 'gdprropa') . '</h3></th>' .
-               '</tr></thead><tbody>';
+               '<th width="' . $col_width . '%" style="background-color:#323232;color:#FFF;"><h3>' . __("Description of the activity", 'gdprropa') . '</h3></th>';
+            if ($display_introduced_in) {
+               $tbl .= '<th width="50%" style="background-color:#323232;color:#FFF;"><h3>' . __("Introduced in", 'gdprropa') . '</h3></th>';
+            }
+            $tbl .= '</tr></thead><tbody>';
 
             $i = 1;
             foreach ($records as $item) {
@@ -664,9 +680,11 @@ class PluginGdprropaCreatePDF extends PluginGdprropaCreatePDFBase {
                $entity->getFromDB($item['entities_id']);
                $tbl .= '<tr>' .
                   '<td width="8%" align="center">' . $i++ . ' </td>' .
-                  '<td width="42%">' . $item['name'] . '</td>' .
-                  '<td width="50%">' . $entity->fields['completename'] . '</td>' .
-                  '</tr>';
+                  '<td width="' . $col_width . '%">' . $item['name'] . '</td>';
+               if ($display_introduced_in) {
+                  $tbl .= '<td width="50%">' . $entity->fields['completename'] . '</td>';
+               }
+               $tbl .= '</tr>';
             }
             $tbl .= "</tbody></table>";
 
@@ -1148,7 +1166,7 @@ class PluginGdprropaCreatePDF extends PluginGdprropaCreatePDFBase {
                      '</td>';
 
                   break;
-               case PluginGdprropaRecord_Retention::RETENTION_TYPE_LEGALBASES:
+               case PluginGdprropaRecord_Retention::RETENTION_TYPE_LEGALBASISACT:
 
                   $legal_basis = new PluginGdprropaLegalBasisAct();
                   $legal_basis->getFromDB($item['plugin_gdprropa_legalbasisacts_id']);
@@ -1192,7 +1210,8 @@ class PluginGdprropaCreatePDF extends PluginGdprropaCreatePDFBase {
 
    protected function printContracts(PluginGdprropaRecord $record, $type, $print_header) {
 
-      $iterator = PluginGdprropaRecord_Contract::getContracts($record, $type);
+      $get_expired = $this->print_options['show_expired_contracts'];
+      $iterator = PluginGdprropaRecord_Contract::getContracts($record, $type, $get_expired);
       $number = count($iterator);
 
       if (!$number && !$this->print_options['show_contracs_types_header_if_empty']) {
@@ -1221,9 +1240,9 @@ class PluginGdprropaCreatePDF extends PluginGdprropaCreatePDFBase {
       } else {
 
          if ($this->print_options['show_comments']) {
-            $cols_width = ['15', '25', '15', '20', '25'];
+            $cols_width = ['13', '23', '13', '18', '10', '23'];
          } else {
-            $cols_width = ['20', '30', '20', '30', '0'];
+            $cols_width = ['18', '28', '18', '28', '10', '0'];
          }
 
          $tbl = '<table border="1" cellpadding="3" cellspacing="0">
@@ -1231,10 +1250,11 @@ class PluginGdprropaCreatePDF extends PluginGdprropaCreatePDFBase {
             <th width="' . $cols_width[0] . '%" style="background-color:#AFAFAF;color:#FFF;"><h4>' . __("Supplier") . '</h4></th>
             <th width="' . $cols_width[1] . '%" style="background-color:#AFAFAF;color:#FFF;"><h4>' . __("Location") . '</h4></th>
             <th width="' . $cols_width[2] . '%" style="background-color:#AFAFAF;color:#FFF;"><h4>' . __("Contact") . '</h4></th>
-            <th width="' . $cols_width[3] . '%" style="background-color:#AFAFAF;color:#FFF;"><h4>' . __("Contract info", 'gdprropa') . '</h4></th>';
+            <th width="' . $cols_width[3] . '%" style="background-color:#AFAFAF;color:#FFF;"><h4>' . __("Contract info", 'gdprropa') . '</h4></th>
+            <th width="' . $cols_width[4] . '%" style="background-color:#AFAFAF;color:#FFF;"><h4>' . __("Expiry", 'gdprropa') . '</h4></th>';
          if ($this->print_options['show_comments']) {
             $tbl .=
-               '<th width="' . $cols_width[4] . '%" style="background-color:#AFAFAF;color:#FFF;"><h4>' . __("Comment") . '</h4></th>';
+               '<th width="' . $cols_width[5] . '%" style="background-color:#AFAFAF;color:#FFF;"><h4>' . __("Comment") . '</h4></th>';
          }
          $tbl .=
             '</tr></thead><tbody>';
@@ -1283,6 +1303,12 @@ class PluginGdprropaCreatePDF extends PluginGdprropaCreatePDFBase {
                $contract_info .= '<br>' . __("Begin date:", 'gdprropa') . '' . $data['contracts_begin_date'];
             }
 
+            $expiry = Infocom::getWarrantyExpir($data['contracts_begin_date'], $data['contracts_duration'], $data['contracts_notice'], false);
+            $expiry_bkg = '#FFFFFF';
+            if (new DateTime($expiry) < new DateTime()) {
+                $expiry_bkg = '#FF0000';
+            }
+
             $comments = '';
             if ($data['contracts_comment']) {
                $comments = $data['contracts_comment'];
@@ -1292,10 +1318,11 @@ class PluginGdprropaCreatePDF extends PluginGdprropaCreatePDFBase {
                <td width="' . $cols_width[0] . '%">' . $supplier_name . '</td>
                <td width="' . $cols_width[1] . '%">' . $location . '</td>
                <td width="' . $cols_width[2] . '%">' . $contact . '</td>
-               <td width="' . $cols_width[3] . '%">' . $contract_info . '</td>';
+               <td width="' . $cols_width[3] . '%">' . $contract_info . '</td>
+               <td width="' . $cols_width[4] . '%" style="background-color:' . $expiry_bkg . '">' . $expiry . '</td>';
             if ($this->print_options['show_comments']) {
                $tbl .=
-                  '<td width="' . $cols_width[4] . '%">' . nl2br($comments) . '</td>';
+                  '<td width="' . $cols_width[5] . '%">' . nl2br($comments) . '</td>';
             }
             $tbl .=
                '</tr>';
