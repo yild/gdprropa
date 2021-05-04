@@ -121,8 +121,7 @@ class PluginGdprropaCreatePDF extends PluginGdprropaCreatePDFBase {
       $this->entity = new Entity();
 
       $this->controller_info = PluginGdprropaControllerInfo::getFirstControllerInfo($entity_id);
-      if (is_null($this->controller_info)) {
-      } else {
+      if (!is_null($this->controller_info)) {
          $this->entity->getFromDB($this->controller_info->fields['entities_id']);
       }
 
