@@ -90,7 +90,7 @@ msgstr "Nie ustawiono typu umowy z krajem trzecim/instytucją międzynarodową."
 
 #: inc/record_contract.class.php:112
 msgid "Internal contract type not set."
-msgstr "Nie ustawiono innego typu umowy."
+msgstr "Nie ustawiono wewnętrznego typu umowy."
 
 #: inc/record_contract.class.php:115
 msgid "Other contract type not set."

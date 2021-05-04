@@ -428,7 +428,7 @@ class PluginGdprropaRecord_Contract extends CommonDBRelation {
       $group  = '';
       $prev   = -1;
       $values = [];
-      while ($data = $DB->fetch_assoc($result)) {
+      while ($data = $DB->fetchAssoc($result)) {
 
          if ($p['nochecklimit']
              || ($data['max_links_allowed'] == 0)
