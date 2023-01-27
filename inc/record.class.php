@@ -51,12 +51,15 @@
          czy ignorowac? (będzie widoczne póki powiązane, bedzie mozna usunąć ale poźniej nie będzie tego widać)
          czy odpiąć od RECORD?
 */
+
+use Glpi\Toolbox\Sanitizer;
+
 if (!defined('GLPI_ROOT')) {
    die("Sorry. You can't access this file directly");
 }
 
 class PluginGdprropaRecord extends CommonDBTM {
-
+   
    static $rightname = 'plugin_gdprropa_record';
 
    public $dohistory = true;
@@ -97,16 +100,16 @@ class PluginGdprropaRecord extends CommonDBTM {
       echo "<tr class='tab_bg_1'>";
       echo "<td>" . __("Purpose (GDPR Article 30 1b)", 'gdprropa') . "</td>";
       echo "<td colspan='2'>";
-      $purpose = Html::setSimpleTextContent($this->fields['content']);
-      echo "<textarea style='width:98%' name='content' required maxlength='1000' rows='3'>" . $purpose . "</textarea>";
+      // $purpose = Html::setSimpleTextContent($this->fields['content']);
+      // $purpose = RichText::normalizeHtmlContent($this->fields['content']);
+      $purpose = Sanitizer::sanitize($this->fields['content']);
+      echo "<textarea style='width:98%' name='content' required maxlength='1000' rows='3'>". $purpose ."</textarea>";
       echo "</td></tr>";
 
       echo "<tr class='tab_bg_1'>";
       echo "<td>" . __("Status") . "</td>";
       echo "<td colspan='2'>";
-      State::dropdown([
-         'value' => $this->fields['states_id']
-      ]);
+      self::DropDownState('record_state');
       echo "</td></tr>";
 
       echo "<tr class='tab_bg_1'><td>" . __("Storage medium", 'gdprropa') . "</td>";
@@ -157,13 +160,15 @@ class PluginGdprropaRecord extends CommonDBTM {
       echo "<tr class='tab_bg_1'>";
       echo "<td>" . __("First entry date", 'gdprropa') . "</td>";
       echo "<td colspan='2'>";
-      Html::showDateField('first_entry_date', ['value' => $this->fields['first_entry_date']]);
+      Html::showDateField('first_entry_date', ['value' => $this->fields['first_entry_date'], 'required' => true, 'placeholder' => date("Y-m-d")]);
       echo "</td></tr>";
 
       echo "<tr class='tab_bg_1'>";
       echo "<td>" . __("Additional information", 'gdprropa') . "</td>";
       echo "<td colspan='2'>";
-      $additional_info = Html::setSimpleTextContent($this->fields['additional_info']);
+      // $additional_info = Html::setSimpleTextContent($this->fields['additional_info']);
+      // $additional_info = RichText::normalizeHtmlContent($this->fields['additional_info']);
+      $additional_info = Sanitizer::sanitize($this->fields['additional_info']);
       echo "<textarea style='width: 98%;' name='additional_info' maxlength='1000' rows='3'>" . $additional_info . "</textarea>";
       echo "</td></tr>";
       $this->showFormButtons($options);
@@ -185,7 +190,9 @@ class PluginGdprropaRecord extends CommonDBTM {
       if ($data['consent_required']) {
          echo "<td>" . __("Consent storage", 'gdprropa') . "</td>";
          echo "<td colspan='2'>";
-         $consent_storage = Html::setSimpleTextContent($data['consent_storage']);
+         // $consent_storage = Html::setSimpleTextContent($data['consent_storage']);
+         // $consent_storage = RichText::normalizeHtmlContent($data['consent_storage']);
+         $consent_storage = Sanitizer::sanitize($data['consent_storage']);
          echo "<textarea style='width: 98%;' name='consent_storage' maxlength='1000' rows='3'>" . $consent_storage . "</textarea>";
          echo "</td>";
       }
@@ -201,6 +208,7 @@ class PluginGdprropaRecord extends CommonDBTM {
          ->addStandardTab(__CLASS__, $ong, $options)
          ->addStandardTab('PluginGdprropaRecord_DataSubjectsCategory', $ong, $options)
          ->addStandardTab('PluginGdprropaRecord_LegalBasisAct', $ong, $options)
+         ->addStandardTab('PluginGdprropaRecord_DataVisibility', $ong, $options)
          ->addStandardTab('PluginGdprropaRecord_Retention', $ong, $options)
          ->addStandardTab('PluginGdprropaRecord_Contract', $ong, $options)
          ->addStandardTab('PluginGdprropaRecord_PersonalDataCategory', $ong, $options)
@@ -221,6 +229,7 @@ class PluginGdprropaRecord extends CommonDBTM {
             PluginGdprropaRecord_Contract::class,
             PluginGdprropaRecord_DataSubjectsCategory::class,
             PluginGdprropaRecord_LegalBasisAct::class,
+            PluginGdprropaRecord_DataVisibility::class,
             PluginGdprropaRecord_PersonalDataCategory::class,
             PluginGdprropaRecord_Retention::class,
             PluginGdprropaRecord_SecurityMeasure::class,
@@ -249,6 +258,29 @@ class PluginGdprropaRecord extends CommonDBTM {
       }
 
       return $tab;
+   }
+
+   static function getAllStateArray(){
+      global $DB;
+      $tab = [];
+
+      $result = $DB->queryOrDie("SELECT `glpi_states`.`name` FROM `glpi_states` WHERE `glpi_states`.`name` NOT LIKE 'Traitement RGPD'  AND `glpi_states`.`comment` LIKE 'Créé via plugin GDPRRoPA';");
+      
+
+      if($result){
+         foreach ($result as $item)
+         {
+            $tab[] = $item['name'];
+         }
+      }
+      else{
+         $tab = ['indéfini'];
+      }
+
+      return $tab;
+   }
+   static function DropDownState($name, $value = 0, $display = true){
+      return DropDown::ShowFromArray($name, self::getAllStateArray(), ['value' => $value, 'display' => $display]);
    }
 
    static function getAllStorageMediumArray($withmetaforsearch = false) {
@@ -467,6 +499,11 @@ class PluginGdprropaRecord extends CommonDBTM {
       $tab = array_merge(
          $tab,
          PluginGdprropaRecord_LegalBasisAct::rawSearchOptionsToAdd()
+      );
+
+      $tab = array_merge(
+         $tab,
+         PluginGdprropaRecord_DataVisibility::rawSearchOptionsToAdd()
       );
 
       $tab = array_merge(

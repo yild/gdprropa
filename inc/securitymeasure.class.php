@@ -72,9 +72,9 @@ class PluginGdprropaSecurityMeasure extends CommonDropdown {
             'list' => true,
          ],
          [
-            'name' => 'content',
+            'name' => 'description',
             'label' => __("Description"),
-            'type' => 'textarea',
+            'type' => 'text',
          ],
       ];
    }
@@ -111,7 +111,7 @@ class PluginGdprropaSecurityMeasure extends CommonDropdown {
       return parent::getSpecificValueToSelect($field, $name, $values, $options);
    }
 
-   function displaySpecificTypeField($id, $field = []) {
+   function displaySpecificTypeField($ID, $field = [], array $options= []) {
 
       if ($field['name'] == 'type') {
          self::dropdownTypes($field['name'], $this->fields[$field['name']], true);
@@ -155,130 +155,130 @@ class PluginGdprropaSecurityMeasure extends CommonDropdown {
 
    }
 
-   static function dropdown($options = []) {
+   // static function dropdown($options = []) {
 
-      global $DB;
+   //    global $DB;
 
-      $p = [
-         'name'             => 'plugin_gdprropa_securitymeasures_id',
-         'value'            => '',
-         'all'              => 0,
-         'width'            => '80%',
-         'entity'           => -1,
-         'entity_sons'      => false,
-         'used'             => [],
-         'rand'             => mt_rand(),
-         'display'          => true,
-         'specific_tags'    => [],
-         'option_tooltips'  => [],
-         'group_by'         => self::DROPDOWN_GROUPBY_TYPE,
-      ];
+   //    $p = [
+   //       'name'             => 'plugin_gdprropa_securitymeasures_id',
+   //       'value'            => '',
+   //       'all'              => 0,
+   //       'width'            => '80%',
+   //       'entity'           => -1,
+   //       'entity_sons'      => false,
+   //       'used'             => [],
+   //       'rand'             => mt_rand(),
+   //       'display'          => true,
+   //       'specific_tags'    => [],
+   //       'option_tooltips'  => [],
+   //       'group_by'         => self::DROPDOWN_GROUPBY_TYPE,
+   //    ];
 
-      if (is_array($options) && count($options)) {
-         foreach ($options as $key => $val) {
-            $p[$key] = $val;
-         }
-      }
+   //    if (is_array($options) && count($options)) {
+   //       foreach ($options as $key => $val) {
+   //          $p[$key] = $val;
+   //       }
+   //    }
 
-      if ((strlen($p['value']) == 0) || !is_numeric($p['value'])) {
-         $p['value'] = 0;
-      }
+   //    if ((strlen($p['value']) == 0) || !is_numeric($p['value'])) {
+   //       $p['value'] = 0;
+   //    }
 
-      $tab = [];
-      $tab[] = Dropdown::EMPTY_VALUE;
+   //    $tab = [];
+   //    $tab[] = Dropdown::EMPTY_VALUE;
 
-      $error = false;
+   //    $error = false;
 
-      if (!($p['entity'] < 0) && $p['entity_sons']) {
-         if (is_array($p['entity'])) {
-            $tab[] = "entity_sons options is not available with array of entity";
-            $error = true;
-         } else {
-            $p['entity'] = getSonsOf('glpi_entities', $p['entity']);
-         }
-      }
+   //    if (!($p['entity'] < 0) && $p['entity_sons']) {
+   //       if (is_array($p['entity'])) {
+   //          $tab[] = "entity_sons options is not available with array of entity";
+   //          $error = true;
+   //       } else {
+   //          $p['entity'] = getSonsOf('glpi_entities', $p['entity']);
+   //       }
+   //    }
 
-      if (!$error) {
+   //    if (!$error) {
 
-         $entities = getAncestorsOf('glpi_entities', $p['entity']);
-         array_push($entities, $p['entity']);
+   //       $entities = getAncestorsOf('glpi_entities', $p['entity']);
+   //       array_push($entities, $p['entity']);
 
-         $query = '
-            SELECT
-               `glpi_plugin_gdprropa_securitymeasures`.`id`,
-               `glpi_plugin_gdprropa_securitymeasures`.`name`,
-               `glpi_plugin_gdprropa_securitymeasures`.`type`,
-               `glpi_plugin_gdprropa_securitymeasures`.`entities_id`,
-               `glpi_entities`.`completename`
-            FROM
-               `glpi_plugin_gdprropa_securitymeasures` 
-            LEFT JOIN
-               `glpi_entities` ON (`glpi_plugin_gdprropa_securitymeasures`.`entities_id` = `glpi_entities`.`id`)
-            WHERE
-               (
-                  (`glpi_plugin_gdprropa_securitymeasures`.`is_recursive` = 1 AND
-                   `glpi_plugin_gdprropa_securitymeasures`.`entities_id` IN (' . implode(',', $entities) . ')
-                  ) OR (
-                   `glpi_plugin_gdprropa_securitymeasures`.`entities_id` = ' . $p['entity'] . '
-                  )
-               )
-            ORDER BY
-               FIELD(`glpi_plugin_gdprropa_securitymeasures`.`entities_id`, 4) DESC,
-               `glpi_plugin_gdprropa_securitymeasures`.`type`';
+   //       $query = '
+   //          SELECT
+   //             `glpi_plugin_gdprropa_securitymeasures`.`id`,
+   //             `glpi_plugin_gdprropa_securitymeasures`.`name`,
+   //             `glpi_plugin_gdprropa_securitymeasures`.`type`,
+   //             `glpi_plugin_gdprropa_securitymeasures`.`entities_id`,
+   //             `glpi_entities`.`completename`
+   //          FROM
+   //             `glpi_plugin_gdprropa_securitymeasures` 
+   //          LEFT JOIN
+   //             `glpi_entities` ON (`glpi_plugin_gdprropa_securitymeasures`.`entities_id` = `glpi_entities`.`id`)
+   //          WHERE
+   //             (
+   //                (`glpi_plugin_gdprropa_securitymeasures`.`is_recursive` = 1 AND
+   //                 `glpi_plugin_gdprropa_securitymeasures`.`entities_id` IN (' . implode(',', $entities) . ')
+   //                ) OR (
+   //                 `glpi_plugin_gdprropa_securitymeasures`.`entities_id` = ' . $p['entity'] . '
+   //                )
+   //             )
+   //          ORDER BY
+   //             FIELD(`glpi_plugin_gdprropa_securitymeasures`.`entities_id`, 4) DESC,
+   //             `glpi_plugin_gdprropa_securitymeasures`.`type`';
 
-         $types = self::getAllTypesArray();
+   //       $types = self::getAllTypesArray();
 
-         $result = $DB->request($query);
+   //       $result = $DB->request($query);
 
-         $p['group_by'] = self::DROPDOWN_GROUPBY_TYPE_2;
+   //       $p['group_by'] = self::DROPDOWN_GROUPBY_TYPE_2;
 
-         switch ($p['group_by']) {
-            case self::DROPDOWN_GROUPBY_ENTITY :
+   //       switch ($p['group_by']) {
+   //          case self::DROPDOWN_GROUPBY_ENTITY :
 
-               $cur_name = '';
-               while ($item = $result->next()) {
-                  if ($cur_name != $item['completename']) {
-                     $cur_name = $item['completename'];
-                  }
+   //             $cur_name = '';
+   //             while ($item = $result->next()) {
+   //                if ($cur_name != $item['completename']) {
+   //                   $cur_name = $item['completename'];
+   //                }
 
-                  $name = $types[$item['type']] . ':&nbsp&nbsp&nbsp&nbsp' . $item['name'];
-                  if ($_SESSION['glpiis_ids_visible'] || empty($item['name'])) {
-                     $name = sprintf(__('%1$s (%2$s)'), $name, $item['id']);
-                  }
-                  $tab[$cur_name][$item['id']] = $name;
-                  $p['option_tooltips'][$cur_name]['__optgroup_label'] = '';
-               }
-               break;
+   //                $name = $types[$item['type']] . ':&nbsp&nbsp&nbsp&nbsp' . $item['name'];
+   //                if ($_SESSION['glpiis_ids_visible'] || empty($item['name'])) {
+   //                   $name = sprintf(__('%1$s (%2$s)'), $name, $item['id']);
+   //                }
+   //                $tab[$cur_name][$item['id']] = $name;
+   //                $p['option_tooltips'][$cur_name]['__optgroup_label'] = '';
+   //             }
+   //             break;
 
-            case self::DROPDOWN_GROUPBY_TYPE :
-            case self::DROPDOWN_GROUPBY_TYPE_2 :
+   //          case self::DROPDOWN_GROUPBY_TYPE :
+   //          case self::DROPDOWN_GROUPBY_TYPE_2 :
 
-               $cur_type = '';
-               while ($item = $result->next()) {
-                  if ($cur_type != $item['type']) {
-                     $cur_type = $item['type'];
-                  }
+   //             $cur_type = '';
+   //             while ($item = $result->next()) {
+   //                if ($cur_type != $item['type']) {
+   //                   $cur_type = $item['type'];
+   //                }
 
-                  if ($p['group_by'] == self::DROPDOWN_GROUPBY_TYPE) {
-                     $name = $item['completename'] . ':&nbsp&nbsp&nbsp&nbsp' . $item['name'];
-                  } else {
-                     $name = $item['name'] .' &nbsp&nbsp(' . $item['completename']. ')';
-                  }
-                  if ($_SESSION['glpiis_ids_visible'] || empty($item['name'])) {
-                     $name = sprintf(__('%1$s (%2$s)'), $name, $item['id']);
-                  }
-                  $tab[$types[$item['type']]][$item['id']] = $name;
-                  $p['option_tooltips'][$types[$item['type']]]['__optgroup_label'] = '';
-               }
+   //                if ($p['group_by'] == self::DROPDOWN_GROUPBY_TYPE) {
+   //                   $name = $item['completename'] . ':&nbsp&nbsp&nbsp&nbsp' . $item['name'];
+   //                } else {
+   //                   $name = $item['name'] .' &nbsp&nbsp(' . $item['completename']. ')';
+   //                }
+   //                if ($_SESSION['glpiis_ids_visible'] || empty($item['name'])) {
+   //                   $name = sprintf(__('%1$s (%2$s)'), $name, $item['id']);
+   //                }
+   //                $tab[$types[$item['type']]][$item['id']] = $name;
+   //                $p['option_tooltips'][$types[$item['type']]]['__optgroup_label'] = '';
+   //             }
 
-               break;
+   //             break;
 
-         }
+   //       }
 
-      }
+   //    }
 
-      return Dropdown::showFromArray($p['name'], $tab, $p);
-   }
+   //    return Dropdown::showFromArray($p['name'], $tab, $p);
+   // }
 
    function rawSearchOptions() {
 
@@ -321,7 +321,7 @@ class PluginGdprropaSecurityMeasure extends CommonDropdown {
       $tab[] = [
          'id'                 => '4',
          'table'              => $this->getTable(),
-         'field'              => 'content',
+         'field'              => 'description',
          'name'               => __("Description"),
          'datatype'           => 'text',
          'toview'             => true,

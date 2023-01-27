@@ -42,29 +42,6 @@
 
 include("../../../inc/includes.php");
 
-$plugin = new Plugin();
+$dropdown = new PluginGdprropaDataVisibility();
 
-if ($plugin->isActivated('gdprropa')) {
-
-   $config = new PluginGdprropaConfig();
-
-   if (isset($_POST['add'])) {
-      $config->check(-1, CREATE, $_POST);
-      $config->add($_POST);
-      Html::back();
-   } else if (isset($_POST['update'])) {
-      $config->check($_POST['id'], UPDATE, $_POST);
-      $config->update($_POST);
-      Html::back();
-   } else if (isset($_POST['sampledata'])) {
-      $config->check(-1, CREATE, $_POST);
-      $config->installSampleData($_POST);
-      Html::back();
-
-   } else {
-      Html::header(PluginGdprropaRecord::getTypeName(0), '', "management", "plugingdprropamenu");
-      $config->showForm();
-      Html::footer();
-   }
-
-}
+include (GLPI_ROOT . "/front/dropdown.common.php");

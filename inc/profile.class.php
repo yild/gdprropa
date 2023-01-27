@@ -138,6 +138,7 @@ class PluginGdprropaProfile extends Profile {
       self::addDefaultProfileInfos($ID, [
          'plugin_gdprropa_record' => CREATE | READ | UPDATE | DELETE | PURGE | READNOTE | UPDATENOTE,
          'plugin_gdprropa_legalbasisact' => CREATE | READ | UPDATE | DELETE | PURGE,
+         'plugin_gdprropa_datavisibility' => CREATE | READ | UPDATE | DELETE | PURGE,
          'plugin_gdprropa_securitymeasure' => CREATE | READ | UPDATE | DELETE | PURGE,
          'plugin_gdprropa_datasubjectscategory' => CREATE | READ | UPDATE | DELETE | PURGE,
          'plugin_gdprropa_controllerinfo' => CREATE | READ | UPDATE,
@@ -167,6 +168,18 @@ class PluginGdprropaProfile extends Profile {
             'itemtype' => PluginGdprropaLegalBasisAct::class,
             'label' => PluginGdprropaLegalBasisAct::getTypeName(2),
             'field' => PluginGdprropaLegalBasisAct::$rightname,
+            'rights' => [
+               CREATE => __("Create"),
+               READ => __("Read"),
+               UPDATE => __("Update"),
+               DELETE => __("Delete"),
+               PURGE => __("Delete permanently")
+            ]
+         ],
+         [
+            'itemtype' => PluginGdprropaDataVisibility::class,
+            'label' => PluginGdprropaDataVisibility::getTypeName(2),
+            'field' => PluginGdprropaDataVisibility::$rightname,
             'rights' => [
                CREATE => __("Create"),
                READ => __("Read"),

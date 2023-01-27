@@ -40,7 +40,7 @@
  --------------------------------------------------------------------------
  */
 
-define('PLUGIN_GDPRROPA_VERSION', '1.0');
+define('PLUGIN_GDPRROPA_VERSION', '2.0');
 define('PLUGIN_GDPRROPA_ROOT', __DIR__);
 
 function plugin_init_gdprropa() {
@@ -82,10 +82,11 @@ function plugin_version_gdprropa() {
       'author' => "<a href='https://github.com/yild/'>Yild</a>",
       'license' => 'GPLv3+',
       'homepage' => 'https://github.com/yild/gdprropa',
-      'minGlpiVersion' => '9.4',
+      'minGlpiVersion' => '10.0.5',
       'requirements'   => [
          'glpi' => [
-            'min' => '9.4',
+            'min' => '10.0.0',
+            'max' => '10.0.99',
             'dev' => false
          ]
       ],

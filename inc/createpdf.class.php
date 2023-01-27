@@ -40,6 +40,10 @@
  --------------------------------------------------------------------------
  */
 // TODO ADDITIONAL FUTURE - save last print settings, per user, same code for PluginGdprropaControllerInfo and PluginGdprropaCreatePDF print execution
+
+use Dropdown;
+use Html;
+
 if (!defined('GLPI_ROOT')) {
    die("Sorry. You can't access this file directly");
 }
@@ -793,6 +797,8 @@ class PluginGdprropaCreatePDF extends PluginGdprropaCreatePDFBase {
 
       $this->printLegalBasisActs($record);
 
+      $this->printDataVisibilities($record);
+
       $this->printDataSubjectsCategories($record);
 
       $this->printDataRetention($record);
@@ -857,7 +863,7 @@ class PluginGdprropaCreatePDF extends PluginGdprropaCreatePDFBase {
             'value' => $pia_status[$record->fields['pia_status']]
          ];
       }
-      if (empty($record->fields['first_entry_date'])) {
+      if (!empty($record->fields['first_entry_date'])) {
          $first_entry_date = Html::convDate($record->fields['first_entry_date']);
       } else {
          $first_entry_date = __("N/A", 'gdprropa');
@@ -874,7 +880,7 @@ class PluginGdprropaCreatePDF extends PluginGdprropaCreatePDFBase {
       }
       $rows[] = [
          'section' => __("First entry date", 'gdprropa'),
-         'value' => $first_entry_date
+         'value' =>  $first_entry_date
       ];
 
       if (PluginGdprropaCreatePDFBase::isGdprownerPluginActive()) {
@@ -919,19 +925,26 @@ class PluginGdprropaCreatePDF extends PluginGdprropaCreatePDFBase {
             'linebefore' => 1
          ]);
 
+
       $result = $DB->request([
-         'FROM' => [PluginGdprropaRecord_LegalBasisAct::getTable(), PluginGdprropaLegalBasisAct::getTable()],
-         'WHERE' => [
-            PluginGdprropaRecord_LegalBasisAct::getTable().'.`plugin_gdprropa_records_id`' => $record->fields['id'],
-            PluginGdprropaRecord_LegalBasisAct::getTable().'.`plugin_gdprropa_legalbasisacts_id`' => '`' . PluginGdprropaLegalBasisAct::getTable().'`.`id`'
-          ],
-         'ORDER' => ['type'],
-      ], "", true);
+         'FROM' => PluginGdprropaRecord_LegalBasisAct::getTable(),
+         'JOIN' => [
+            PluginGdprropaLegalBasisAct::getTable() => [
+               'ON' => [
+               PluginGdprropaRecord_LegalBasisAct::getTable() => 'plugin_gdprropa_legalbasisacts_id',
+               PluginGdprropaLegalBasisAct::getTable() => 'id'
+               ]
+            ]     
+         ],
+         'WHERE' => [PluginGdprropaRecord_LegalBasisAct::getTable().'.`plugin_gdprropa_records_id`' => $record->fields['id']],
+         'ORDER' => ['type']
+      ]);
+
 
       if (!count($result)) {
 
          $this->writeInternal(
-            __("No legal basis act(s).", 'gdprropa'), [
+            __("No legal basis act(s). " . count($result), 'gdprropa'), [
                'border' => 1,
                'linebefore' => 1
             ]);
@@ -961,7 +974,7 @@ class PluginGdprropaCreatePDF extends PluginGdprropaCreatePDFBase {
                '<th width="'. $cols_width[2] . '%" style="background-color:#AFAFAF;color:#FFF;"><h4>' . __("Introduced in", 'gdprropa') . '</h4></th>';
          }
          $tbl .=
-            '<th width="'. $cols_width[3] . '%" style="background-color:#AFAFAF;color:#FFF;"><h4>' . __("Content", 'gdprropa') . '</h4></th>';
+            '<th width="'. $cols_width[3] . '%" style="background-color:#AFAFAF;color:#FFF;"><h4>' . __("Description", 'gdprropa') . '</h4></th>';
          if ($this->print_options['show_comments']) {
             $tbl .=
                '<th width="'. $cols_width[4] . '%" style="background-color:#AFAFAF;color:#FFF;"><h4>' . __("Comment") . '</h4></th>';
@@ -971,7 +984,7 @@ class PluginGdprropaCreatePDF extends PluginGdprropaCreatePDFBase {
             '<tbody>';
 
          $type = PluginGdprropaLegalBasisAct::getAllTypesArray();
-         while ($item = $result->next()) {
+         foreach ($result as $item) {
             $tbl .=
                '<tr>' .
                '<td width="'. $cols_width[0] . '%">' . $item['name'] . '</td>' .
@@ -981,7 +994,108 @@ class PluginGdprropaCreatePDF extends PluginGdprropaCreatePDFBase {
                   '<td width="'. $cols_width[2] . '%">' . Dropdown::getDropdownName(Entity::getTable(), $item['entities_id']) . '</td>';
             }
             $tbl .=
-               '<td width="'. $cols_width[3] . '%">' . $item['content'] . '</td>';
+               '<td width="'. $cols_width[3] . '%">' . $item['description'] . '</td>';
+            if ($this->print_options['show_comments']) {
+               $tbl .=
+                  '<td width="'. $cols_width[4] . '%">' . nl2br($item['comment']) . '</td>';
+            }
+            $tbl .=
+               '</tr>';
+         }
+
+         $tbl .=
+            '</tbody>' .
+            '</table>';
+
+         $this->writeHtml($tbl);
+
+      }
+
+      $this->insertNewPageIfBottomSpaceLeft();
+
+   }
+
+   protected function printDataVisibilities(PluginGdprropaRecord $record) {
+
+      global $DB;
+
+      $this->writeInternal(
+         '<h2>' . PluginGdprropaDataVisibility::getTypeName(1) . '</h2>', [
+            'linebefore' => 1
+         ]);
+
+
+      $result = $DB->request([
+         'FROM' => PluginGdprropaRecord_DataVisibility::getTable(),
+         'JOIN' => [
+            PluginGdprropaDataVisibility::getTable() => [
+               'ON' => [
+               PluginGdprropaRecord_DataVisibility::getTable() => 'plugin_gdprropa_datavisibilities_id',
+               PluginGdprropaDataVisibility::getTable() => 'id'
+               ]
+            ]     
+         ],
+         'WHERE' => [PluginGdprropaRecord_DataVisibility::getTable().'.`plugin_gdprropa_records_id`' => $record->fields['id']],
+         'ORDER' => ['type']
+      ]);
+
+
+      if (!count($result)) {
+
+         $this->writeInternal(
+            __("Aucun accès aux données. " . count($result), 'gdprropa'), [
+               'border' => 1,
+               'linebefore' => 1
+            ]);
+
+      } else {
+
+         if ($this->print_options['show_inherited_from']) {
+            if ($this->print_options['show_comments']) {
+               $cols_width = ['10', '10', '20', '25', '20', '15'];
+            } else {
+               $cols_width = ['15', '15', '25', '30', '0', '15'];
+            }
+         } else {
+            if ($this->print_options['show_comments']) {
+               $cols_width = ['10', '10', '25', '35', '20', '0'];
+            } else {
+               $cols_width = ['15', '15', '25', '45', '0', '0'];
+            }
+         }
+         $tbl =
+            '<table border="1" cellpadding="3" cellspacing="0">' .
+            '<thead><tr>' .
+            '<th width="'. $cols_width[0] . '%" style="background-color:#AFAFAF;color:#FFF;"><h4>' . __("Name", 'gdprropa') . '</h4></th>' .
+            '<th width="'. $cols_width[1] . '%" style="background-color:#AFAFAF;color:#FFF;"><h4>' . __("Prénom", 'gdprropa') . '</h4></th>' .
+            '<th width="'. $cols_width[2] . '%" style="background-color:#AFAFAF;color:#FFF;"><h4>' . __("Type", 'gdprropa') . '</h4></th>';
+         if ($this->print_options['show_inherited_from']) {
+            $tbl .=
+               '<th width="'. $cols_width[5] . '%" style="background-color:#AFAFAF;color:#FFF;"><h4>' . __("Introduced in", 'gdprropa') . '</h4></th>';
+         }
+         $tbl .=
+            '<th width="'. $cols_width[3] . '%" style="background-color:#AFAFAF;color:#FFF;"><h4>' . __("Données accédées", 'gdprropa') . '</h4></th>';
+         if ($this->print_options['show_comments']) {
+            $tbl .=
+               '<th width="'. $cols_width[4] . '%" style="background-color:#AFAFAF;color:#FFF;"><h4>' . __("Comment") . '</h4></th>';
+         }
+         $tbl .=
+            '</tr></thead>' .
+            '<tbody>';
+
+         $type = PluginGdprropaDataVisibility::getAllTypesArray();
+         foreach ($result as $item) {
+            $tbl .=
+               '<tr>' .
+               '<td width="'. $cols_width[0] . '%">' . $item['name'] . '</td>' .
+               '<td width="'. $cols_width[1] . '%">' . $item['firstname'] . '</td>' .
+               '<td width="'. $cols_width[2] . '%">' . $type[$item['type']] . '</td>';
+            if ($this->print_options['show_inherited_from']) {
+               $tbl .=
+                  '<td width="'. $cols_width[5] . '%">' . Dropdown::getDropdownName(Entity::getTable(), $item['entities_id']) . '</td>';
+            }
+            $tbl .=
+               '<td width="'. $cols_width[3] . '%">' . $item['accessed_data'] . '</td>';
             if ($this->print_options['show_comments']) {
                $tbl .=
                   '<td width="'. $cols_width[4] . '%">' . nl2br($item['comment']) . '</td>';
@@ -1258,7 +1372,7 @@ class PluginGdprropaCreatePDF extends PluginGdprropaCreatePDFBase {
          $tbl .=
             '</tr></thead><tbody>';
 
-         while ($data = $iterator->next()) {
+         foreach ($iterator as $data) {
 
             $supplier_name = '';
             $supplier_name .= $data['suppliers_name'];
@@ -1638,11 +1752,11 @@ class PluginGdprropaCreatePDF extends PluginGdprropaCreatePDFBase {
          $tbl .=
             '</tr></thead><tbody>';
 
-         while ($item = $result->next()) {
+         foreach ($result as $item) {
             $tbl .=
                '<tr>' .
                '<td width="' . $cols_width[0] . '%">' . $item['name'] . '</td>' .
-               '<td width="' . $cols_width[1] . '%">' . $item['content'] . '</td>';
+               '<td width="' . $cols_width[1] . '%">' . $item['description'] . '</td>';
 
             if ($this->print_options['show_inherited_from']) {
                $tbl .=

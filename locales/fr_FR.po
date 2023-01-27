@@ -1,0 +1,830 @@
+# French translations for PACKAGE package.
+# Copyright (C) 2023 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Automatically generated, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-09-04 19:11+0200\n"
+"PO-Revision-Date: 2020-09-04 19:11+0200\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: setup.php:80
+msgid "GDPR Records of Processing Activities"
+msgstr "Registres des activités de traitement du RGPD"
+
+#: inc/datasubjectscategory.class.php:57
+#: inc/record_datasubjectscategory.class.php:56
+msgid "Category of data subjects"
+msgid_plural "Categories of data subjects"
+msgstr[0] "Catégorie de personnes concernées"
+msgstr[1] "Catégories de personnes concernées"
+
+#: inc/record_securitymeasure.class.php:56 inc/securitymeasure.class.php:63
+msgid "Security Measure"
+msgid_plural "Security Measures"
+msgstr[0] "Mesure de sécurité"
+msgstr[1] "Mesures de sécurité"
+
+#: inc/record_securitymeasure.class.php:117
+msgid "Add Security Measure"
+msgstr "Ajouter une mesure de sécurité"
+
+#: inc/record_securitymeasure.class.php:119
+msgid "GDPR Article 30 1g"
+msgstr "Article 30 1g du RGPD"
+
+#: inc/record_securitymeasure.class.php:163
+#: inc/record_legalbasisact.class.php:160 inc/legalbasisact.class.php:192
+#: inc/securitymeasure.class.php:315
+#: inc/record_personaldatacategory.class.php:162 inc/createpdf.class.php:959
+#: inc/createpdf.class.php:1513
+msgid "Type"
+msgstr "Type"
+
+#: inc/record_securitymeasure.class.php:164 inc/record_contract.class.php:218
+#: inc/record_datasubjectscategory.class.php:162
+#: inc/record_legalbasisact.class.php:161
+#: inc/record_personaldatacategory.class.php:163 inc/createpdf.class.php:673
+#: inc/createpdf.class.php:962 inc/createpdf.class.php:1045
+#: inc/createpdf.class.php:1383 inc/createpdf.class.php:1518
+#: inc/createpdf.class.php:1632
+msgid "Introduced in"
+msgstr "Enfant de"
+
+#: inc/menu.class.php:55
+msgid "Create PDF for all records within active entity and its sons"
+msgstr "Créer des PDF pour tous les registres de l'entité active et de ses fils."
+
+#: inc/record_contract.class.php:64
+msgid "Contract"
+msgid_plural "Contracts"
+msgstr[0] "Contrat"
+msgstr[1] "Contrats"
+
+#: inc/record_contract.class.php:103
+msgid "Joint controller contract type not set."
+msgstr "Le type de contrat du contrôleur conjoint n'est pas défini."
+
+#: inc/record_contract.class.php:106
+msgid "Processor contract type not set."
+msgstr "Le type de contrat du processeur n'est pas défini."
+
+#: inc/record_contract.class.php:109
+msgid "Third country/internalional organization contract type not set."
+msgstr "Le type de contrat du pays tiers ou de l'organisation interne n'est pas défini."
+
+#: inc/record_contract.class.php:112
+msgid "Internal contract type not set."
+msgstr "Autre type de contrat non défini."
+
+#: inc/record_contract.class.php:115
+msgid "Other contract type not set."
+msgstr "Autre type de contrat non défini."
+
+#: inc/record_contract.class.php:120
+#, php-format
+msgid "Go to %s tab at %s and assign contract type."
+msgstr "Allez dans l'onglet %s à %s et attribuez le type de contrat."
+
+#: inc/record_contract.class.php:158
+msgid "Add Joint Controller/Processor"
+msgstr "Ajouter un contrôleur/processeur conjoint"
+
+#: inc/record_contract.class.php:160
+msgid "GDPR Article 30 1d, 1e"
+msgstr "Article 30 1d, 1e du RGPD"
+
+#: inc/record_contract.class.php:334
+msgid "Joint controller contract"
+msgstr "Contrat de contrôleur commun"
+
+#: inc/record_contract.class.php:335
+msgid "Processor contract"
+msgstr "Contrat du processeur"
+
+#: inc/record_contract.class.php:336
+msgid "Thirdparty contract"
+msgstr "Contrat avec un tiers"
+
+#: inc/record_contract.class.php:337
+msgid "Internal contract"
+msgstr "Contrat interne"
+
+#: inc/record_contract.class.php:338
+msgid "Other contract"
+msgstr "Autre contrat"
+
+#: inc/record_contract.class.php:581
+msgid "Name (select from list)"
+msgstr "Nom (choisir dans la liste)"
+
+#: inc/record_datasubjectscategory.class.php:117
+msgid "Add Category of Data Subjects"
+msgstr "Ajouter une catégorie de personnes concernées"
+
+#: inc/record_datasubjectscategory.class.php:119
+#: inc/record_personaldatacategory.class.php:119
+msgid "GDPR Article 30 1c"
+msgstr "Article 30 1c du RGPD"
+
+#: inc/createpdfbase.class.php:60
+msgid "Create PDF"
+msgstr "Créer un PDF"
+
+#: inc/record_legalbasisact.class.php:56 inc/legalbasisact.class.php:62
+#: inc/record_retention.class.php:353
+msgid "Legal basis"
+msgid_plural "Legal bases"
+msgstr[0] "Base légale"
+msgstr[1] "Bases légales"
+
+#: inc/record_legalbasisact.class.php:117
+msgid "Add Legal Basis"
+msgstr "Ajouter une base légale"
+
+#: inc/record.class.php:80 inc/createpdf.class.php:703
+msgid "GDPR Record of Processing Activity"
+msgid_plural "GDPR Records of Processing Activities"
+msgstr[0] "Registre des activités de traitement du RGPD"
+msgstr[1] "Registres des activités de traitement du RGPD"
+
+#: inc/record.class.php:91
+msgid "Title"
+msgstr "Titre"
+
+#: inc/record.class.php:98
+msgid "Purpose (GDPR Article 30 1b)"
+msgstr "Objectif(s) (article 30 1b du RGPD)"
+
+#: inc/record.class.php:112 inc/record.class.php:456
+#: inc/createpdf.class.php:847
+msgid "Storage medium"
+msgstr "Support de stockage"
+
+#: inc/record.class.php:116 inc/record.class.php:437
+#: inc/createpdf.class.php:851
+msgid "PIA required"
+msgstr "EFVP(PIA) requise"
+
+#: inc/record.class.php:136 inc/createpdf.class.php:867
+msgid "Consent required"
+msgstr "Consentement requis"
+
+#: inc/record.class.php:158 inc/createpdf.class.php:877
+msgid "First entry date"
+msgstr "Date de la première entrée"
+
+#: inc/record.class.php:164 inc/record.class.php:405
+#: inc/record_retention.class.php:187 inc/createpdf.class.php:836
+#: inc/createpdf.class.php:1196
+msgid "Additional information"
+msgstr "Informations complémentaires"
+
+#: inc/record.class.php:186 inc/createpdf.class.php:872
+msgid "Consent storage"
+msgstr "Stockage des consentements"
+
+#: inc/record.class.php:239 inc/record.class.php:257
+#: inc/legalbasisact.class.php:130 inc/config.class.php:468
+msgid "Undefined"
+msgid_plural "Undefined"
+msgstr[0] "Indéfini"
+msgstr[1] "Indéfinis"
+
+#: inc/record.class.php:258
+msgid "Paper only"
+msgstr "Papier uniquement"
+
+#: inc/record.class.php:259
+msgid "Paper and electronic"
+msgstr "Papier et électronique"
+
+#: inc/record.class.php:260
+msgid "Electronic only"
+msgstr "Électronique uniquement"
+
+#: inc/record.class.php:396 inc/createpdf.class.php:831
+msgid "Purpose"
+msgstr "Objectif(s)"
+
+#: inc/record.class.php:446 inc/createpdf.class.php:857
+msgid "PIA status"
+msgstr "Statut de l'EFVP"
+
+#: inc/legalbasisact.class.php:131
+msgid "GDPR Article"
+msgstr "Article sur le RGPD"
+
+#: inc/legalbasisact.class.php:132
+msgid "Local law regulation"
+msgstr "Réglementation du droit local"
+
+#: inc/legalbasisact.class.php:133
+msgid "International regulation"
+msgstr "Réglementation internationale"
+
+#: inc/legalbasisact.class.php:134
+msgid "Controller internal regulation"
+msgstr "Régulation interne du contrôleur"
+
+#: inc/legalbasisact.class.php:135
+msgid "Other regulation"
+msgstr "Autre réglementation"
+
+#: inc/controllerinfo.class.php:59
+msgid "GDPR Controller Info"
+msgstr "Informations sur le contrôleur RGPD"
+
+#: inc/controllerinfo.class.php:121 inc/createpdf.class.php:590
+msgid "Controller information not set."
+msgstr "Informations sur le contrôleur non définies."
+
+#: inc/controllerinfo.class.php:127
+msgid "Manage entity Controller information"
+msgstr "Gérer les informations de l'entité Controller"
+
+#: inc/controllerinfo.class.php:133
+msgid "GDPR Article 30 1a"
+msgstr "Article 30 1a du RGPD"
+
+#: inc/controllerinfo.class.php:137 inc/controllerinfo.class.php:307
+#: inc/createpdf.class.php:719
+msgid "Legal representative"
+msgstr "Représentant légal"
+
+#: inc/controllerinfo.class.php:146 inc/controllerinfo.class.php:325
+#: inc/createpdf.class.php:720
+msgid "Data Protection Officer"
+msgstr "Délégué à la protection des données"
+
+#: inc/controllerinfo.class.php:156 inc/controllerinfo.class.php:342
+#: inc/controllerinfo.class.php:360
+msgid "Controller Name"
+msgstr "Nom du contrôleur"
+
+#: inc/controllerinfo.class.php:166
+msgid "Controller configuration - contract types"
+msgstr "Configuration du contrôleur - types de contrats"
+
+#: inc/controllerinfo.class.php:170
+msgid "Joint Controller Contract Type"
+msgstr "Contrôleur conjoint Type de contrat"
+
+#: inc/controllerinfo.class.php:178
+msgid "Processor Contract Type"
+msgstr "Processeur Type de contrat"
+
+#: inc/controllerinfo.class.php:188
+msgid "Thirdparty Contract Type"
+msgstr "Type de contrat avec un tiers"
+
+#: inc/controllerinfo.class.php:196
+msgid "Internal Contract Type"
+msgstr "Interne Type de contrat"
+
+#: inc/controllerinfo.class.php:206
+msgid "Other Contract Type"
+msgstr "Autre Type de contrat"
+
+#: inc/controllerinfo.class.php:231 inc/createpdf.class.php:357
+msgid "PDF creation settings"
+msgstr "Paramètres de création de PDF"
+
+#: inc/controllerinfo.class.php:242
+msgid "Create Controller RoPA PDF for Entity"
+msgstr "Créer le PDF"
+
+#: inc/record_software.class.php:74 inc/createpdf.class.php:1472
+msgid "Software"
+msgid_plural "Software"
+msgstr[0] "Logiciel"
+msgstr[1] "Logiciels"
+
+#: inc/record_software.class.php:139
+msgid "Add a software"
+msgstr "Ajouter un logiciel"
+
+#: inc/securitymeasure.class.php:131
+msgid "Organizational"
+msgstr "Organisation"
+
+#: inc/securitymeasure.class.php:132
+msgid "Physical"
+msgstr "Physique"
+
+#: inc/securitymeasure.class.php:133
+msgid "IT"
+msgstr "IT"
+
+#: inc/record_retention.class.php:58
+msgid "Data Retention"
+msgstr "Conservation des données"
+
+#: inc/record_retention.class.php:124
+msgid "Manage data retention"
+msgstr "Gérer la conservation des données"
+
+#: inc/record_retention.class.php:130
+msgid "GDPR Article 30 1f"
+msgstr "Article 30 1f du RGPD"
+
+#: inc/record_retention.class.php:134 inc/createpdf.class.php:1107
+msgid "Retention regulated by"
+msgstr "Conservation réglementée par"
+
+#: inc/record_retention.class.php:219
+msgid "Contract name"
+msgstr "Nom du contrat"
+
+#: inc/record_retention.class.php:249 inc/createpdf.class.php:1125
+msgid "Until contract is valid"
+msgstr "Jusqu'à ce que le contrat soit valide"
+
+#: inc/record_retention.class.php:288
+msgid "Period"
+msgstr "Période"
+
+#: inc/record_retention.class.php:307
+msgid "After contract is terminated"
+msgstr "Après la fin du contrat"
+
+#: inc/record_retention.class.php:327 inc/config.class.php:400
+#: inc/config.class.php:404
+msgid "Legal bases"
+msgstr "Bases légales"
+
+#: inc/record_retention.class.php:351
+msgid "Not required"
+msgstr "Non requis"
+
+#: inc/record_retention.class.php:352
+msgid "Contractual term"
+msgstr "Durée du contrat"
+
+#: inc/record_retention.class.php:354
+msgid "Other regulations"
+msgstr "Autres règlements"
+
+#: inc/record_retention.class.php:361
+msgid "Year"
+msgid_plural "Years"
+msgstr[0] "Année"
+msgstr[1] "Années"
+
+#: inc/record_retention.class.php:362
+msgid "Month"
+msgid_plural "Months"
+msgstr[0] "Mois"
+msgstr[1] "Mois"
+
+#: inc/record_retention.class.php:363
+msgid "Day"
+msgid_plural "Days"
+msgstr[0] "Jour"
+msgstr[1] "Jours"
+
+#: inc/record_retention.class.php:364
+msgid "Hour"
+msgid_plural "Hours"
+msgstr[0] "Heure"
+msgstr[1] "Heures"
+
+#: inc/personaldatacategory.class.php:57
+#: inc/record_personaldatacategory.class.php:56
+msgid "Personal Data Category"
+msgid_plural "Personal Data Categories"
+msgstr[0] "Catégorie de données personnelles"
+msgstr[1] "Catégories de données personnelles"
+
+#: inc/personaldatacategory.class.php:71 inc/personaldatacategory.class.php:289
+#: inc/record_personaldatacategory.class.php:191 inc/createpdf.class.php:1380
+msgid "Special category"
+msgstr "Catégorie spéciale"
+
+#: inc/record_personaldatacategory.class.php:117
+msgid "Add a personal data category"
+msgstr "Ajouter une catégorie de données personnelles"
+
+#: inc/record_personaldatacategory.class.php:244
+msgid "Selected item is already on list."
+msgstr "L'article sélectionné figure déjà dans la liste."
+
+#: inc/record_personaldatacategory.class.php:249
+msgid "Cannot add child item if parent is already on the list."
+msgstr "Impossible d'ajouter un élément enfant si le parent est déjà dans la liste."
+
+#: inc/record_personaldatacategory.class.php:254
+msgid ""
+"Cannot add Parent item if child is already on the list.<br>Remove child "
+"items before adding parent."
+msgstr ""
+"Impossible d'ajouter l'élément Parent si l'élement enfant est déjà sur la liste.<br>Supprimer l'enfant "
+"avant d'ajouter le parent."
+
+#: inc/record_personaldatacategory.class.php:298
+msgid "Any special category"
+msgstr "Toute catégorie spéciale"
+
+#: inc/createpdf.class.php:134
+msgid "Show 'introduced in'"
+msgstr "Afficher 'Enfant de'"
+
+#: inc/createpdf.class.php:141
+msgid "Show comments"
+msgstr "Afficher les commentaires"
+
+#: inc/createpdf.class.php:153
+msgid "Show deleted records"
+msgstr "Afficher les registres supprimés"
+
+#: inc/createpdf.class.php:160
+msgid "Show legal representative and DPO for each record"
+msgstr "Indiquer le représentant légal et le DPD pour chaque registre"
+
+#: inc/createpdf.class.php:169
+msgid "Show record owner information"
+msgstr "Afficher les informations sur le propriétaire du registre"
+
+#: inc/createpdf.class.php:176
+msgid "Show assets owners"
+msgstr "Afficher les propriétaires d'actifs"
+
+#: inc/createpdf.class.php:184
+msgid "Show full personal data category list"
+msgstr "Afficher la liste complète des catégories de données personnelles"
+
+#: inc/createpdf.class.php:191
+msgid "Show expired contracts"
+msgstr "Afficher les contrats expirés"
+
+#: inc/createpdf.class.php:198
+msgid "Show contracts types header if empty list"
+msgstr "Afficher l'en-tête des types de contrats si la liste est vide"
+
+#: inc/createpdf.class.php:205
+msgid "Show 'is deleted' information in info header"
+msgstr "Afficher l'information 'est supprimé' dans l'en-tête d'information"
+
+#: inc/createpdf.class.php:212
+msgid "Show print date/time"
+msgstr "Afficher la date et l'heure d'impression"
+
+#: inc/createpdf.class.php:219
+msgid "Page orientation"
+msgstr "Orientation de la page"
+
+#: inc/createpdf.class.php:223
+msgid "Portrait"
+msgstr "Portrait"
+
+#: inc/createpdf.class.php:224
+msgid "Landscape"
+msgstr "Paysage"
+
+#: inc/createpdf.class.php:231
+msgid "Show record status in info header"
+msgstr "Afficher le statut du registre dans l'en-tête d'information"
+
+#: inc/createpdf.class.php:246
+msgid "Show legal representative"
+msgstr "Afficher le représentant légal"
+
+#: inc/createpdf.class.php:253 inc/createpdf.class.php:293
+msgid "Show title"
+msgstr "Afficher le titre"
+
+#: inc/createpdf.class.php:260 inc/createpdf.class.php:300
+msgid "Show address"
+msgstr "Afficher l'adresse"
+
+#: inc/createpdf.class.php:267 inc/createpdf.class.php:307
+msgid "Show phone"
+msgstr "Afficher le téléphone"
+
+#: inc/createpdf.class.php:274 inc/createpdf.class.php:314
+msgid "Show email"
+msgstr "Montrer l'email"
+
+#: inc/createpdf.class.php:286
+msgid "Show DPO"
+msgstr "Afficher le DPD"
+
+#: inc/createpdf.class.php:377
+msgid "Controller name not set."
+msgstr "Le nom du contrôleur n'est pas défini."
+
+#: inc/createpdf.class.php:389 inc/createpdf.class.php:393
+#: inc/createpdf.class.php:397 inc/createpdf.class.php:405
+#: inc/createpdf.class.php:409 inc/createpdf.class.php:413
+#: inc/createpdf.class.php:417 inc/createpdf.class.php:467
+#: inc/createpdf.class.php:471 inc/createpdf.class.php:480
+#: inc/createpdf.class.php:486 inc/createpdf.class.php:488
+#: inc/createpdf.class.php:490 inc/createpdf.class.php:510
+#: inc/createpdf.class.php:517 inc/createpdf.class.php:864
+#: inc/createpdf.class.php:1141 inc/createpdf.class.php:1174
+#: inc/config.class.php:469
+msgid "N/A"
+msgstr "N/A"
+
+#: inc/createpdf.class.php:440
+msgid "Controller"
+msgstr "Contrôleur"
+
+#: inc/createpdf.class.php:640
+msgid "GDPR Record of Processing Activities"
+msgstr "Registres des activités de traitement du RGPD"
+
+#: inc/createpdf.class.php:642
+#, php-format
+msgid "print date/time: %1s"
+msgstr "impression le date/heure : %1s"
+
+#: inc/createpdf.class.php:658
+msgid "List of processing activities for which entity deals with personal data"
+msgstr "Liste des activités de traitement pour lesquelles l'entité traite des données à caractère personnel"
+
+#: inc/createpdf.class.php:663
+msgid "There are no activities."
+msgstr "Il n'y a pas d'activités."
+
+#: inc/createpdf.class.php:670
+msgid "No"
+msgstr "Non"
+
+#: inc/createpdf.class.php:671
+msgid "Description of the activity"
+msgstr "Description de l'activité"
+
+#: inc/createpdf.class.php:709
+#, php-format
+msgid "GDPR Records of Processing Activity for entity:<br/>%1s"
+msgstr "Registres des activités de traitement du RGPD pour l'entité:<br/>%1s"
+
+#: inc/createpdf.class.php:712
+msgid "GDPR Records of Processing Activity"
+msgstr "Registres des activités de traitement du RGPD"
+
+#: inc/createpdf.class.php:719
+msgid "Legal representative not set."
+msgstr "Représentant légal non fixé."
+
+#: inc/createpdf.class.php:720
+msgid "DPO not set."
+msgstr "DPD non défini."
+
+#: inc/createpdf.class.php:757
+msgid "The record is marked as DELETED"
+msgstr "Le registre est marqué comme SUPPRIMÉ"
+
+#: inc/createpdf.class.php:770
+#, php-format
+msgid "Record status: %s"
+msgstr "État du registre : %s"
+
+#: inc/createpdf.class.php:784
+msgid "Sheet for GDPR Record of Processing Activities"
+msgstr "Fiche pour le registre des activités de traitement du RGPD"
+
+#: inc/createpdf.class.php:821
+msgid "Processing Activity information"
+msgstr "Informations sur l'activité de traitement"
+
+#: inc/createpdf.class.php:827 inc/createpdf.class.php:958
+#: inc/createpdf.class.php:1512
+msgid "Name"
+msgstr "Nom"
+
+#: inc/createpdf.class.php:888 inc/createpdf.class.php:1522
+msgid "Owner"
+msgstr "Owner"
+
+#: inc/createpdf.class.php:935
+msgid "No legal basis act(s)."
+msgstr "Pas d'acte(s) de base légale."
+
+#: inc/createpdf.class.php:965
+msgid "Content"
+msgstr "Contenu"
+
+#: inc/createpdf.class.php:1018
+msgid "No data subjects category/ies assigned."
+msgstr "Aucune catégorie de personnes concernées n'est attribuée."
+
+#: inc/createpdf.class.php:1095
+msgid "Data retention not set."
+msgstr "La conservation des données n'est pas définie."
+
+#: inc/createpdf.class.php:1122
+#, php-format
+msgid "Data retention: %1$s after contract is terminated"
+msgstr "Conservation des données : %1$s après la fin du contrat"
+
+#: inc/createpdf.class.php:1144
+#, php-format
+msgid "Contract name/number: %1$s %2$s"
+msgstr "Nom/numéro du contrat : %1$s %2$s"
+
+#: inc/createpdf.class.php:1146
+#, php-format
+msgid "Begin date: %1$s"
+msgstr "Date de début : %1$s"
+
+#: inc/createpdf.class.php:1147
+#, php-format
+msgid "Comment: %1$s"
+msgstr "Commentaire : %1$s"
+
+#: inc/createpdf.class.php:1153 inc/createpdf.class.php:1253
+msgid "Contract info"
+msgstr "Informations sur le contrat"
+
+#: inc/createpdf.class.php:1157
+msgid "Supplier"
+msgstr "Fournisseur"
+
+#: inc/createpdf.class.php:1181
+#, php-format
+msgid "Name: %1$s"
+msgstr "Nom: %1$s"
+
+#: inc/createpdf.class.php:1188
+msgid "Data retention is not required"
+msgstr "La conservation des données n'est pas nécessaire"
+
+#: inc/createpdf.class.php:1224
+msgid "Contracts related to processing activity"
+msgstr "Contrats liés à l'activité de traitement"
+
+#: inc/createpdf.class.php:1236
+msgid "None."
+msgstr "Aucun."
+
+#: inc/record_contract.class.php:220
+#: inc/createpdf.class.php:1254
+msgid "Expiry"
+msgstr "Date d'expiration"
+
+#: inc/createpdf.class.php:1303
+msgid "Begin date:"
+msgstr "Date de début :"
+
+#: inc/createpdf.class.php:1356
+msgid "None assigned."
+msgstr "Aucune assignation."
+
+#: inc/createpdf.class.php:1379
+msgid "Complete name"
+msgstr "Nom complet"
+
+#: inc/createpdf.class.php:1477
+msgid "Software not assigned."
+msgstr "Logiciel non attribué."
+
+#: inc/createpdf.class.php:1514
+msgid "Publisher"
+msgstr "Editeur"
+
+#: inc/createpdf.class.php:1544
+msgid "Not assigned"
+msgstr "Non attribué"
+
+#: inc/createpdf.class.php:1604
+msgid "None implemented."
+msgstr "Aucune mise en œuvre."
+
+#: inc/config.class.php:71
+msgid "Config"
+msgid_plural "Config"
+msgstr[0] "Config"
+msgstr[1] "Config"
+
+#: inc/config.class.php:181
+msgid "Manage GDPR RoPA configuration"
+msgstr "Gérer la configuration de RGPD RoPA"
+
+#: inc/config.class.php:184
+msgid "System configuration"
+msgstr "Configuration du système"
+
+#: inc/config.class.php:187
+msgid "Keep 'is special category' strict"
+msgstr "Garder la catégorie 'est spéciale' stricte"
+
+#: inc/config.class.php:195
+msgid "Limit retention contracts list to those selected in controller info"
+msgstr "Limiter la liste des contrats de conservation à ceux sélectionnés dans les informations sur le contrôleur"
+
+#: inc/config.class.php:203
+msgid ""
+"Remove software when record storage medium set to Paper only if any was "
+"assigned previously"
+msgstr ""
+"Supprimer les logiciels lorsque le support de stockage du registre est réglé sur Papier uniquement si l’un d’eux "
+"a été attribué précédemment"
+
+#: inc/config.class.php:211
+msgid "Allow add expired contract (show expired on dropdown list)"
+msgstr "Autoriser l’ajout d’un contrat expiré (afficher la liste déroulante des contrats expirés)"
+
+#: inc/config.class.php:219
+msgid "Allow add software from any entity"
+msgstr "Autoriser l’ajout de logiciel depuis toute entité"
+
+#: inc/config.class.php:227
+msgid ""
+"Allow retrieve controller info from ancestor entity (set as recursive) when "
+"current entity controller info is not set"
+msgstr ""
+"Autoriser la récupération des informations du contrôleur depuis l’entité père (défini comme récursif) lorsque "
+"les informations de l'entité du contrôleur actuel ne sont pas définies"
+
+#: inc/config.class.php:235
+msgid "PDF creating configuration"
+msgstr "Configuration de la création du PDF"
+
+#: inc/config.class.php:239
+msgid "Codepage"
+msgstr "Encodage"
+
+#: inc/config.class.php:248
+msgid "Font name"
+msgstr "Nom de la police"
+
+#: inc/config.class.php:257
+msgid "Font size"
+msgstr "Taille de police"
+
+#: inc/config.class.php:270
+msgid "Margin left"
+msgstr "Marge gauche"
+
+#: inc/config.class.php:282
+msgid "Margin top"
+msgstr "Marge supérieure"
+
+#: inc/config.class.php:294
+msgid "Margin right"
+msgstr "Marge droite"
+
+#: inc/config.class.php:306
+msgid "Margin bottom"
+msgstr "Marge inférieure"
+
+#: inc/config.class.php:318
+msgid "Header margin (from top)"
+msgstr "Marge d'en-tête (à partir du haut)"
+
+#: inc/config.class.php:330
+msgid "Footer margin (from bottom)"
+msgstr "Marge de pied de page (à partir du bas)"
+
+#: inc/config.class.php:342
+msgid "Show logo"
+msgstr "Afficher le logo"
+
+#: inc/config.class.php:350
+msgid "Logo image filename (located in /plugins/gdprropa/images/)"
+msgstr "Nom du fichier image du logo (situé dans /plugins/gdprropa/images/)"
+
+#: inc/config.class.php:385
+msgid "Install sample data"
+msgstr "Installer des exemples de données"
+
+#: inc/config.class.php:388
+msgid "Sample data will be installed for current active entity."
+msgstr "Des exemples de données seront installés pour l'entité active actuelle."
+
+#: inc/config.class.php:391 inc/config.class.php:395
+msgid "Categories of data subjects"
+msgstr "Catégories de personnes concernées"
+
+#: inc/config.class.php:409 inc/config.class.php:413
+msgid "Security measures"
+msgstr "Mesures de sécurité"
+
+#: inc/config.class.php:418 inc/config.class.php:422
+msgid "Contract types"
+msgstr "Types de contrats"
+
+#: inc/config.class.php:427 inc/config.class.php:431
+msgid "Personal data types"
+msgstr "Types de données personnelles"
+
+#: inc/config.class.php:438
+msgid "Install"
+msgstr "Installer"
+
+
+
+
+
+

@@ -51,15 +51,120 @@ function plugin_gdprropa_install() {
 
    if ($install) {
 
+      if ($DB->tableExists('glpi_states')){
+
+         $query = "SELECT * FROM `glpi_states` WHERE `glpi_states`.`level` = 1 AND `glpi_states`.`name` = 'Traitement RGPD' AND `glpi_states`.`comment` = 'Créé via plugin GDPRRoPA';";
+         $result = $DB->queryOrDie($query, $DB->error());
+
+         if(!empty($result)){
+
+            $parent = [
+               'name' => 'Traitement RGPD',
+               'comment' => 'Créé via plugin GDPRRoPA',
+               'states_id' => 0,
+               'completename' => 'Traitement RGPD',
+               'level' => 1,
+               'ancestors_cache' => '[]',
+               'is_visible_computer' => 0,
+               'is_visible_monitor' => 0,
+               'is_visible_networkequipment' => 0,
+               'is_visible_peripheral' => 0,
+               'is_visible_phone' => 0,
+               'is_visible_printer' => 0,
+               'is_visible_softwareversion' => 0,
+               'is_visible_softwarelicense' => 0,
+               'is_visible_line' => 0,
+               'is_visible_certificate' => 0,
+               'is_visible_rack' => 0,
+               'is_visible_passivedcequipment' => 0,
+               'is_visible_enclosure' => 0,
+               'is_visible_pdu' => 0,
+               'is_visible_cluster' => 0,
+               'is_visible_contract' => 0,
+               'is_visible_appliance' => 0,
+               'is_visible_databaseinstance' => 0,
+               'is_visible_cable' => 0,
+               'date_creation' => date("Y-m-d H:i:s"),
+               'date_mod' => date("Y-m-d H:i:s"),
+            ];
+            $DB->insertOrDie('glpi_states', $parent, $DB->error());
+
+            $parent_id = $DB->insertId();
+
+
+            //Not mandatory part (If there is an error you can delete this part) ---
+            $i = 0;
+            $sons = [];
+            //---
+
+            $childnames = [
+               'Nouveau',
+               'En cours de traitement',
+               'Non-conformité mineure',
+               'Non-conformité majeure',
+               'Conforme',
+               'Retiré',
+            ];
+
+            foreach($childnames as $childname){
+               $childs = [
+                  'name' => $childname,
+                  'comment' => 'Créé via plugin GDPRRoPA',
+                  'states_id' => $parent_id,
+                  'completename' => 'Traitement RGPD > '. $childname,
+                  'level' => 2,
+                  'ancestors_cache' => $parent_id,
+                  'is_visible_computer' => 0,
+                  'is_visible_monitor' => 0,
+                  'is_visible_networkequipment' => 0,
+                  'is_visible_peripheral' => 0,
+                  'is_visible_phone' => 0,
+                  'is_visible_printer' => 0,
+                  'is_visible_softwareversion' => 0,
+                  'is_visible_softwarelicense' => 0,
+                  'is_visible_line' => 0,
+                  'is_visible_certificate' => 0,
+                  'is_visible_rack' => 0,
+                  'is_visible_passivedcequipment' => 0,
+                  'is_visible_enclosure' => 0,
+                  'is_visible_pdu' => 0,
+                  'is_visible_cluster' => 0,
+                  'is_visible_contract' => 0,
+                  'is_visible_appliance' => 0,
+                  'is_visible_databaseinstance' => 0,
+                  'is_visible_cable' => 0,
+                  'date_creation' => date("Y-m-d H:i:s"),
+                  'date_mod' => date("Y-m-d H:i:s"),
+               ];
+               $DB->insertOrDie('glpi_states', $childs, $DB->error(), );
+
+               //Not mandatory part (If there is an error you can delete this part) ---
+               $sons[$i] = $DB->insertId();
+               $DB->queryOrDie("UPDATE `glpi_states` SET `glpi_states`.`sons_cache` = '{\"$sons[$i]\":$sons[$i]}' WHERE `glpi_states`.`id` = $sons[$i];", $DB->error());
+               $i++;
+               //---
+            }
+
+            //Not mandatory part (If there is an error you can delete this part) ---
+            $parent_sons = "{\"$parent_id\":$parent_id";
+            foreach ($sons as $son){
+               $parent_sons .= ",\"$son\":$son";
+            }
+            $parent_sons .= "}";
+            $DB->queryOrDie("UPDATE `glpi_states` SET `glpi_states`.`sons_cache` = '$parent_sons' WHERE `glpi_states`.`id` = $parent_id ;", $DB->error());
+            //---
+         }
+      }
+
       if (!$DB->tableExists('glpi_plugin_gdprropa_configs')) {
          $query = "CREATE TABLE `glpi_plugin_gdprropa_configs` (
                      `id` int(11) NOT NULL auto_increment,
                      `entities_id` int(11) NOT NULL default '0' COMMENT 'RELATION to glpi_entities (id)',
                      `config` TEXT NOT NULL default '{}',
 
-                     `date_creation` datetime default NULL,
+                     `date_creation` timestamp,
                      `users_id_creator` int(11) default NULL COMMENT 'RELATION to glpi_users (id)',
-                     `date_mod` datetime default NULL,
+                     `date_mod` timestamp,
                      `users_id_lastupdater` int(11) default NULL COMMENT 'RELATION to glpi_users (id)',
 
                      PRIMARY KEY  (`id`)
@@ -80,12 +185,10 @@ function plugin_gdprropa_install() {
                      `contracttypes_id_internal` int(11) default NULL COMMENT 'RELATION to glpi_contracttypes (id)',
                      `contracttypes_id_other` int(11) default NULL COMMENT 'RELATION to glpi_contracttypes (id)',
                      `controllername` varchar(250) default NULL,
-
-                     `date_creation` datetime default NULL,
+                     `date_creation` timestamp,
                      `users_id_creator` int(11) default NULL COMMENT 'RELATION to glpi_users (id)',
-                     `date_mod` datetime default NULL,
+                     `date_mod` timestamp,
                      `users_id_lastupdater` int(11) default NULL COMMENT 'RELATION to glpi_users (id)',
-
                      PRIMARY KEY  (`id`),
                      UNIQUE `entities_id` (`entities_id`)
                    ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
@@ -101,9 +204,9 @@ function plugin_gdprropa_install() {
                      `entities_id` int(11) NOT NULL default '0' COMMENT 'RELATION to glpi_entities (id)',
                      `is_recursive` tinyint(1) NOT NULL default '1',
 
-                     `date_creation` datetime default NULL,
+                     `date_creation` timestamp,
                      `users_id_creator` int(11) default NULL COMMENT 'RELATION to glpi_users (id)',
-                     `date_mod` datetime default NULL,
+                     `date_mod` timestamp,
                      `users_id_lastupdater` int(11) default NULL COMMENT 'RELATION to glpi_users (id)',
 
                      PRIMARY KEY  (`id`),
@@ -126,15 +229,14 @@ function plugin_gdprropa_install() {
                      `id` int(11) NOT NULL auto_increment,
                      `name` varchar(255) collate utf8_unicode_ci default NULL,
                      `type` tinyint(1) NOT NULL default '0',
-                     `content` varchar(1024) collate utf8_unicode_ci default NULL,
+                     `description` varchar(1024) collate utf8_unicode_ci default NULL,
                      `comment` text collate utf8_unicode_ci,
                      `injected` tinyint(1) NOT NULL default '0' COMMENT 'is record injected ad plugin install',
                      `entities_id` int(11) NOT NULL default '0' COMMENT 'RELATION to glpi_entities (id)',
                      `is_recursive` tinyint(1) NOT NULL default '1',
-
-                     `date_creation` datetime default NULL,
+                     `date_creation` timestamp,
                      `users_id_creator` int(11) default NULL COMMENT 'RELATION to glpi_users (id)',
-                     `date_mod` datetime default NULL,
+                     `date_mod` timestamp,
                      `users_id_lastupdater` int(11) default NULL COMMENT 'RELATION to glpi_users (id)',
 
                      PRIMARY KEY  (`id`),
@@ -158,6 +260,42 @@ function plugin_gdprropa_install() {
          ]);
       }
 
+      if (!$DB->tableExists('glpi_plugin_gdprropa_datavisibilities')) {
+         $query = "CREATE TABLE `glpi_plugin_gdprropa_datavisibilities` (
+                     `id` int(11) NOT NULL auto_increment,
+                     `name` varchar(255) collate utf8_unicode_ci default NULL,
+                     `firstname` varchar(255) collate utf8_unicode_ci default NULL,
+                     `type` tinyint(1) NOT NULL default '0',
+                     `accessed_data` varchar(1024) collate utf8_unicode_ci default NULL,
+                     `comment` text collate utf8_unicode_ci,
+                     `entities_id` int(11) NOT NULL default '0' COMMENT 'RELATION to glpi_entities (id)',
+                     `is_recursive` tinyint(1) NOT NULL default '1',
+                     `date_creation` timestamp,
+                     `users_id_creator` int(11) default NULL COMMENT 'RELATION to glpi_users (id)',
+                     `date_mod` timestamp,
+                     `users_id_lastupdater` int(11) default NULL COMMENT 'RELATION to glpi_users (id)',
+
+                     PRIMARY KEY  (`id`),
+                     KEY `name` (`name`),
+                     UNIQUE `un_per_record` (`name`, `type`, `entities_id`)
+                   ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
+         $DB->queryOrDie($query, $DB->error());
+
+         $dp = new DisplayPreference();
+         $dp->add([
+            'itemtype' => 'PluginGdprropaDataVisibility',
+            'num' => 3,
+            'rank' => 1,
+            'users_id' => 0
+         ]);
+         $dp->add([
+            'itemtype' => 'PluginGdprropaDataVisibility',
+            'num' => 4,
+            'rank' => 2,
+            'users_id' => 0
+         ]);
+      }
+      
       if (!$DB->tableExists('glpi_plugin_gdprropa_personaldatacategories')) {
          $query = "CREATE TABLE `glpi_plugin_gdprropa_personaldatacategories` (
                      `id` int(11) NOT NULL auto_increment,
@@ -170,9 +308,9 @@ function plugin_gdprropa_install() {
                      `is_recursive` tinyint(1) NOT NULL default '1',
                      `is_special_category` tinyint(1) default '0',
 
-                     `date_creation` datetime default NULL,
+                     `date_creation` timestamp,
                      `users_id_creator` int(11) default NULL COMMENT 'RELATION to glpi_users (id)',
-                     `date_mod` datetime default NULL,
+                     `date_mod` timestamp,
                      `users_id_lastupdater` int(11) default NULL COMMENT 'RELATION to glpi_users (id)',
 
                      PRIMARY KEY  (`id`),
@@ -201,14 +339,14 @@ function plugin_gdprropa_install() {
                      `id` int(11) NOT NULL auto_increment,
                      `name` varchar(255) collate utf8_unicode_ci default NULL,
                      `type` tinyint(1) NOT NULL default '0',
-                     `content` varchar(1000) collate utf8_unicode_ci default NULL,
+                     `description` varchar(1000) collate utf8_unicode_ci default NULL,
                      `comment` text collate utf8_unicode_ci,
                      `entities_id` int(11) NOT NULL default '0' COMMENT 'RELATION to glpi_entities (id)',
                      `is_recursive` tinyint(1) NOT NULL default '1',
 
-                     `date_creation` datetime default NULL,
+                     `date_creation` timestamp,
                      `users_id_creator` int(11) default NULL COMMENT 'RELATION to glpi_users (id)',
-                     `date_mod` datetime default NULL,
+                     `date_mod` timestamp,
                      `users_id_lastupdater` int(11) default NULL COMMENT 'RELATION to glpi_users (id)',
 
                      PRIMARY KEY  (`id`),
@@ -245,13 +383,13 @@ function plugin_gdprropa_install() {
                      `storage_medium` int(11) NOT NULL default '0'  COMMENT 'Default status to UNDEFINED',
                      `pia_required` tinyint(1) NOT NULL default '0',
                      `pia_status` int(11) NOT NULL default '0' COMMENT 'Default status to UNDEFINED',
-                     `first_entry_date` datetime default NULL,
+                     `first_entry_date` timestamp,
                      `consent_required` tinyint(1) NOT NULL default '0',
                      `consent_storage` varchar(1000) collate utf8_unicode_ci default NULL,
 
-                     `date_creation` datetime default NULL,
+                     `date_creation` timestamp,
                      `users_id_creator` int(11) default NULL COMMENT 'RELATION to glpi_users (id)',
-                     `date_mod` datetime default NULL,
+                     `date_mod` timestamp,
                      `users_id_lastupdater` int(11) default NULL COMMENT 'RELATION to glpi_users (id)',
 
                      PRIMARY KEY  (`id`),
@@ -316,7 +454,7 @@ function plugin_gdprropa_install() {
                    ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
          $DB->queryOrDie($query, $DB->error());
       }
-
+      
       if (!$DB->tableExists('glpi_plugin_gdprropa_records_datasubjectscategories')) {
          $query = "CREATE TABLE `glpi_plugin_gdprropa_records_datasubjectscategories` (
                      `id` int(11) NOT NULL auto_increment,
@@ -337,6 +475,18 @@ function plugin_gdprropa_install() {
 
                      PRIMARY KEY  (`id`),
                      UNIQUE `un_per_record` (`plugin_gdprropa_records_id`, `plugin_gdprropa_legalbasisacts_id`)
+                   ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
+         $DB->queryOrDie($query, $DB->error());
+      }
+
+      if (!$DB->tableExists('glpi_plugin_gdprropa_records_datavisibilities')) {
+         $query = "CREATE TABLE `glpi_plugin_gdprropa_records_datavisibilities` (
+                     `id` int(11) NOT NULL auto_increment,
+                     `plugin_gdprropa_records_id` int(11) NOT NULL default '0' COMMENT 'RELATION to glpi_plugins_gdprropa_records (id)',
+                     `plugin_gdprropa_datavisibilities_id` int(11) NOT NULL default '0' COMMENT 'RELATION to glpi_plugins_gdprropa_datavisibilities (id)',
+
+                     PRIMARY KEY  (`id`),
+                     UNIQUE `un_per_record` (`plugin_gdprropa_records_id`, `plugin_gdprropa_datavisibilities_id`)
                    ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
          $DB->queryOrDie($query, $DB->error());
       }
@@ -412,6 +562,7 @@ function plugin_gdprropa_uninstall() {
       'glpi_plugin_gdprropa_controllerinfos',
       'glpi_plugin_gdprropa_datasubjectscategories',
       'glpi_plugin_gdprropa_legalbasisacts',
+      'glpi_plugin_gdprropa_datavisibilities',
       'glpi_plugin_gdprropa_personaldatacategories',
       'glpi_plugin_gdprropa_securitymeasures',
       'glpi_plugin_gdprropa_records',
@@ -419,6 +570,7 @@ function plugin_gdprropa_uninstall() {
       'glpi_plugin_gdprropa_records_retentions',
       'glpi_plugin_gdprropa_records_datasubjectscategories',
       'glpi_plugin_gdprropa_records_legalbasisacts',
+      'glpi_plugin_gdprropa_records_datavisibilities',
       'glpi_plugin_gdprropa_records_personaldatacategories',
       'glpi_plugin_gdprropa_records_securitymeasures',
       'glpi_plugin_gdprropa_records_softwares',
@@ -427,6 +579,34 @@ function plugin_gdprropa_uninstall() {
    foreach ($tables as $table) {
       $DB->query("DROP TABLE IF EXISTS `$table`;");
    }
+
+
+   $contracttypes = [
+      'Contrat de contrôleur commun',
+      'Contrat du processeur',
+      'Contrat avec un tiers',
+      'Contrat interne',
+      'Autre contrat',
+   ];
+
+   foreach ($contracttypes as $contracttype) {
+      $DB->queryOrDie("DELETE FROM `glpi_contracttypes` WHERE `glpi_contracttypes`.`comment` LIKE '%(Créé via plugin GDPRRoPA)%' AND `glpi_contracttypes`.`name` = '$contracttype';");
+   }
+
+   $statecnames = [
+      'Traitement RGPD > Nouveau',
+      'Traitement RGPD > En cours de traitement',
+      'Traitement RGPD > Non-conformité mineure',
+      'Traitement RGPD > Non-conformité majeure',
+      'Traitement RGPD > Conforme',
+      'Traitement RGPD > Retiré',
+      'Traitement RGPD',
+   ];
+
+   foreach ($statecnames as $statecname) {
+      $DB->queryOrDie("DELETE FROM `glpi_states` WHERE `glpi_states`.`comment` LIKE 'Créé via plugin GDPRRoPA' AND `glpi_states`.`completename` = '$statecname';", $DB->error());
+   }
+
 
    $query = "DELETE FROM `glpi_logs`
                WHERE
@@ -438,6 +618,7 @@ function plugin_gdprropa_uninstall() {
    $dp->deleteByCriteria(['itemtype' => [
       'PluginGdprropaRecord',
       'PluginGdprropaLegalBasisAct',
+      'PluginGdprropaDataVisibility',
       'PluginGdprropaSecurityMeasure',
       'PluginGdprropaDataSubjectsCategory',
       'PluginGdprropaPersonalDataCategory'
@@ -459,6 +640,7 @@ function plugin_gdprropa_getDropdown() {
 
    return [
       PluginGdprropaLegalBasisAct::class => PluginGdprropaLegalBasisAct::getTypeName(2),
+      PluginGdprropaDataVisibility::class => PluginGdprropaDataVisibility::getTypeName(2),
       PluginGdprropaSecurityMeasure::class => PluginGdprropaSecurityMeasure::getTypeName(2),
       PluginGdprropaDataSubjectsCategory::class => PluginGdprropaDataSubjectsCategory::getTypeName(2),
       PluginGdprropaPersonalDataCategory::class => PluginGdprropaPersonalDataCategory::getTypeName(2),
@@ -489,6 +671,7 @@ function plugin_gdprropa_getDatabaseRelations() {
             'glpi_plugin_gdprropa_controllerinfos' => 'entities_id',
             'glpi_plugin_gdprropa_datasubjectscategories' => 'entities_id',
             'glpi_plugin_gdprropa_legalbasisacts' => 'entities_id',
+            'glpi_plugin_gdprropa_datavisibilities' => 'entities_id',
             'glpi_plugin_gdprropa_personaldatacategories' => 'entities_id',
             'glpi_plugin_gdprropa_securitymeasures' => 'entities_id',
             ],
@@ -507,6 +690,10 @@ function plugin_gdprropa_getDatabaseRelations() {
                'users_id_lastupdater',
             ],
             'glpi_plugin_gdprropa_legalbasisacts' => [
+               'users_id_creator',
+               'users_id_lastupdater',
+            ],
+            'glpi_plugin_gdprropa_datavisibilities' => [
                'users_id_creator',
                'users_id_lastupdater',
             ],
@@ -540,6 +727,7 @@ function plugin_gdprropa_getDatabaseRelations() {
             'glpi_plugin_gdprropa_records_contracts' => 'plugin_gdprropa_records_id',
             'glpi_plugin_gdprropa_records_datasubjectscategories' => 'plugin_gdprropa_records_id',
             'glpi_plugin_gdprropa_records_legalbasisacts' => 'plugin_gdprropa_records_id',
+            'glpi_plugin_gdprropa_records_datavisibilities' => 'plugin_gdprropa_records_id',
             'glpi_plugin_gdprropa_records_personaldatacategories' => 'plugin_gdprropa_records_id',
             'glpi_plugin_gdprropa_records_retentions' => 'plugin_gdprropa_records_id',
             'glpi_plugin_gdprropa_records_securitymeasures' => 'plugin_gdprropa_records_id',
@@ -553,6 +741,11 @@ function plugin_gdprropa_getDatabaseRelations() {
          'glpi_plugin_gdprropa_legalbasisacts' => [
             'glpi_plugin_gdprropa_records_legalbasisacts' => 'plugin_gdprropa_legalbasisacts_id',
             'glpi_plugin_gdprropa_records_retentions' => 'plugin_gdprropa_legalbasisacts_id',
+         ],
+
+         'glpi_plugin_gdprropa_datavisibilities' => [
+            'glpi_plugin_gdprropa_records_datavisibilities' => 'plugin_gdprropa_datavisibilities_id',
+            'glpi_plugin_gdprropa_records_retentions' => 'plugin_gdprropa_datavisibilities_id',
          ],
 
          'glpi_plugin_gdprropa_personaldatacategories' => [

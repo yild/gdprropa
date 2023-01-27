@@ -164,7 +164,7 @@ class PluginGdprropaConfig extends CommonDBTM {
       return parent::prepareInputForUpdate($input);
    }
 
-   public function showForm() {
+   public function showForm($ID = null, array $options = [] ) {
 
       if (!self::canUpdate()) {
          return;
@@ -200,7 +200,7 @@ class PluginGdprropaConfig extends CommonDBTM {
       echo "</tr>";
 
       echo "<tr>";
-      echo "<td>" . __("Remove sofrware when record storage medium set to Paper only if any was assigned previously", 'gdprropa') . "</td>";
+      echo "<td>" . __("Remove software when record storage medium set to Paper only if any was assigned previously", 'gdprropa') . "</td>";
       echo "<td>";
 
       dropdown::showYesNo('system[remove_software_when_paper_only]', $config['system']['remove_software_when_paper_only']);
@@ -450,14 +450,14 @@ class PluginGdprropaConfig extends CommonDBTM {
       if (isset($data['install_categories_of_data_subjects']) && ($data['install_categories_of_data_subjects'] == 1)) {
          $sample_data = new PluginGdprropaDataSubjectsCategory();
          $sample_data->add([
-            'name' => __("Employees", 'gdprropa'),
-            'comment' => __("Company employees", 'gdprropa'),
+            'name' => __("Employées", 'gdprropa'),
+            'comment' => __("Employés de l\'entreprise", 'gdprropa'),
             'entities_id' => $_SESSION['glpiactive_entity'],
          ]);
          $sample_data = new PluginGdprropaDataSubjectsCategory();
          $sample_data->add([
-            'name' => __("Consumers", 'gdprropa'),
-            'comment' => __("Company consumers/clients", 'gdprropa'),
+            'name' => __("Consommateurs", 'gdprropa'),
+            'comment' => __("Consommateurs/clients de l\'entreprise", 'gdprropa'),
             'entities_id' => $_SESSION['glpiactive_entity'],
          ]);
       }
@@ -465,50 +465,56 @@ class PluginGdprropaConfig extends CommonDBTM {
       if (isset($data['install_legal_bases']) && ($data['install_legal_bases'] == 1)) {
          $sample_data = new PluginGdprropaLegalBasisAct();
          $sample_data->add([
-            'name' => __("Undefined", 'gdprropa'),
-            'content' => __("N/A", 'gdprropa'),
+            'name' => __("Indéfini", 'gdprropa'),
+            'description' => __("N/A", 'gdprropa'),
             'type' => PluginGdprropaLegalBasisAct::LEGALBASISACT_BLANK,
             'entities_id' => $_SESSION['glpiactive_entity'],
             'injected' => 1,
          ]);
          $sample_data->add([
             'name' => __("Article 6-1a", 'gdprropa'),
-            'content' =>  __("The data subject has given consent to the processing of his or her personal data for one or more specific purposes.", 'gdprropa'),
+            'comment' => __("Consentement", 'gdprropa'),
+            'description' =>  __("La personne concernée a donné son consentement au traitement de ses données personnelles pour une ou plusieurs finalités spécifiques.", 'gdprropa'),
             'type' => PluginGdprropaLegalBasisAct::LEGALBASISACT_GDPR,
             'entities_id' => $_SESSION['glpiactive_entity'],
             'injected' => 1,
          ]);
          $sample_data->add([
             'name' => __("Article 6-1b", 'gdprropa'),
-            'content' => __("Processing is necessary for the performance of a contract to which the data subject is party or in order to take steps at the request of the data subject prior to entering into a contract.", 'gdprropa'),
+            'comment' => __("Exécution d\'un contrat", 'gdprropa'),
+            'description' => __("Le traitement est nécessaire à l\'exécution d\'un contrat auquel la personne concernée est partie ou pour prendre des mesures à la demande de la personne concernée avant la conclusion d\'un contrat.", 'gdprropa'),
             'type' => PluginGdprropaLegalBasisAct::LEGALBASISACT_GDPR,
             'entities_id' => $_SESSION['glpiactive_entity'],
             'injected' => 1,
          ]);
          $sample_data->add([
             'name' => __("Article 6-1c", 'gdprropa'),
-            'content' => __("Processing is necessary for compliance with a legal obligation to which the controller is subject.", 'gdprropa'),
+            'comment' => __("Respect d\'une obligation légale", 'gdprropa'),
+            'description' => __("Le traitement est nécessaire au respect d\'une obligation légale à laquelle le responsable du traitement est soumis.", 'gdprropa'),
             'type' => PluginGdprropaLegalBasisAct::LEGALBASISACT_GDPR,
             'entities_id' => $_SESSION['glpiactive_entity'],
             'injected' => 1,
          ]);
          $sample_data->add([
             'name' => __("Article 6-1d", 'gdprropa'),
-            'content' =>  __("Processing is necessary in order to protect the vital interests of the data subject or of another natural person.", 'gdprropa'),
+            'comment' => __("Sauvegarde des intérêts vitaux de la personne", 'gdprropa'),
+            'description' =>  __("Le traitement est nécessaire pour protéger les intérêts vitaux de la personne concernée ou d\'une autre personne physique.", 'gdprropa'),
             'type' => PluginGdprropaLegalBasisAct::LEGALBASISACT_GDPR,
             'entities_id' => $_SESSION['glpiactive_entity'],
             'injected' => 1,
          ]);
          $sample_data->add([
             'name' => __("Article 6-1e", 'gdprropa'),
-            'content' => __("Processing is necessary for the performance of a task carried out in the public interest or in the exercise of official authority vested in the controller.", 'gdprropa'),
+            'comment' => __("Exécution d\'une mission d\'intérêt public", 'gdprropa'),
+            'description' => __("Le traitement est nécessaire à l\'exécution d\'une mission d\'intérêt public ou relevant de l\'exercice de l\'autorité publique dont est investi le responsable du traitement.", 'gdprropa'),
             'type' => PluginGdprropaLegalBasisAct::LEGALBASISACT_GDPR,
             'entities_id' => $_SESSION['glpiactive_entity'],
             'injected' => 1,
          ]);
          $sample_data->add([
             'name' => __("Article 6-1f", 'gdprropa'),
-            'content' => __("Processing is necessary for the purposes of the legitimate interests pursued by the controller or by a third party, except where such interests are overridden by the interests or fundamental rights and freedoms of the data subject which require protection of personal data, in particular where the data subject is a child.", 'gdprropa'),
+            'comment' => __("Intérêts légitimes", 'gdprropa'),
+            'description' => __("Le traitement est nécessaire aux fins des intérêts légitimes poursuivis par le responsable du traitement ou par un tiers, à moins que ne prévalent les intérêts ou les libertés et droits fondamentaux de la personne concernée qui exigent la protection des données à caractère personnel, notamment lorsque la personne concernée est un enfant.", 'gdprropa'),
             'type' => PluginGdprropaLegalBasisAct::LEGALBASISACT_GDPR,
             'entities_id' => $_SESSION['glpiactive_entity'],
             'injected' => 1,
@@ -518,93 +524,131 @@ class PluginGdprropaConfig extends CommonDBTM {
       if (isset($data['install_security_measures']) && ($data['install_security_measures'] == 1)) {
          $sample_data = new PluginGdprropaSecurityMeasure();
          $sample_data->add([
-            'name' => __("DPO was appointed", 'gdprropa'),
+            'name' => __("Le DPD a été nommé", 'gdprropa'),
             'type' => PluginGdprropaSecurityMeasure::SECURITYMEASURE_TYPE_ORGANIZATION,
-            'comment' => __("Data Protection Officer was appointed", 'gdprropa'),
+            'comment' => __("Le délégué à la protection des données a été nommé", 'gdprropa'),
             'entities_id' => $_SESSION['glpiactive_entity'],
          ]);
          $sample_data->add([
-            'name' => __("Computers Usage Policy", 'gdprropa'),
+            'name' => __("Politique d\'utilisation des ordinateurs", 'gdprropa'),
             'type' => PluginGdprropaSecurityMeasure::SECURITYMEASURE_TYPE_ORGANIZATION,
-            'comment' => __("Internal policy regarding usage of computers", 'gdprropa'),
+            'comment' => __("Politique interne concernant l\'utilisation des ordinateurs", 'gdprropa'),
             'entities_id' => $_SESSION['glpiactive_entity'],
          ]);
          $sample_data->add([
-            'name' => __("24h Security", 'gdprropa'),
+            'name' => __("Sécurité 24h/24", 'gdprropa'),
             'type' => PluginGdprropaSecurityMeasure::SECURITYMEASURE_TYPE_PHYSICAL,
-            'comment' => __("Securtiy personel on site for 24h", 'gdprropa'),
+            'comment' => __("Personnel de sécurité sur place pendant 24 heures", 'gdprropa'),
             'entities_id' => $_SESSION['glpiactive_entity'],
          ]);
          $sample_data->add([
-            'name' => __("UPS system", 'gdprropa'),
+            'name' => __("Système d\'onduleurs", 'gdprropa'),
             'type' => PluginGdprropaSecurityMeasure::SECURITYMEASURE_TYPE_PHYSICAL,
-            'comment' => __("Uninterruptidle power supply is installed", 'gdprropa'),
+            'comment' => __("Une alimentation sans interruption est installée", 'gdprropa'),
             'entities_id' => $_SESSION['glpiactive_entity'],
          ]);
          $sample_data->add([
-            'name' => __("Antivirus App", 'gdprropa'),
+            'name' => __("Application Antivirus", 'gdprropa'),
             'type' => PluginGdprropaSecurityMeasure::SECURITYMEASURE_TYPE_IT,
-            'comment' => __("Computers have Antivirus app installed", 'gdprropa'),
+            'comment' => __("Les ordinateurs ont une application antivirus installée", 'gdprropa'),
             'entities_id' => $_SESSION['glpiactive_entity'],
          ]);
          $sample_data->add([
-            'name' => __("Firewall", 'gdprropa'),
+            'name' => __("Pare-feu", 'gdprropa'),
             'type' => PluginGdprropaSecurityMeasure::SECURITYMEASURE_TYPE_IT,
-            'comment' => __("Firewall protects internal network", 'gdprropa'),
+            'comment' => __("Le pare-feu protège le réseau interne", 'gdprropa'),
             'entities_id' => $_SESSION['glpiactive_entity'],
          ]);
       }
 
+      
+
       if (isset($data['install_contract_types']) && ($data['install_contract_types'] == 1)) {
+
+         global $DB;
+
+         $contractnames = [
+            'Contrat de contrôleur commun',
+            'Contrat du processeur',
+            'Contrat avec un tiers',
+            'Contrat interne',
+            'Autre contrat',
+         ];
+         $contract_row = count($contractnames);
+         $verifs = [];
+         $i = 0;
+
+         $result = $DB->query("SELECT * FROM `glpi_contracttypes` WHERE `glpi_contracttypes`.`comment` LIKE '%(Créé via plugin GDPRRoPA)%';");
+
+         if(!empty($result)){
+            foreach($contractnames as $contractname){           
+               foreach($result as $item){
+                  if(($item['name'] == $contractname) && ($verifs[$i] != true)){
+                     $verifs[$i] = true;
+                  }
+                  elseif(($item['name'] != $contractname) && ($verifs[$i] != true)){
+                     $verifs[$i] = false;
+                  }
+                  elseif($verifs[$i] != true){
+                     $verifs[$i] = false;
+                  }
+               }
+               $i++;        
+            }
+         }
+         else{
+            for($i = 0; $i < $contract_row; ){
+               $verifs[$i] = false;
+               $i++;
+            }
+         }
+
          $sample_data = new ContractType();
-         $sample_data->add([
-            'name' => __("GDPR Joint Controller Contract", 'gdprropa'),
-            'comment' => __("GDPR Joint Controller Contract", 'gdprropa'),
-         ]);
-         $sample_data->add([
-            'name' => __("GDPR Processor Contract", 'gdprropa'),
-            'comment' => __("GDPR Processor Contract", 'gdprropa'),
-         ]);
-         $sample_data->add([
-            'name' => __("GDPR Thirdparty Contract", 'gdprropa'),
-            'comment' => __("GDPR Thirdparty Contract", 'gdprropa'),
-         ]);
-         $sample_data->add([
-            'name' => __("GDPR Internal Contract", 'gdprropa'),
-            'comment' => __("GDPR Internal Contract", 'gdprropa'),
-         ]);
-         $sample_data->add([
-            'name' => __("GDPR Other Contract", 'gdprropa'),
-            'comment' => __("GDPR Other Contract", 'gdprropa'),
-         ]);
+         $contractcomments = [
+            'Contrat de contrôleur commun (Créé via plugin GDPRRoPA)',
+            'Contrat du processeur (Créé via plugin GDPRRoPA)',
+            'Contrat avec un tiers (Créé via plugin GDPRRoPA)',
+            'Contrat interne (Créé via plugin GDPRRoPA)',
+            'Autre contrat (Créé via plugin GDPRRoPA)',
+         ];
+
+         for($i = 0; $i < $contract_row; ){
+            if($verifs[$i] == false){
+               $sample_data->add([
+                  'name' => $contractnames[$i],
+                     'comment' => $contractcomments[$i],
+               ]);
+            }
+            $i++;
+         }
       }
 
       if (isset($data['install_personal_data_types']) && ($data['install_personal_data_types'] == 1)) {
          $sample_data = new PluginGdprropaPersonalDataCategory();
          $parent_id = $sample_data->add([
-            'name' => __("Employees record", 'gdprropa'),
-            'comment' => __("Employee personal data", 'gdprropa'),
+            'name' => __("Dossier des employés", 'gdprropa'),
+            'comment' => __("Données personnelles des employés", 'gdprropa'),
             'is_special_category' => false,
             'entities_id' => $_SESSION['glpiactive_entity'],
          ]);
          if ($parent_id) {
             $sample_data->add([
-               'name' => __("First name", 'gdprropa'),
-               'comment' => __("Employee first name", 'gdprropa'),
+               'name' => __("Prénom", 'gdprropa'),
+               'comment' => __("Prénom de l\'employé", 'gdprropa'),
                'entities_id' => $_SESSION['glpiactive_entity'],
                'is_special_category' => false,
                'plugin_gdprropa_personaldatacategories_id' => $parent_id
             ]);
             $sample_data->add([
-               'name' => __("Last name", 'gdprropa'),
-               'comment' => __("Employee last name", 'gdprropa'),
+               'name' => __("Nom de famille", 'gdprropa'),
+               'comment' => __("Nom de famille de l\'employé", 'gdprropa'),
                'entities_id' => $_SESSION['glpiactive_entity'],
                'is_special_category' => false,
                'plugin_gdprropa_personaldatacategories_id' => $parent_id
             ]);
             $sample_data->add([
-               'name' => __("Personal ID", 'gdprropa'),
-               'comment' => __("Employee personal ID", 'gdprropa'),
+               'name' => __("ID personnel", 'gdprropa'),
+               'comment' => __("ID personnel de l\'employé", 'gdprropa'),
                'entities_id' => $_SESSION['glpiactive_entity'],
                'is_special_category' => true,
                'plugin_gdprropa_personaldatacategories_id' => $parent_id

@@ -124,7 +124,7 @@ class PluginGdprropaRecord_Software extends CommonDBRelation {
 
       $items_list = [];
       $used = [];
-      while ($data = $iterator->next()) {
+      foreach($iterator as $data) {
          $items_list[$data['id']] = $data;
          $used[$data['id']] = $data['id'];
       }

@@ -40,6 +40,8 @@
  --------------------------------------------------------------------------
  */
 
+use Glpi\Toolbox\Sanitizer;
+
 if (!defined('GLPI_ROOT')) {
    die("Sorry. You can't access this file directly");
 }
@@ -188,7 +190,7 @@ class PluginGdprropaRecord_Retention extends CommonDBTM {
       echo "";
       $additional_info = '';
       if (array_key_exists('additional_info', $this->fields)) {
-         $additional_info = Html::setSimpleTextContent($this->fields['additional_info']);
+         $additional_info = Sanitizer::sanitize($this->fields['additional_info']);
       }
       echo "<textarea style='width:98%' name='additional_info' maxlength='1000' rows='3'>" . $additional_info . "</textarea>";
       echo "</td></tr>";

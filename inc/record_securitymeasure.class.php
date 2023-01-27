@@ -102,7 +102,7 @@ class PluginGdprropaRecord_SecurityMeasure extends CommonDBRelation {
 
       $items_list = [];
       $used = [];
-      while ($data = $iterator->next()) {
+      foreach ($iterator as $data) {
          $items_list[$data['id']] = $data;
          $used[$data['id']] = $data['id'];
       }
@@ -119,7 +119,6 @@ class PluginGdprropaRecord_SecurityMeasure extends CommonDBRelation {
          echo __("GDPR Article 30 1g", 'gdprropa');
          echo "</strong></center></td></tr>";
          echo "<tr class='tab_bg_1'><td width='80%' class='center'>";
-
          PluginGdprropaSecurityMeasure::dropdown([
             'addicon'  => PluginGdprropaSecurityMeasure::canCreate(),
             'name' => 'plugin_gdprropa_securitymeasures_id',

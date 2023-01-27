@@ -40,6 +40,8 @@
  --------------------------------------------------------------------------
  */
 
+ use Dropdown;
+
 if (!defined('GLPI_ROOT')) {
    die("Sorry. You can't access this file directly");
 }
@@ -102,9 +104,10 @@ class PluginGdprropaRecord_DataSubjectsCategory extends CommonDBRelation {
 
       $items_list = [];
       $used = [];
-      while ($data = $iterator->next()) {
+
+      foreach ($iterator as $data) {
          $items_list[$data['id']] = $data;
-         $used[$data['id']] = $data['id'];
+         $used[$data['id']] = $data['id'];     
       }
 
       if ($canedit) {
@@ -183,6 +186,7 @@ class PluginGdprropaRecord_DataSubjectsCategory extends CommonDBRelation {
 
             echo "<td class='left" . (isset($data['is_deleted']) && $data['is_deleted'] ? " tab_bg_2_2'" : "'");
             echo ">" . $name . "</td>";
+            
 
             echo "<td class='left'>";
             echo Dropdown::getDropdownName(

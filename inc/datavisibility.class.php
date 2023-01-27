@@ -44,38 +44,43 @@ if (!defined('GLPI_ROOT')) {
    die("Sorry. You can't access this file directly");
 }
 
-class PluginGdprropaLegalBasisAct extends CommonDropdown {
+class PluginGdprropaDataVisibility extends CommonDropdown {
 
-   static $rightname = 'plugin_gdprropa_legalbasisact';
+   static $rightname = 'plugin_gdprropa_datavisibility';
 
    public $dohistory = true;
 
-   const LEGALBASISACT_BLANK = 0;
-   const LEGALBASISACT_GDPR = 1;
-   const LEGALBASISACT_NATIONAL = 2;
-   const LEGALBASISACT_INTERNATIONAL = 3;
-   const LEGALBASISACT_INTERNAL = 4;
-   const LEGALBASISACT_OTHER = 5;
+   const DATAVISIBILITY_BLANK = 0;
+   const DATAVISIBILITY_INTERNAL = 1;
+   const DATAVISIBILITY_EXTERNAL = 2;
+   const DATAVISIBILITY_INTERNALGROUP = 4;
+   const DATAVISIBILITY_EXTERNALGROUP = 8;
 
    static function getTypeName($nb = 0) {
 
-       return _n("Legal basis", "Legal bases", $nb, 'gdprropa');
+       return _n("Personne(s) ayant accès aux données", "Personnes ayant accès aux données", $nb, 'gdprropa');
    }
 
    function getAdditionalFields() {
 
       return [
          [
+            'name' => 'firstname',
+            'label' => __("Prénom"),
+            'type' => 'text',
+            'rows' => 6
+         ],
+         [
+            'name' => 'accessed_data',
+            'label' => __("Données accédées"),
+            'type' => 'textarea',
+            'rows' => 6
+         ],
+         [
             'name' => 'type',
             'label' => __("Type"),
             'list' => true,
-         ],
-         [
-            'name' => 'description',
-            'label' => __("Description"),
-            'type' => 'textarea',
-            'rows' => 6
-         ]
+         ]      
       ];
    }
 
@@ -87,9 +92,9 @@ class PluginGdprropaLegalBasisAct extends CommonDropdown {
 
       switch ($field) {
          case 'type' :
-            $legalbases = self::getAllTypesArray();
+            $datavisibility = self::getAllTypesArray();
 
-            return $legalbases[$values[$field]];
+            return $datavisibility[$values[$field]];
       }
 
       return parent::getSpecificValueToDisplay($field, $values, $options);
@@ -127,12 +132,11 @@ class PluginGdprropaLegalBasisAct extends CommonDropdown {
    static function getAllTypesArray() {
 
       return [
-         self::LEGALBASISACT_BLANK => __("Undefined", 'gdprropa'),
-         self::LEGALBASISACT_GDPR => __("GDPR Article", 'gdprropa'),
-         self::LEGALBASISACT_NATIONAL => __("Local law regulation", 'gdprropa'),
-         self::LEGALBASISACT_INTERNATIONAL => __("International regulation", 'gdprropa'),
-         self::LEGALBASISACT_INTERNAL => __("Controller internal regulation", 'gdprropa'),
-         self::LEGALBASISACT_OTHER => __("Other regulation", 'gdprropa'),
+         self::DATAVISIBILITY_BLANK => __("Undefined", 'gdprropa'),
+         self::DATAVISIBILITY_INTERNAL => __("Personne interne", 'gdprropa'),
+         self::DATAVISIBILITY_EXTERNAL => __("Personne externe", 'gdprropa'),
+         self::DATAVISIBILITY_INTERNALGROUP => __("Groupe de personnes internes", 'gdprropa'),
+         self::DATAVISIBILITY_EXTERNALGROUP => __("Groupe de personnes externes", 'gdprropa'),
       ];
    }
 
@@ -152,8 +156,8 @@ class PluginGdprropaLegalBasisAct extends CommonDropdown {
 
    function cleanDBonPurge() {
 
-      $rel = new PluginGdprropaRecord_LegalBasisAct();
-      $rel->deleteByCriteria(['plugin_gdprropa_legalbasisacts_id' => $this->fields['id']]);
+      $rel = new PluginGdprropaRecord_DataVisibility();
+      $rel->deleteByCriteria(['plugin_gdprropa_datavisibilities_id' => $this->fields['id']]);
 
    }
 
@@ -179,6 +183,16 @@ class PluginGdprropaLegalBasisAct extends CommonDropdown {
       $tab[] = [
          'id'                 => '2',
          'table'              => $this->getTable(),
+         'field'              => 'firstname',
+         'name'               => __("Prénom"),
+         'datatype'           => 'itemlink',
+         'massiveaction'      => false,
+         'autocomplete'       => true,
+      ];
+
+      $tab[] = [
+         'id'                 => '3',
+         'table'              => $this->getTable(),
          'field'              => 'id',
          'name'               => __("ID"),
          'massiveaction'      => false,
@@ -186,7 +200,7 @@ class PluginGdprropaLegalBasisAct extends CommonDropdown {
       ];
 
       $tab[] = [
-         'id'                 => '3',
+         'id'                 => '4',
          'table'              => $this->getTable(),
          'field'              => 'type',
          'name'               => __("Type", 'gdprropa'),
@@ -196,17 +210,17 @@ class PluginGdprropaLegalBasisAct extends CommonDropdown {
       ];
 
       $tab[] = [
-         'id'                 => '4',
+         'id'                 => '5',
          'table'              => $this->getTable(),
-         'field'              => 'description',
-         'name'               => __("Description"),
+         'field'              => 'accessed_data',
+         'name'               => __("Données accédées"),
          'datatype'           => 'text',
          'toview'             => true,
          'massiveaction'      => true,
       ];
 
       $tab[] = [
-         'id'                 => '5',
+         'id'                 => '6',
          'table'              => $this->getTable(),
          'field'              => 'comment',
          'name'               => __("Comments"),
@@ -216,7 +230,7 @@ class PluginGdprropaLegalBasisAct extends CommonDropdown {
       ];
 
       $tab[] = [
-         'id'                 => '6',
+         'id'                 => '7',
          'table'              => 'glpi_entities',
          'field'              => 'completename',
          'name'               => __("Entity"),
@@ -225,7 +239,7 @@ class PluginGdprropaLegalBasisAct extends CommonDropdown {
       ];
 
       $tab[] = [
-         'id'                 => '7',
+         'id'                 => '8',
          'table'              => $this->getTable(),
          'field'              => 'is_recursive',
          'name'               => __("Child entities"),

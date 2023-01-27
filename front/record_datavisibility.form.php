@@ -42,29 +42,17 @@
 
 include("../../../inc/includes.php");
 
-$plugin = new Plugin();
+Session::checkLoginUser();
 
-if ($plugin->isActivated('gdprropa')) {
+if (isset($_POST['add'])
+   && (isset($_POST['plugin_gdprropa_records_id']) && ($_POST['plugin_gdprropa_datavisibilities_id']))) {
 
-   $config = new PluginGdprropaConfig();
+   $record = new PluginGdprropaRecord();
+   $record->check($_POST[PluginGdprropaRecord::getForeignKeyField()], UPDATE);
 
-   if (isset($_POST['add'])) {
-      $config->check(-1, CREATE, $_POST);
-      $config->add($_POST);
-      Html::back();
-   } else if (isset($_POST['update'])) {
-      $config->check($_POST['id'], UPDATE, $_POST);
-      $config->update($_POST);
-      Html::back();
-   } else if (isset($_POST['sampledata'])) {
-      $config->check(-1, CREATE, $_POST);
-      $config->installSampleData($_POST);
-      Html::back();
-
-   } else {
-      Html::header(PluginGdprropaRecord::getTypeName(0), '', "management", "plugingdprropamenu");
-      $config->showForm();
-      Html::footer();
-   }
+   $item = new PluginGdprropaRecord_DataVisibility();
+   $item->add($_POST);
 
 }
+
+Html::back();
