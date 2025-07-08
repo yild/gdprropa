@@ -61,6 +61,8 @@ class PluginGdprropaCreatePDFBase extends CommonGLPI {
    }
 
    public function showPDF() {
+	   // TODO: sprawdzic czy to bedzie dzialac
+	   ob_end_clean();
 
       $this->pdf->Output('glpi.pdf', 'I');
 

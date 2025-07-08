@@ -62,7 +62,7 @@ if ($plugin->isActivated('gdprropa')) {
       Html::back();
    } else {
       Html::header(PluginGdprropaRecord::getTypeName(0), '', "management", "plugingdprropamenu");
-      $config->showForm();
+      $config->showForm(-1, []);
       Html::footer();
    }
 

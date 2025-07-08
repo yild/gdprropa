@@ -526,7 +526,10 @@ function plugin_gdprropa_getDatabaseRelations() {
          ],
 
          'glpi_contracts' => [
-            'glpi_plugin_gdprropa_records_contracts' => 'contracts_id',
+            'glpi_plugin_gdprropa_records_contracts' => 'contracts_id', 
+            'glpi_plugin_gdprropa_records_retentions' => 'contracts_id',
+         ],
+         'glpi_contracttypes' => [
             'glpi_plugin_gdprropa_controllerinfos' => [
                'contracttypes_id_jointcontroller',
                'contracttypes_id_processor',
@@ -534,7 +537,6 @@ function plugin_gdprropa_getDatabaseRelations() {
                'contracttypes_id_internal',
                'contracttypes_id_other',
             ],
-            'glpi_plugin_gdprropa_records_retentions' => 'contracts_id',
          ],
          'glpi_plugin_gdprropa_records' => [
             'glpi_plugin_gdprropa_records_contracts' => 'plugin_gdprropa_records_id',

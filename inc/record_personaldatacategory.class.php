@@ -102,7 +102,7 @@ class PluginGdprropaRecord_PersonalDataCategory extends CommonDBRelation {
 
       $items_list = [];
       $used = [];
-      while ($data = $iterator->next()) {
+      foreach ($iterator as $data) {
          $items_list[$data['id']] = $data;
          $used[$data['id']] = $data['id'];
       }

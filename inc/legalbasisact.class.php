@@ -111,7 +111,7 @@ class PluginGdprropaLegalBasisAct extends CommonDropdown {
       return parent::getSpecificValueToSelect($field, $name, $values, $options);
    }
 
-   function displaySpecificTypeField($ID, $field = []) {
+   function displaySpecificTypeField($ID, $field = [], array $options = []) {
 
       if ($field['name'] == 'type') {
          self::dropdownTypes($field['name'], $this->fields[$field['name']], true);

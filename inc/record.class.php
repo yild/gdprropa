@@ -97,7 +97,7 @@ class PluginGdprropaRecord extends CommonDBTM {
       echo "<tr class='tab_bg_1'>";
       echo "<td>" . __("Purpose (GDPR Article 30 1b)", 'gdprropa') . "</td>";
       echo "<td colspan='2'>";
-      $purpose = Html::setSimpleTextContent($this->fields['content']);
+      $purpose = $this->fields['content'];
       echo "<textarea style='width:98%' name='content' required maxlength='1000' rows='3'>" . $purpose . "</textarea>";
       echo "</td></tr>";
 
@@ -163,7 +163,7 @@ class PluginGdprropaRecord extends CommonDBTM {
       echo "<tr class='tab_bg_1'>";
       echo "<td>" . __("Additional information", 'gdprropa') . "</td>";
       echo "<td colspan='2'>";
-      $additional_info = Html::setSimpleTextContent($this->fields['additional_info']);
+      $additional_info = $this->fields['additional_info'];
       echo "<textarea style='width: 98%;' name='additional_info' maxlength='1000' rows='3'>" . $additional_info . "</textarea>";
       echo "</td></tr>";
       $this->showFormButtons($options);
@@ -185,7 +185,7 @@ class PluginGdprropaRecord extends CommonDBTM {
       if ($data['consent_required']) {
          echo "<td>" . __("Consent storage", 'gdprropa') . "</td>";
          echo "<td colspan='2'>";
-         $consent_storage = Html::setSimpleTextContent($data['consent_storage']);
+         $consent_storage = $data['consent_storage'];
          echo "<textarea style='width: 98%;' name='consent_storage' maxlength='1000' rows='3'>" . $consent_storage . "</textarea>";
          echo "</td>";
       }
@@ -334,6 +334,10 @@ class PluginGdprropaRecord extends CommonDBTM {
          $input['consent_storage'] = null;
       }
 
+	   if (array_key_exists('first_entry_date', $input) && $input['first_entry_date'] == '') {
+		   $input['first_entry_date'] = null;
+	   }
+
       return parent::prepareInputForAdd($input);
    }
 
@@ -348,6 +352,10 @@ class PluginGdprropaRecord extends CommonDBTM {
       if (array_key_exists('consent_required', $input) && $input['consent_required'] == 0) {
          $input['consent_storage'] = null;
       }
+
+	   if (array_key_exists('first_entry_date', $input) && $input['first_entry_date'] == '') {
+		   $input['first_entry_date'] = null;
+	   }
 
       return parent::prepareInputForUpdate($input);
    }

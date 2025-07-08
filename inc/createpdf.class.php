@@ -121,7 +121,8 @@ class PluginGdprropaCreatePDF extends PluginGdprropaCreatePDFBase {
       $this->entity = new Entity();
 
       $this->controller_info = PluginGdprropaControllerInfo::getFirstControllerInfo($entity_id);
-      if (!is_null($this->controller_info)) {
+      if (is_null($this->controller_info)) {
+      } else {
          $this->entity->getFromDB($this->controller_info->fields['entities_id']);
       }
 
@@ -377,43 +378,55 @@ class PluginGdprropaCreatePDF extends PluginGdprropaCreatePDFBase {
       $info = "<strong>" . $controller_name . "</strong>";
       if (isset($this->controller_info->fields['id'])) {
 
-         $controller_name = trim($this->controller_info->fields['controllername']);
+         if(!is_null($this->controller_info->fields['controllername'])) {
+             $controller_name = trim($this->controller_info->fields['controllername']);
+         }
+
          if (!empty($controller_name)) {
 
             $info = "<ul>";
             $info .= "<li>" . __("Name") . ": <strong>" . $controller_name . "</strong>" . "</li>";
-
-            $address = trim($this->entity->fields['address']);
-            if (empty($address)) {
-               $address = __("N/A", 'gdprropa');
+//TODO: poprawic kolejnosc wywolywania tego, najpierw ustaw NA pozniej sprawdz trim ? ; ZROBIC TAK DLA KAZDEGO!
+              $address = __("N/A", 'gdprropa');
+              if (!is_null($this->entity->fields['address'])) {
+              $address = trim($this->entity->fields['address']);
             }
-            $postcode = trim($this->entity->fields['postcode']);
-            if (empty($postcode)) {
+
                $postcode = __("N/A", 'gdprropa');
-            }
-            $town = trim($this->entity->fields['town']);
-            if (empty($town)) {
-               $town = __("N/A", 'gdprropa');
+            if (!is_null($this->entity->fields['postcode'])) {
+               $postcode = trim($this->entity->fields['postcode']);
             }
 
+               $town = __("N/A", 'gdprropa');
+		      if (!is_null($this->entity->fields['town'])) {
+			      $town = trim($this->entity->fields['town']);
+            }
+
+		      $state = __("N/A", 'gdprropa');
+		      if (!is_null($this->entity->fields['state'])) {
             $state = trim($this->entity->fields['state']);
+		      }
+		      $county = __("N/A", 'gdprropa');
+		      if (!is_null($this->entity->fields['country'])) {
             $country = trim($this->entity->fields['country']);
+		      }
 
+		      $phone = __("N/A", 'gdprropa');
+		      if (!is_null($this->entity->fields['phonenumber'])) {
             $phone = trim($this->entity->fields['phonenumber']);
-            if (empty($phone)) {
-               $town = __("N/A", 'gdprropa');
             }
+		      
+		      $fax = __("N/A", 'gdprropa');
+		      if(!is_null($this->entity->fields['fax'])) {
             $fax = trim($this->entity->fields['fax']);
-            if (empty($fax)) {
-               $town = __("N/A", 'gdprropa');
             }
+		      $email = __("N/A", 'gdprropa');
+		      if(!is_null($this->entity->fields['email'])) {
             $email = trim($this->entity->fields['email']);
-            if (empty($email)) {
-               $town = __("N/A", 'gdprropa');
             }
+		      $web = __("N/A", 'gdprropa');
+		      if(!is_null($this->entity->fields['website'])) {
             $web = trim($this->entity->fields['website']);
-            if (empty($web)) {
-               $town = __("N/A", 'gdprropa');
             }
 
             $address_full = $address . ", " . $postcode . " " . $town;
@@ -461,13 +474,14 @@ class PluginGdprropaCreatePDF extends PluginGdprropaCreatePDFBase {
          $location = new Location();
          $location->getFromDB($user->fields['locations_id']);
 
-         $realname = trim($user->fields['realname']);
-         if (empty($realname)) {
             $realname = __("N/A", 'gdprropa');
+	      if (!is_null($user->fields['realname'])) {
+		      $realname = trim($user->fields['realname']);
          }
-         $firstname = trim($user->fields['firstname']);
-         if (empty($firstname)) {
+
             $firstname = __("N/A", 'gdprropa');
+	      if (!is_null($user->fields['firstname'])) {
+		      $firstname = trim($user->fields['firstname']);
          }
 
          $info = "<ul>";
@@ -764,7 +778,7 @@ class PluginGdprropaCreatePDF extends PluginGdprropaCreatePDFBase {
 
       if ($this->print_options['show_status_in_header']) {
 
-         $status = dropdown::getDropdownName('glpi_states', $record->fields['states_id']);
+         $status = Dropdown::getDropdownName('glpi_states', $record->fields['states_id']);
          $this->writeInternal(
             '<h3>' . sprintf(__("Record status: %s", 'gdprropa'), $status) . '</h3>', [
                'fillcolor' => [100, 100, 100],
@@ -790,7 +804,7 @@ class PluginGdprropaCreatePDF extends PluginGdprropaCreatePDFBase {
       }
       */
       $this->printRecordInformation($record);
-
+	   // TODO: nie wyswietlaja sie prawa !!!
       $this->printLegalBasisActs($record);
 
       $this->printDataSubjectsCategories($record);
@@ -807,7 +821,7 @@ class PluginGdprropaCreatePDF extends PluginGdprropaCreatePDFBase {
       $contracts += $this->printContracts($record, PluginGdprropaRecord_Contract::CONTRACT_OTHER, $contracts);
 
       $this->printSoftware($record);
-
+	   // TODO: nie wyswietla sie ? sprawdzic czy uzupelnione sa
       $this->printSecurityMeasures($record, PluginGdprropaSecurityMeasure::SECURITYMEASURE_TYPE_ORGANIZATION, true);
       $this->printSecurityMeasures($record, PluginGdprropaSecurityMeasure::SECURITYMEASURE_TYPE_PHYSICAL);
       $this->printSecurityMeasures($record, PluginGdprropaSecurityMeasure::SECURITYMEASURE_TYPE_IT);
@@ -857,7 +871,7 @@ class PluginGdprropaCreatePDF extends PluginGdprropaCreatePDFBase {
             'value' => $pia_status[$record->fields['pia_status']]
          ];
       }
-      if (empty($record->fields['first_entry_date'])) {
+	   if (!is_null($record->fields['first_entry_date'])) {
          $first_entry_date = Html::convDate($record->fields['first_entry_date']);
       } else {
          $first_entry_date = __("N/A", 'gdprropa');
@@ -913,12 +927,15 @@ class PluginGdprropaCreatePDF extends PluginGdprropaCreatePDFBase {
    protected function printLegalBasisActs(PluginGdprropaRecord $record) {
 
       global $DB;
-
+// TODO: tutaj cos nie dziala
       $this->writeInternal(
          '<h2>' . PluginGdprropaLegalBasisAct::getTypeName(1) . '</h2>', [
             'linebefore' => 1
          ]);
 
+	   $result = (new PluginGdprropaRecord_LegalBasisAct())
+		   ->find([PluginGdprropaRecord::getForeignKeyField() => $record->fields['id']]);
+	   /*
       $result = $DB->request([
          'FROM' => [PluginGdprropaRecord_LegalBasisAct::getTable(), PluginGdprropaLegalBasisAct::getTable()],
          'WHERE' => [
@@ -927,7 +944,7 @@ class PluginGdprropaCreatePDF extends PluginGdprropaCreatePDFBase {
           ],
          'ORDER' => ['type'],
       ], "", true);
-
+	   */
       if (!count($result)) {
 
          $this->writeInternal(
@@ -971,20 +988,27 @@ class PluginGdprropaCreatePDF extends PluginGdprropaCreatePDFBase {
             '<tbody>';
 
          $type = PluginGdprropaLegalBasisAct::getAllTypesArray();
-         while ($item = $result->next()) {
+	      
+	      foreach ($result as $item) {
+		      
+		      $dsc = new PluginGdprropaLegalBasisAct();
+		      $dsc->getFromDB($item['plugin_gdprropa_legalbasisacts_id']);
+
+
+//         while ($item = $result->next()) {
             $tbl .=
                '<tr>' .
-               '<td width="'. $cols_width[0] . '%">' . $item['name'] . '</td>' .
-               '<td width="'. $cols_width[1] . '%">' . $type[$item['type']] . '</td>';
+			      '<td width="'. $cols_width[0] . '%">' . $dsc->fields['name'] . '</td>' .
+			      '<td width="'. $cols_width[1] . '%">' . $type[$dsc->fields['type']] . '</td>';
             if ($this->print_options['show_inherited_from']) {
                $tbl .=
-                  '<td width="'. $cols_width[2] . '%">' . Dropdown::getDropdownName(Entity::getTable(), $item['entities_id']) . '</td>';
+				      '<td width="'. $cols_width[2] . '%">' . Dropdown::getDropdownName(Entity::getTable(), $dsc->fields['entities_id']) . '</td>';
             }
             $tbl .=
-               '<td width="'. $cols_width[3] . '%">' . $item['content'] . '</td>';
+			      '<td width="'. $cols_width[3] . '%">' . $dsc->fields['content'] . '</td>';
             if ($this->print_options['show_comments']) {
                $tbl .=
-                  '<td width="'. $cols_width[4] . '%">' . nl2br($item['comment']) . '</td>';
+				      '<td width="'. $cols_width[4] . '%">' . nl2br($dsc->fields['comment']) . '</td>';
             }
             $tbl .=
                '</tr>';

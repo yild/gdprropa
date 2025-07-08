@@ -124,7 +124,7 @@ class PluginGdprropaRecord_Software extends CommonDBRelation {
 
       $items_list = [];
       $used = [];
-      while ($data = $iterator->next()) {
+      foreach ($iterator as $data) {
          $items_list[$data['id']] = $data;
          $used[$data['id']] = $data['id'];
       }
@@ -150,10 +150,17 @@ class PluginGdprropaRecord_Software extends CommonDBRelation {
          Software::dropdown([
             'addicon'  => Software::canCreate(),
             'name' => 'softwares_id',
-            'entity' => $entity,
-            'entity_sons' => $entity_sons,
+            'entity' => $entity_sons,
+//            'entity_sons' => $entity_sons,
             'used' => $used,
          ]);
+//         Software::dropdown([
+//            'addicon'  => Software::canCreate(),
+//            'name' => 'softwares_id',
+//            'entity' => $entity,
+//            'entity_sons' => $entity_sons,
+//            'used' => $used,
+//         ]);
          echo "</td></tr><tr><td width='20%' class='center'>";
          echo "<input type='submit' name='add' value=\"" . _sx('button', 'Add') . "\" class='submit'>";
          echo "</td></tr>";

@@ -188,7 +188,7 @@ class PluginGdprropaRecord_Retention extends CommonDBTM {
       echo "";
       $additional_info = '';
       if (array_key_exists('additional_info', $this->fields)) {
-         $additional_info = Html::setSimpleTextContent($this->fields['additional_info']);
+         $additional_info = $this->fields['additional_info'];
       }
       echo "<textarea style='width:98%' name='additional_info' maxlength='1000' rows='3'>" . $additional_info . "</textarea>";
       echo "</td></tr>";
@@ -329,7 +329,7 @@ class PluginGdprropaRecord_Retention extends CommonDBTM {
          'name' => 'plugin_gdprropa_legalbasisacts_id',
          'value' => $value,
          'entity' => $data['is_record_recursive'] ? getSonsOf('glpi_entities', $data['entities_id']) : $data['entities_id'],
-         'entity_sons' => $data['is_record_recursive'],
+//         'entity_sons' => $data['is_record_recursive'],
          'used' => [],
       ]);
    }

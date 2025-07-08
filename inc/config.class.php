@@ -163,8 +163,8 @@ class PluginGdprropaConfig extends CommonDBTM {
 
       return parent::prepareInputForUpdate($input);
    }
-
-   public function showForm() {
+	
+	public function showForm($id, $options = []) {
 
       if (!self::canUpdate()) {
          return;
