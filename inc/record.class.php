@@ -51,6 +51,9 @@
          czy ignorowac? (będzie widoczne póki powiązane, bedzie mozna usunąć ale poźniej nie będzie tego widać)
          czy odpiąć od RECORD?
 */
+
+use Glpi\Toolbox\Sanitizer;
+
 if (!defined('GLPI_ROOT')) {
    die("Sorry. You can't access this file directly");
 }
@@ -97,7 +100,7 @@ class PluginGdprropaRecord extends CommonDBTM {
       echo "<tr class='tab_bg_1'>";
       echo "<td>" . __("Purpose (GDPR Article 30 1b)", 'gdprropa') . "</td>";
       echo "<td colspan='2'>";
-      $purpose = $this->fields['content'];
+      $purpose = Sanitizer::sanitize($this->fields['content']);
       echo "<textarea style='width:98%' name='content' required maxlength='1000' rows='3'>" . $purpose . "</textarea>";
       echo "</td></tr>";
 
@@ -163,7 +166,7 @@ class PluginGdprropaRecord extends CommonDBTM {
       echo "<tr class='tab_bg_1'>";
       echo "<td>" . __("Additional information", 'gdprropa') . "</td>";
       echo "<td colspan='2'>";
-      $additional_info = $this->fields['additional_info'];
+      $additional_info = Sanitizer::sanitize($this->fields['additional_info']);
       echo "<textarea style='width: 98%;' name='additional_info' maxlength='1000' rows='3'>" . $additional_info . "</textarea>";
       echo "</td></tr>";
       $this->showFormButtons($options);
@@ -185,7 +188,7 @@ class PluginGdprropaRecord extends CommonDBTM {
       if ($data['consent_required']) {
          echo "<td>" . __("Consent storage", 'gdprropa') . "</td>";
          echo "<td colspan='2'>";
-         $consent_storage = $data['consent_storage'];
+         $consent_storage = Sanitizer::sanitize($data['consent_storage']);
          echo "<textarea style='width: 98%;' name='consent_storage' maxlength='1000' rows='3'>" . $consent_storage . "</textarea>";
          echo "</td>";
       }
