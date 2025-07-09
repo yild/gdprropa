@@ -71,7 +71,7 @@ class PluginGdprropaRecord_Software extends CommonDBRelation {
 
    static function getTypeName($nb = 0) {
 
-      return _n("Software", "Software", $nb, 'gdprropa');
+      return __("Software", 'gdprropa');
    }
 
    function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {

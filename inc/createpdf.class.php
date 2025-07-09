@@ -713,7 +713,7 @@ class PluginGdprropaCreatePDF extends PluginGdprropaCreatePDFBase {
 
       switch ($type) {
          case PluginGdprropaCreatePDF::REPORT_SINGLE_RECORD:
-            $this->printPageTitle("<h1><small>" . __("GDPR Record of Processing Activity", 'gdprropa') ."</small><br/>" . $records->fields['name'] . "</h1>");
+            $this->printPageTitle("<h1><small>" . __("Record of Processing Activities", 'gdprropa') ."</small><br/>" . $records->fields['name'] . "</h1>");
             $this->printRecordStatusInfo($records);
             break;
          case PluginGdprropaCreatePDF::REPORT_FOR_ENTITY:
@@ -1274,7 +1274,7 @@ class PluginGdprropaCreatePDF extends PluginGdprropaCreatePDFBase {
             <th width="' . $cols_width[1] . '%" style="background-color:#AFAFAF;color:#FFF;"><h4>' . __("Location") . '</h4></th>
             <th width="' . $cols_width[2] . '%" style="background-color:#AFAFAF;color:#FFF;"><h4>' . __("Contact") . '</h4></th>
             <th width="' . $cols_width[3] . '%" style="background-color:#AFAFAF;color:#FFF;"><h4>' . __("Contract info", 'gdprropa') . '</h4></th>
-            <th width="' . $cols_width[4] . '%" style="background-color:#AFAFAF;color:#FFF;"><h4>' . __("Expiry", 'gdprropa') . '</h4></th>';
+            <th width="' . $cols_width[4] . '%" style="background-color:#AFAFAF;color:#FFF;"><h4>' . __("Expiration", 'gdprropa') . '</h4></th>';
          if ($this->print_options['show_comments']) {
             $tbl .=
                '<th width="' . $cols_width[5] . '%" style="background-color:#AFAFAF;color:#FFF;"><h4>' . __("Comment") . '</h4></th>';

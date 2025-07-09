@@ -350,7 +350,7 @@ class PluginGdprropaRecord_Retention extends CommonDBTM {
          '' => Dropdown::EMPTY_VALUE,
          self::RETENTION_TYPE_NONE => __("Not required", 'gdprropa'),
          self::RETENTION_TYPE_CONTRACT => __("Contractual term", 'gdprropa'),
-         self::RETENTION_TYPE_LEGALBASISACT => __("Legal basis", 'gdprropa'),
+         self::RETENTION_TYPE_LEGALBASISACT => _n("Legal basis", "Legal bases", 1, 'gdprropa'),
          self::RETENTION_TYPE_OTHER => __("Other regulations", 'gdprropa'),
       ];
    }

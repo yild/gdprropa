@@ -80,7 +80,7 @@ class PluginGdprropaRecord extends CommonDBTM {
 
    static function getTypeName($nb = 0) {
 
-      return _n("GDPR Record of Processing Activity", "GDPR Records of Processing Activities", $nb, 'gdprropa');
+      return __("Record of Processing Activities", 'gdprropa');
    }
 
    function showForm($id, $options = []) {
@@ -91,10 +91,10 @@ class PluginGdprropaRecord extends CommonDBTM {
       $this->showFormHeader($options);
 
       echo "<tr class='tab_bg_1'>";
-      echo "<td>" . __("Title", 'gdprropa') . "</td>";
+      echo "<td>" . __("Processing activity", 'gdprropa') . "</td>";
       echo "<td colspan='2'>";
-      $title = Html::cleanInputText($this->fields['name']);
-      echo "<input type='text' style='width:98%' maxlength=250 name='name' required value='" . $title . "'>";
+      $processingActivity = Html::cleanInputText($this->fields['name']);
+      echo "<input type='text' style='width:98%' maxlength=250 name='name' required value='" . $processingActivity . "'>";
       echo "</td></tr>";
 
       echo "<tr class='tab_bg_1'>";

@@ -1,5 +1,5 @@
 .buildpath
 .project
 .settings/*
-.locales/how_to_prepare_language_files.*
-
+.prepare_language_files.sh
+.locales/messages.pot
