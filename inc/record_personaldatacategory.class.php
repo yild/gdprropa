@@ -116,7 +116,7 @@ class Record_PersonalDataCategory extends CommonDBRelation
         if ($canedit) {
             echo "<div class='firstbloc'>";
             echo "<form name='ticketitem_form$rand' id='ticketitem_form$rand' method='post'
-            action='" . Toolbox::getItemTypeFormURL(__class__) . "'>";
+                action='" . Toolbox::getItemTypeFormURL(__class__) . "'>";
             echo "<input type='hidden' name='plugin_gdprropa_records_id' value='$id' />";
 
             echo "<table class='tab_cadre_fixe'>";
@@ -143,7 +143,8 @@ class Record_PersonalDataCategory extends CommonDBRelation
         if ($iterator) {
             echo "<div class='spaced'>";
             if ($canedit && $number) {
-                Html::openMassiveActionsForm('mass' . __class__ . $rand);
+                $massive_action_form_id = 'mass' . str_replace('\\', '', static::class) . $rand;
+                Html::openMassiveActionsForm($massive_action_form_id);
                 $massive_action_params = [
                     'container' => 'mass' . __class__ . $rand,
                     'num_displayed' => min($_SESSION['glpilist_limit'], $number)
