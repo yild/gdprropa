@@ -77,7 +77,7 @@ class Profile extends GlpiProfile
         return true;
     }
 
-    public function showForm($ID, $options = [])
+    public function showForm($ID, $options = []): void
     {
         $profile = new GlpiProfile();
 
@@ -104,10 +104,10 @@ class Profile extends GlpiProfile
         }
     }
 
-    public static function addDefaultProfileInfos($profiles_id, $rights, $drop_existing = false)
+    public static function addDefaultProfileInfos($profiles_id, $rights, $drop_existing = false): void
     {
         $profileRight = new ProfileRight();
-        $dbu          = new DbUtils();
+        $dbu = new DbUtils();
         foreach ($rights as $right => $value) {
             if (
                 $dbu->countElementsInTable('glpi_profilerights', [
@@ -129,8 +129,8 @@ class Profile extends GlpiProfile
                 ])
             ) {
                 $myright['profiles_id'] = $profiles_id;
-                $myright['name']        = $right;
-                $myright['rights']      = $value;
+                $myright['name'] = $right;
+                $myright['rights'] = $value;
                 $profileRight->add($myright);
 
                 $_SESSION['glpiactiveprofile'][$right] = $value;
@@ -138,7 +138,7 @@ class Profile extends GlpiProfile
         }
     }
 
-    public static function createFirstAccess($ID)
+    public static function createFirstAccess($ID): void
     {
         self::addDefaultProfileInfos(
             $ID,
@@ -148,14 +148,15 @@ class Profile extends GlpiProfile
                 'plugin_gdprropa_securitymeasure' => CREATE | READ | UPDATE | DELETE | PURGE,
                 'plugin_gdprropa_datasubjectscategory' => CREATE | READ | UPDATE | DELETE | PURGE,
                 'plugin_gdprropa_controllerinfo' => CREATE | READ | UPDATE,
-                'plugin_gdprropa_personaldatacategory' => CREATE | READ | UPDATE | DELETE | PURGE | READNOTE | UPDATENOTE,
+                'plugin_gdprropa_personaldatacategory' => CREATE | READ | UPDATE | DELETE | PURGE | READNOTE |
+                    UPDATENOTE,
                 'plugin_gdprropa_createpdf' => CREATE,
             ],
             true
         );
     }
 
-    public static function getAllRights($all = false)
+    public static function getAllRights($all = false): array
     {
         return [
             [
@@ -243,7 +244,7 @@ class Profile extends GlpiProfile
         ];
     }
 
-    public static function removeRightsFromSession()
+    public static function removeRightsFromSession(): void
     {
         foreach (self::getAllRights(true) as $right) {
             if (isset($_SESSION['glpiactiveprofile'][$right['field']])) {
@@ -252,7 +253,7 @@ class Profile extends GlpiProfile
         }
     }
 
-    public static function initProfile()
+    public static function initProfile(): void
     {
         global $DB;
 

@@ -58,12 +58,12 @@ class Record_PersonalDataCategory extends CommonDBRelation
     public static $itemtype_2 = PersonalDataCategory::class;
     public static $items_id_2 = 'plugin_gdprropa_personaldatacategories_id';
 
-    public static function getTypeName($nb = 0)
+    public static function getTypeName($nb = 0): string
     {
         return _n("Personal Data Category", "Personal Data Categories", $nb, 'gdprropa');
     }
 
-    public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
+    public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0): bool|string
     {
         if (!$item->canView()) {
             return false;
@@ -82,7 +82,7 @@ class Record_PersonalDataCategory extends CommonDBRelation
         return '';
     }
 
-    public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
+    public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0): bool
     {
         switch ($item->getType()) {
             case Record::class:
@@ -93,7 +93,7 @@ class Record_PersonalDataCategory extends CommonDBRelation
         return true;
     }
 
-    public static function showForRecord(Record $record, $withtemplate = 0)
+    public static function showForRecord(Record $record, $withtemplate = 0): bool
     {
         $id = $record->fields['id'];
         if (!$record->can($id, READ)) {
@@ -126,7 +126,7 @@ class Record_PersonalDataCategory extends CommonDBRelation
             echo "</strong></center></td></tr>";
             echo "<tr class='tab_bg_1'><td width='80%' class='center'>";
             PersonalDataCategory::dropdownLimitLevel([
-                'addicon'  => PersonalDataCategory::canCreate(),
+                'addicon' => PersonalDataCategory::canCreate(),
                 'name' => 'plugin_gdprropa_personaldatacategories_id',
                 'entity' => $record->fields['entities_id'],
                 'entity_sons' => false,
@@ -144,8 +144,10 @@ class Record_PersonalDataCategory extends CommonDBRelation
             echo "<div class='spaced'>";
             if ($canedit && $number) {
                 Html::openMassiveActionsForm('mass' . __class__ . $rand);
-                $massive_action_params = ['container' => 'mass' . __class__ . $rand,
-                'num_displayed' => min($_SESSION['glpilist_limit'], $number)];
+                $massive_action_params = [
+                    'container' => 'mass' . __class__ . $rand,
+                    'num_displayed' => min($_SESSION['glpilist_limit'], $number)
+                ];
                 Html::showMassiveActions($massive_action_params);
             }
             echo "<table class='tab_cadre_fixehov'>";
@@ -156,10 +158,10 @@ class Record_PersonalDataCategory extends CommonDBRelation
             $header_end = '';
 
             if ($canedit && $number) {
-                $header_begin   .= "<th width='10'>";
-                $header_top     .= Html::getCheckAllAsCheckbox('mass' . __class__ . $rand);
-                $header_bottom  .= Html::getCheckAllAsCheckbox('mass' . __class__ . $rand);
-                $header_end     .= "</th>";
+                $header_begin .= "<th width='10'>";
+                $header_top .= Html::getCheckAllAsCheckbox('mass' . __class__ . $rand);
+                $header_bottom .= Html::getCheckAllAsCheckbox('mass' . __class__ . $rand);
+                $header_end .= "</th>";
             }
 
             $header_end .= "<th>" . __("Name") . "</th>";
@@ -184,7 +186,7 @@ class Record_PersonalDataCategory extends CommonDBRelation
                     $link = sprintf(__("%1\$s (%2\$s)"), $link, $data['id']);
                 }
                 $name = "<a href=\"" .
-                        PersonalDataCategory::getFormURLWithID($data['id']) . "\">" . $link . "</a>";
+                    PersonalDataCategory::getFormURLWithID($data['id']) . "\">" . $link . "</a>";
 
                 echo "<td class='left" . (isset($data['is_deleted']) && $data['is_deleted'] ? " tab_bg_2_2'" : "'");
                 echo ">" . $name . "</td>";
@@ -221,9 +223,11 @@ class Record_PersonalDataCategory extends CommonDBRelation
 
             echo "</div>";
         }
+
+        return true;
     }
 
-    public function getForbiddenStandardMassiveAction()
+    public function getForbiddenStandardMassiveAction(): array
     {
         $forbidden = parent::getForbiddenStandardMassiveAction();
         $forbidden[] = 'update';
@@ -231,7 +235,7 @@ class Record_PersonalDataCategory extends CommonDBRelation
         return $forbidden;
     }
 
-    public function isAllowedToAdd($data)
+    public function isAllowedToAdd($data): bool
     {
         global $DB;
 
@@ -248,26 +252,28 @@ class Record_PersonalDataCategory extends CommonDBRelation
         );
         array_shift($sons);
 
-        $pdc = $DB->query('SELECT `plugin_gdprropa_personaldatacategories_id` FROM `' .
-            $this->getTable() . '` WHERE `plugin_gdprropa_records_id` = ' . $data['plugin_gdprropa_records_id'] . ' ');
+        $pdc = $DB->query(
+            'SELECT `plugin_gdprropa_personaldatacategories_id` FROM `' .
+            $this->getTable() . '` WHERE `plugin_gdprropa_records_id` = ' . $data['plugin_gdprropa_records_id'] . ' '
+        );
         while ($item = $DB->fetch_assoc($pdc)) {
             if (
                 $data['plugin_gdprropa_personaldatacategories_id'] == $item['plugin_gdprropa_personaldatacategories_id']
             ) {
                 $result = 1;
-                $msg =  __('Selected item is already on list.', 'gdprropa');
+                $msg = __('Selected item is already on list.', 'gdprropa');
                 break;
             } else {
                 if (in_array($item['plugin_gdprropa_personaldatacategories_id'], $ancestors)) {
                     $result = 2;
-                    $msg =  __('Cannot add child item if parent is already on the list.', 'gdprropa');
+                    $msg = __('Cannot add child item if parent is already on the list.', 'gdprropa');
                     break;
                 } else {
                     if (count($sons) && in_array($item['plugin_gdprropa_personaldatacategories_id'], $sons)) {
                         $result = 3;
-                        $msg =  __(
+                        $msg = __(
                             'Cannot add Parent item if child is already on the list.' .
-                                '<br>Remove child items before adding parent.',
+                            '<br>Remove child items before adding parent.',
                             'gdprropa'
                         );
                         break;
@@ -277,19 +283,19 @@ class Record_PersonalDataCategory extends CommonDBRelation
         }
 
         if ($result) {
-            Session::addMessageAfterRedirect($msg, true, INFO);
+            Session::addMessageAfterRedirect($msg, true);
         }
 
         return $result == 0;
     }
 
-    public static function rawSearchOptionsToAdd()
+    public static function rawSearchOptionsToAdd(): array
     {
         $tab = [];
 
         $tab[] = [
             'id' => 'personaldatacategory',
-            'name' => Record_PersonalDataCategory::getTypeName(0)
+            'name' => Record_PersonalDataCategory::getTypeName()
         ];
 
         $tab[] = [

@@ -51,6 +51,11 @@ use Session;
 
 class Config extends CommonDBTM
 {
+    public const PLUGIN_VERSION = '1.0.2';
+
+    public const PLUGIN_MIN_GLPI_VERSION = '10.0.0';
+    public const PLUGIN_MAX_GLPI_VERSION = '10.99.99';
+
     public static $rightname = 'plugin_gdprropa_record';
 
     protected array $core_tcpdf_fonts = [
@@ -71,12 +76,12 @@ class Config extends CommonDBTM
         'zapfdingbats' => 'ZapfDingbats'
     ];
 
-    public static function getTypeName($nb = 0)
+    public static function getTypeName($nb = 0): string
     {
         return _n("Config", "Config", $nb, 'gdprropa');
     }
 
-    public static function getConfigDefault()
+    public static function getConfigDefault(): array
     {
         $config = [];
 
@@ -152,7 +157,7 @@ class Config extends CommonDBTM
         return $input;
     }
 
-    public function prepareInputForAdd($input)
+    public function prepareInputForAdd($input): bool|array
     {
         $input = $this->prepareJSON($input);
         $input['users_id_creator'] = Session::getLoginUserID();
@@ -160,7 +165,7 @@ class Config extends CommonDBTM
         return parent::prepareInputForAdd($input);
     }
 
-    public function prepareInputForUpdate($input)
+    public function prepareInputForUpdate($input): bool|array
     {
         $input = $this->prepareJSON($input);
         $input['users_id_lastupdater'] = Session::getLoginUserID();
@@ -168,7 +173,7 @@ class Config extends CommonDBTM
         return parent::prepareInputForUpdate($input);
     }
 
-    public function showForm($ID, $options = [])
+    public function showForm($ID, $options = []): void
     {
         if (!self::canUpdate()) {
             return;
@@ -199,10 +204,11 @@ class Config extends CommonDBTM
         echo "</tr>";
 
         echo "<tr>";
-        echo "<td>" . __(
-            "Limit retention contracts list to those selected in controller info",
-            'gdprropa'
-        ) . "</td>";
+        echo "<td>" .
+            __(
+                "Limit retention contracts list to those selected in controller info",
+                'gdprropa'
+            ) . "</td>";
         echo "<td>";
 
         dropdown::showYesNo(
@@ -213,8 +219,11 @@ class Config extends CommonDBTM
         echo "</tr>";
 
         echo "<tr>";
-        echo "<td>" . __("Remove sofrware when record storage medium set to
-            Paper only if any was assigned previously", 'gdprropa') . "</td>";
+        echo "<td>" . __(
+                "Remove sofrware when record storage medium set to " .
+                "Paper only if any was assigned previously",
+                'gdprropa'
+            ) . "</td>";
         echo "<td>";
 
         dropdown::showYesNo(
@@ -247,8 +256,11 @@ class Config extends CommonDBTM
         echo "</tr>";
 
         echo "<tr>";
-        echo "<td>" . __("Allow retrieve controller info from ancestor entity
-            (set as recursive) when current entity controller info is not set", 'gdprropa') . "</td>";
+        echo "<td>" . __(
+                "Allow retrieve controller info from ancestor entity " .
+                "(set as recursive) when current entity controller info is not set",
+                'gdprropa'
+            ) . "</td>";
         echo "<td>";
 
         dropdown::showYesNo(
@@ -378,7 +390,7 @@ class Config extends CommonDBTM
         echo "<td>";
 
         echo "<input type='text' maxlength='254' name='print[logo_image]' value=\"" .
-                $config['print']['logo_image']  . "\">";
+            $config['print']['logo_image'] . "\">";
         echo "</td>";
         echo "</tr>";
 
@@ -413,34 +425,37 @@ class Config extends CommonDBTM
         echo "<th colspan='2'>" . __("Install sample data", 'gdprropa') . "</th>";
         echo "</tr>";
         echo "<tr class='tab_bg_1'>";
-        echo "<td colspan='2'><strong>" . __(
-            "Sample data will be installed for current active entity.",
-            'gdprropa'
-        ) . "</strong></td>";
+        echo "<td colspan='2'><strong>" .
+            __(
+                "Sample data will be installed for current active entity.",
+                'gdprropa'
+            ) . "</strong></td>";
         echo "</tr>";
         echo "<tr class='tab_bg_1'>";
         echo "<td>" . __("Categories of data subjects", 'gdprropa') . "</td>";
         echo "<td>";
         Html::showCheckbox([
-            'name'  => 'install_categories_of_data_subjects',
+            'name' => 'install_categories_of_data_subjects',
             'title' => __("Categories of data subjects", 'gdprropa'),
-            'checked' => 1]);
+            'checked' => 1
+        ]);
         echo "</td>";
         echo "</tr>";
         echo "<tr class='tab_bg_1'>";
         echo "<td>" . __("Legal bases", 'gdprropa') . "</td>";
         echo "<td>";
         Html::showCheckbox([
-            'name'  => 'install_legal_bases',
+            'name' => 'install_legal_bases',
             'title' => __("Legal bases", 'gdprropa'),
-            'checked' => 1]);
+            'checked' => 1
+        ]);
         echo "</td>";
         echo "</tr>";
         echo "<tr class='tab_bg_1'>";
         echo "<td>" . __("Security measures", 'gdprropa') . "</td>";
         echo "<td>";
         Html::showCheckbox([
-            'name'  => 'install_security_measures',
+            'name' => 'install_security_measures',
             'title' => __("Security measures", 'gdprropa'),
             'checked' => 1
         ]);
@@ -450,25 +465,27 @@ class Config extends CommonDBTM
         echo "<td>" . __("Contract types", 'gdprropa') . "</td>";
         echo "<td>";
         Html::showCheckbox([
-            'name'  => 'install_contract_types',
+            'name' => 'install_contract_types',
             'title' => __("Contract types", 'gdprropa'),
-            'checked' => 1]);
+            'checked' => 1
+        ]);
         echo "</td>";
         echo "</tr>";
         echo "<tr class='tab_bg_1'>";
         echo "<td>" . __("Personal data types", 'gdprropa') . "</td>";
         echo "<td>";
         Html::showCheckbox([
-            'name'  => 'install_personal_data_types',
+            'name' => 'install_personal_data_types',
             'title' => __("Personal data types", 'gdprropa'),
-            'checked' => 1]);
+            'checked' => 1
+        ]);
         echo "</td>";
         echo "</tr>";
         echo "<tr class='tab_bg_1'>";
         echo "<td colspan='2'>";
         echo "<div class='center'>";
         echo "<input type='submit' name='sampledata' value=\"" .
-                __("Install", 'gdprropa') . "\" class='submit'>";
+            __("Install", 'gdprropa') . "\" class='submit'>";
         echo "</div>";
         echo "</td>";
         echo "</tr>";
@@ -477,7 +494,7 @@ class Config extends CommonDBTM
         echo "</div>";
     }
 
-    public function installSampleData($data = [])
+    public function installSampleData($data = []): void
     {
         if (
             isset($data['install_categories_of_data_subjects']) &&
@@ -508,42 +525,70 @@ class Config extends CommonDBTM
             ]);
             $sample_data->add([
                 'name' => __("Article 6-1a", 'gdprropa'),
-                'content' =>  __("The data subject has given consent to the processing of his or her personal data for one or more specific purposes.", 'gdprropa'),
+                'content' => __(
+                    "The data subject has given consent to the processing of his or her " .
+                    "personal data for one or more specific purposes.",
+                    'gdprropa'
+                ),
                 'type' => LegalBasisAct::LEGALBASISACT_GDPR,
                 'entities_id' => $_SESSION['glpiactive_entity'],
                 'injected' => 1,
             ]);
             $sample_data->add([
                 'name' => __("Article 6-1b", 'gdprropa'),
-                'content' => __("Processing is necessary for the performance of a contract to which the data subject is party or in order to take steps at the request of the data subject prior to entering into a contract.", 'gdprropa'),
+                'content' => __(
+                    "Processing is necessary for the performance of a contract to which the data subject is " .
+                    "party or in order to take steps at the request of the data subject prior to entering into a " .
+                    "contract.",
+                    'gdprropa'
+                ),
                 'type' => LegalBasisAct::LEGALBASISACT_GDPR,
                 'entities_id' => $_SESSION['glpiactive_entity'],
                 'injected' => 1,
             ]);
             $sample_data->add([
                 'name' => __("Article 6-1c", 'gdprropa'),
-                'content' => __("Processing is necessary for compliance with a legal obligation to which the controller is subject.", 'gdprropa'),
+                'content' => __(
+                    "Processing is necessary for compliance with a legal obligation to which " .
+                    "the controller is subject.",
+                    'gdprropa'
+                ),
                 'type' => LegalBasisAct::LEGALBASISACT_GDPR,
                 'entities_id' => $_SESSION['glpiactive_entity'],
                 'injected' => 1,
             ]);
             $sample_data->add([
                 'name' => __("Article 6-1d", 'gdprropa'),
-                'content' =>  __("Processing is necessary in order to protect the vital interests of the data subject or of another natural person.", 'gdprropa'),
+                'content' => __(
+                    "Processing is necessary in order to protect the vital interests of the " .
+                    "data subject or of another natural person.",
+                    'gdprropa'
+                ),
                 'type' => LegalBasisAct::LEGALBASISACT_GDPR,
                 'entities_id' => $_SESSION['glpiactive_entity'],
                 'injected' => 1,
             ]);
             $sample_data->add([
                 'name' => __("Article 6-1e", 'gdprropa'),
-                'content' => __("Processing is necessary for the performance of a task carried out in the public interest or in the exercise of official authority vested in the controller.", 'gdprropa'),
+                'content' => __(
+                    "Processing is necessary for the performance of a task carried out in the " .
+                    "public interest or in the exercise of official authority vested in the " .
+                    "controller.",
+                    'gdprropa'
+                ),
                 'type' => LegalBasisAct::LEGALBASISACT_GDPR,
                 'entities_id' => $_SESSION['glpiactive_entity'],
                 'injected' => 1,
             ]);
             $sample_data->add([
                 'name' => __("Article 6-1f", 'gdprropa'),
-                'content' => __("Processing is necessary for the purposes of the legitimate interests pursued by the controller or by a third party, except where such interests are overridden by the interests or fundamental rights and freedoms of the data subject which require protection of personal data, in particular where the data subject is a child.", 'gdprropa'),
+                'content' => __(
+                    "Processing is necessary for the purposes of the legitimate interests pursued " .
+                    "by the controller or by a third party, except where such interests are overridden by the " .
+                    "interests or fundamental rights and freedoms of the data subject which require protection of " .
+                    "personal data, in particular where the data subject is a child.",
+                    'gdprropa'
+                ),
                 'type' => LegalBasisAct::LEGALBASISACT_GDPR,
                 'entities_id' => $_SESSION['glpiactive_entity'],
                 'injected' => 1,

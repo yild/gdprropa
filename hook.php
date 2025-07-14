@@ -74,7 +74,7 @@ function plugin_gdprropa_install()
 
                      PRIMARY KEY  (`id`)
                    ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
-            $DB->queryOrDie($query, $DB->error());
+            $DB->doQuery($query);
         }
 
         if (!$DB->tableExists('glpi_plugin_gdprropa_controllerinfos')) {
@@ -100,7 +100,7 @@ function plugin_gdprropa_install()
                      PRIMARY KEY  (`id`),
                      UNIQUE `entities_id` (`entities_id`)
                    ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
-            $DB->queryOrDie($query, $DB->error());
+            $DB->doQuery($query);
         }
 
         if (!$DB->tableExists('glpi_plugin_gdprropa_datasubjectscategories')) {
@@ -120,7 +120,7 @@ function plugin_gdprropa_install()
                      KEY `name` (`name`),
                      UNIQUE `un_per_record` (`name`, `entities_id`)
                   ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
-            $DB->queryOrDie($query, $DB->error());
+            $DB->doQuery($query);
 
             $dp = new DisplayPreference();
             $dp->add([
@@ -151,7 +151,7 @@ function plugin_gdprropa_install()
                      KEY `name` (`name`),
                      UNIQUE `un_per_record` (`name`, `type`, `entities_id`)
                    ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
-            $DB->queryOrDie($query, $DB->error());
+            $DB->doQuery($query);
 
             $dp = new DisplayPreference();
             $dp->add([
@@ -189,7 +189,7 @@ function plugin_gdprropa_install()
                      KEY `name` (`name`),
                      UNIQUE `un_per_record` (`name`, `entities_id`)
                   ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
-            $DB->queryOrDie($query, $DB->error());
+            $DB->doQuery($query);
 
             $dp = new DisplayPreference();
             $dp->add([
@@ -225,7 +225,7 @@ function plugin_gdprropa_install()
                      KEY `name` (`name`),
                      UNIQUE `un_per_record` (`name`, `type`, `entities_id`)
                    ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
-            $DB->queryOrDie($query, $DB->error());
+            $DB->doQuery($query);
 
             $dp = new DisplayPreference();
             $dp->add([
@@ -268,7 +268,7 @@ function plugin_gdprropa_install()
                      KEY `name` (`name`),
                      UNIQUE `un_per_record` (`name`, `entities_id`)
                    ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
-            $DB->queryOrDie($query, $DB->error());
+            $DB->doQuery($query);
 
             $dp = new DisplayPreference();
             $dp->add([
@@ -325,7 +325,7 @@ function plugin_gdprropa_install()
                      PRIMARY KEY  (`id`),
                      UNIQUE `un_per_record` (`plugin_gdprropa_records_id`, `contracts_id`)
                    ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
-            $DB->queryOrDie($query, $DB->error());
+            $DB->doQuery($query);
         }
 
         if (!$DB->tableExists('glpi_plugin_gdprropa_records_datasubjectscategories')) {
@@ -339,7 +339,7 @@ function plugin_gdprropa_install()
                      PRIMARY KEY  (`id`),
                      UNIQUE `un_per_record` (`plugin_gdprropa_records_id`, `plugin_gdprropa_datasubjectscategories_id`)
                    ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
-            $DB->queryOrDie($query, $DB->error());
+            $DB->doQuery($query);
         }
 
         if (!$DB->tableExists('glpi_plugin_gdprropa_records_legalbasisacts')) {
@@ -353,7 +353,7 @@ function plugin_gdprropa_install()
                      PRIMARY KEY  (`id`),
                      UNIQUE `un_per_record` (`plugin_gdprropa_records_id`, `plugin_gdprropa_legalbasisacts_id`)
                    ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
-            $DB->queryOrDie($query, $DB->error());
+            $DB->doQuery($query);
         }
 
         if (!$DB->tableExists('glpi_plugin_gdprropa_records_personaldatacategories')) {
@@ -366,7 +366,7 @@ function plugin_gdprropa_install()
 
                      PRIMARY KEY  (`id`)
                    ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
-            $DB->queryOrDie($query, $DB->error());
+            $DB->doQuery($query);
         }
 
         if (!$DB->tableExists('glpi_plugin_gdprropa_records_retentions')) {
@@ -387,7 +387,7 @@ function plugin_gdprropa_install()
                      PRIMARY KEY  (`id`),
                      UNIQUE `un_per_record` (`plugin_gdprropa_records_id`)
                    ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
-            $DB->queryOrDie($query, $DB->error());
+            $DB->doQuery($query);
         }
 
         if (!$DB->tableExists('glpi_plugin_gdprropa_records_securitymeasures')) {
@@ -401,7 +401,7 @@ function plugin_gdprropa_install()
                      PRIMARY KEY  (`id`),
                      UNIQUE `un_per_record` (`plugin_gdprropa_records_id`, `plugin_gdprropa_securitymeasures_id`)
                    ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
-            $DB->queryOrDie($query, $DB->error());
+            $DB->doQuery($query);
         }
 
         if (!$DB->tableExists('glpi_plugin_gdprropa_records_softwares')) {
@@ -414,7 +414,7 @@ function plugin_gdprropa_install()
                      PRIMARY KEY  (`id`),
                      UNIQUE `un_per_record` (`plugin_gdprropa_records_id`, `softwares_id`)
                    ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
-            $DB->queryOrDie($query, $DB->error());
+            $DB->doQuery($query);
         }
     }
 
@@ -446,22 +446,23 @@ function plugin_gdprropa_uninstall()
     ];
 
     foreach ($tables as $table) {
-        $DB->query("DROP TABLE IF EXISTS `$table`;");
+        $DB->doQuery("DROP TABLE IF EXISTS `$table`;");
     }
 
     $query = "DELETE FROM `glpi_logs`
                WHERE
                      `itemtype` LIKE 'PluginGdprropa%'
                   OR `itemtype_link` LIKE 'PluginGdprropa%'";
-    $DB->queryOrDie($query, $DB->error());
+    $DB->doQuery($query);
 
     $dp = new DisplayPreference();
-    $dp->deleteByCriteria(['itemtype' => [
-        'Record',
-        'LegalBasisAct',
-        'SecurityMeasure',
-        'DataSubjectsCategory',
-        'PersonalDataCategory'
+    $dp->deleteByCriteria([
+        'itemtype' => [
+            'Record',
+            'LegalBasisAct',
+            'SecurityMeasure',
+            'DataSubjectsCategory',
+            'PersonalDataCategory'
         ]
     ]);
 

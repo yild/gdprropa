@@ -51,6 +51,7 @@ use CommonDBRelation;
 use CommonDBTM;
 use CommonGLPI;
 use Contract;
+use DBmysqlIterator;
 use Dropdown;
 use Entity;
 use Html;
@@ -72,12 +73,12 @@ class Record_Contract extends CommonDBRelation
     public static $itemtype_2 = Contract::class;
     public static $items_id_2 = 'contracts_id';
 
-    public static function getTypeName($nb = 0)
+    public static function getTypeName($nb = 0): string
     {
         return _n("Contract", "Contracts", $nb, 'gdprropa');
     }
 
-    public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
+    public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0): bool|string
     {
         if (!Contract::canView() || !$item->canView()) {
             return false;
@@ -96,7 +97,7 @@ class Record_Contract extends CommonDBRelation
         return '';
     }
 
-    public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
+    public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0): bool
     {
         switch ($item->getType()) {
             case Record::class:
@@ -106,7 +107,7 @@ class Record_Contract extends CommonDBRelation
         return true;
     }
 
-    public static function showContractTypesNotSetInfo($contracttypes = [], $entity_id = -1)
+    public static function showContractTypesNotSetInfo($contracttypes = [], $entity_id = -1): string
     {
         $output = '';
 
@@ -117,10 +118,11 @@ class Record_Contract extends CommonDBRelation
             $output .= '<br>' . __("Processor contract type not set.", 'gdprropa') . '<br>';
         }
         if ($contracttypes['contracttypes_id_thirdparty'] < 1) {
-            $output .= '<br>' . __(
-                "Third country/internalional organization contract type not set.",
-                'gdprropa'
-            ) . '<br>';
+            $output .= '<br>' .
+                __(
+                    "Third country/internalional organization contract type not set.",
+                    'gdprropa'
+                ) . '<br>';
         }
         if ($contracttypes['contracttypes_id_internal'] < 1) {
             $output .= '<br>' . __("Internal contract type not set.", 'gdprropa') . '<br>';
@@ -143,7 +145,7 @@ class Record_Contract extends CommonDBRelation
         return $output;
     }
 
-    public static function showForRecord(Record $record, $withtemplate = 0)
+    public static function showForRecord(Record $record, $withtemplate = 0): bool
     {
         global $DB;
 
@@ -191,7 +193,7 @@ class Record_Contract extends CommonDBRelation
             Record_Contract::getContractsDropdown([
                 'name' => 'contracts_id',
                 'entity' => $record->fields['is_recursive'] ?
-                        getSonsOf('glpi_entities', $record->fields['entities_id']) : $record->fields['entities_id'],
+                    getSonsOf('glpi_entities', $record->fields['entities_id']) : $record->fields['entities_id'],
                 'entity_sons' => !$record->fields['is_recursive'],
                 'used' => $used,
                 'expired' => Config::getConfig('system', 'allow_select_expired_contracts'),
@@ -226,10 +228,10 @@ class Record_Contract extends CommonDBRelation
             $header_end = '';
 
             if ($canedit && $number) {
-                $header_begin   .= "<th width='10'>";
-                $header_top     .= Html::getCheckAllAsCheckbox('mass' . __class__ . $rand);
-                $header_bottom  .= Html::getCheckAllAsCheckbox('mass' . __class__ . $rand);
-                $header_end     .= "</th>";
+                $header_begin .= "<th width='10'>";
+                $header_top .= Html::getCheckAllAsCheckbox('mass' . __class__ . $rand);
+                $header_bottom .= Html::getCheckAllAsCheckbox('mass' . __class__ . $rand);
+                $header_end .= "</th>";
             }
 
             $header_end .= "<th>" . __("Name") . "</th>";
@@ -288,10 +290,11 @@ class Record_Contract extends CommonDBRelation
                 }
 
                 echo "<td class='center'>" . $out . "</td>";
-                echo "<td class='center'>" . Dropdown::getDropdownName(
-                    'glpi_contracttypes',
-                    $data['contracttypes_id']
-                ) . "</td>";
+                echo "<td class='center'>" . Dropdown::getDropdownName
+                    (
+                        'glpi_contracttypes',
+                        $data['contracttypes_id']
+                    ) . "</td>";
                 echo "<td>" . $data['num'] . "</td>";
                 echo "<td class='left'>" . $data['begin_date'] . "</td>";
 
@@ -330,7 +333,7 @@ class Record_Contract extends CommonDBRelation
         return true;
     }
 
-    public static function cleanForItem(CommonDBTM $item)
+    public static function cleanForItem(CommonDBTM $item): void
     {
         $rel = new Record_Contract();
         $rel->deleteByCriteria([
@@ -339,14 +342,14 @@ class Record_Contract extends CommonDBRelation
         ]);
     }
 
-    public function prepareInputForUpdate($input)
+    public function prepareInputForUpdate($input): bool|array
     {
         // override hack - there was a problem in CommonDBConnexity.checkAttachedItemChangesAllowed
         // while purging item lined to master table - permissions errors
         return $input;
     }
 
-    public function getForbiddenStandardMassiveAction()
+    public function getForbiddenStandardMassiveAction(): array
     {
         $forbidden = parent::getForbiddenStandardMassiveAction();
         $forbidden[] = 'update';
@@ -354,7 +357,7 @@ class Record_Contract extends CommonDBRelation
         return $forbidden;
     }
 
-    public static function getContractTypeStr($type)
+    public static function getContractTypeStr($type): string
     {
         switch ($type) {
             case self::CONTRACT_JOINTCONTROLLER:
@@ -372,7 +375,7 @@ class Record_Contract extends CommonDBRelation
         return "???";
     }
 
-    public static function getContractsDropdown($options = [])
+    public static function getContractsDropdown($options = []): int|string|null
     {
         global $DB;
 
@@ -455,8 +458,8 @@ class Record_Contract extends CommonDBRelation
                   `glpi_contracts`.`begin_date` DESC";
         $result = $DB->query($query);
 
-        $group  = '';
-        $prev   = -1;
+        $group = '';
+        $prev = -1;
         $values = [];
         while ($data = $DB->fetchAssoc($result)) {
             if (
@@ -494,7 +497,7 @@ class Record_Contract extends CommonDBRelation
         ]);
     }
 
-    public static function getContracts($record, $type = null, $get_expired = false)
+    public static function getContracts($record, $type = null, $get_expired = false): DBmysqlIterator
     {
         global $DB;
 
@@ -589,12 +592,10 @@ class Record_Contract extends CommonDBRelation
                 DATEDIFF(`glpi_contracts`.`begin_date`, CURDATE() ) < '0' ) OR
                 `glpi_contracts`.`renewal` = 1";
         }
-        $iterator = $DB->request($query);
-
-        return $iterator;
+        return $DB->request($query);
     }
 
-    public static function rawSearchOptionsToAdd()
+    public static function rawSearchOptionsToAdd(): array
     {
         $tab = [];
 
@@ -654,13 +655,17 @@ class Record_Contract extends CommonDBRelation
         return $tab;
     }
 
-    public static function getSuppliersNamesNoIds($contract_id, $separator = '<br>', $trimlast = true)
+    public static function getSuppliersNamesNoIds($contract_id, $separator = '<br>', $trimlast = true): string
     {
         return self::getSuppliersNames($contract_id, $separator, $trimlast, true);
     }
 
-    public static function getSuppliersNames($contract_id, $separator = '<br>', $trimlast = true, $no_ids = false)
-    {
+    public static function getSuppliersNames(
+        $contract_id,
+        $separator = '<br>',
+        $trimlast = true,
+        $no_ids = false
+    ): string {
         global $DB;
 
         $iterator = $DB->request([

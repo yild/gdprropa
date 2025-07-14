@@ -58,13 +58,8 @@ if (isset($_GET['createpdf'])) {
 
     if (isset($_GET['action'])) {
         if ($_GET['action'] == 'prepare') {
-            if (isset($_GET['report_type'])) {
-                $type = $_GET['report_type'];
-            } else {
-                $type = CreatePDF::REPORT_ALL;
-            }
-
-            Html::header(Record::getTypeName(0), '', "management", Menu::class);
+            $type = $_GET['report_type'] ?? CreatePDF::REPORT_ALL;
+            Html::header(Record::getTypeName(), '', "management", Menu::class);
             CreatePDF::showPrepareForm($type);
         } elseif ($_GET['action'] == 'print') {
             $pdfoutput = new CreatePDF();

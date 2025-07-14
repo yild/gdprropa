@@ -61,12 +61,12 @@ class ControllerInfo extends CommonDBChild
 
     public static $rightname = 'plugin_gdprropa_controllerinfo';
 
-    public static function getTypeName($nb = 0)
+    public static function getTypeName($nb = 0): string
     {
         return __("GDPR Controller Info", 'gdprropa');
     }
 
-    public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
+    public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0): bool|string
     {
         if (!ControllerInfo::canView()) {
             return false;
@@ -74,13 +74,13 @@ class ControllerInfo extends CommonDBChild
 
         switch ($item->getType()) {
             case Entity::class:
-                return self::createTabEntry(ControllerInfo::getTypeName(), 0);
+                return self::createTabEntry(ControllerInfo::getTypeName());
         }
 
         return '';
     }
 
-    public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
+    public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0): bool
     {
         switch ($item->getType()) {
             case Entity::class:
@@ -92,21 +92,21 @@ class ControllerInfo extends CommonDBChild
         return true;
     }
 
-    public function prepareInputForAdd($input)
+    public function prepareInputForAdd($input): bool|array
     {
         $input['users_id_creator'] = Session::getLoginUserID();
 
         return parent::prepareInputForAdd($input);
     }
 
-    public function prepareInputForUpdate($input)
+    public function prepareInputForUpdate($input): bool|array
     {
         $input['users_id_lastupdater'] = Session::getLoginUserID();
 
         return parent::prepareInputForUpdate($input);
     }
 
-    public function showForEntity(Entity $entity, $options = [])
+    public function showForEntity(Entity $entity, $options = []): void
     {
         global $CFG_GLPI;
 
@@ -125,7 +125,7 @@ class ControllerInfo extends CommonDBChild
 
         if ($this->fields['id'] <= 0 && !ControllerInfo::canCreate()) {
             echo "<br><br><span class='b'>" .
-                    __("Controller information not set.", 'gdprropa') . "</span><br><br>";
+                __("Controller information not set.", 'gdprropa') . "</span><br><br>";
 
             return;
         }
@@ -170,7 +170,7 @@ class ControllerInfo extends CommonDBChild
         }
         $controller_name = Html::cleanInputText($this->fields['controllername']);
         echo "<input type='text' style='width:98%' maxlength=250 name='controllername' required value='" .
-                $controller_name . "'/>";
+            $controller_name . "'/>";
         echo "</td></tr>";
 
         echo "<tr class='tab_bg_3'><td colspan='4'><center><strong>";
@@ -184,7 +184,7 @@ class ControllerInfo extends CommonDBChild
             'width' => '75%',
             'name' => 'contracttypes_id_jointcontroller',
             'value' => array_key_exists('contracttypes_id_jointcontroller', $this->fields) ?
-                    $this->fields['contracttypes_id_jointcontroller'] : null
+                $this->fields['contracttypes_id_jointcontroller'] : null
         ]);
         echo "</td><td width='$colsize3'>";
         echo __("Processor Contract Type", 'gdprropa');
@@ -193,7 +193,7 @@ class ControllerInfo extends CommonDBChild
             'width' => '75%',
             'name' => 'contracttypes_id_processor',
             'value' => array_key_exists('contracttypes_id_processor', $this->fields) ?
-                    $this->fields['contracttypes_id_processor'] : null
+                $this->fields['contracttypes_id_processor'] : null
         ]);
         echo "</td></tr>";
 
@@ -204,7 +204,7 @@ class ControllerInfo extends CommonDBChild
             'width' => '75%',
             'name' => 'contracttypes_id_thirdparty',
             'value' => array_key_exists('contracttypes_id_thirdparty', $this->fields) ?
-                    $this->fields['contracttypes_id_thirdparty'] : null
+                $this->fields['contracttypes_id_thirdparty'] : null
         ]);
         echo "</td><td width='$colsize3'>";
         echo __("Internal Contract Type", 'gdprropa');
@@ -213,7 +213,7 @@ class ControllerInfo extends CommonDBChild
             'width' => '75%',
             'name' => 'contracttypes_id_internal',
             'value' => array_key_exists('contracttypes_id_internal', $this->fields) ?
-                    $this->fields['contracttypes_id_internal'] : null
+                $this->fields['contracttypes_id_internal'] : null
         ]);
         echo "</td></tr>";
 
@@ -224,7 +224,7 @@ class ControllerInfo extends CommonDBChild
             'width' => '75%',
             'name' => 'contracttypes_id_other',
             'value' => array_key_exists('contracttypes_id_other', $this->fields) ?
-                    $this->fields['contracttypes_id_other'] : null
+                $this->fields['contracttypes_id_other'] : null
         ]);
         echo "</td><td width='$colsize3'>";
         echo "</td><td width='$colsize4'>";
@@ -256,7 +256,7 @@ class ControllerInfo extends CommonDBChild
             echo "<input type='hidden' name='entities_id' value='" . $entity->fields['id'] . "'>";
             echo "<input type='hidden' name='action' value=\"print\">";
             echo "<input type='submit' class='submit' name='createpdf' value='" .
-                    __("Create Controller RoPA PDF for Entity", 'gdprropa') . "' />";
+                __("Create Controller RoPA PDF for Entity", 'gdprropa') . "' />";
             Html::closeForm();
             echo "</div>";
         }
@@ -274,8 +274,10 @@ class ControllerInfo extends CommonDBChild
         } else {
             if (
                 (isset($controllerInfo->fields['id'])) &&
-                ($controllerInfo->fields['is_recursive'] &&
-                ($controllerInfo->fields['entities_id'] == $entity_id))
+                (
+                    $controllerInfo->fields['is_recursive'] &&
+                    ($controllerInfo->fields['entities_id'] == $entity_id)
+                )
             ) {
                 return $controllerInfo;
             } else {
@@ -287,7 +289,7 @@ class ControllerInfo extends CommonDBChild
         }
     }
 
-    public static function getContractTypes($entity_id, $compact = false)
+    public static function getContractTypes($entity_id, $compact = false): array
     {
         $controllerInfo = ControllerInfo::getFirstControllerInfo(
             $entity_id,
@@ -315,7 +317,7 @@ class ControllerInfo extends CommonDBChild
         return $out;
     }
 
-    public static function getSearchOptionsControllerInfo()
+    public static function getSearchOptionsControllerInfo(): array
     {
         $options = [];
 
@@ -369,9 +371,9 @@ class ControllerInfo extends CommonDBChild
         return $options;
     }
 
-    public function rawSearchOptions()
+    public function rawSearchOptions(): array
     {
-            $tab = [];
+        $tab = [];
 
         $tab[] = [
             'id' => '11',
@@ -382,8 +384,6 @@ class ControllerInfo extends CommonDBChild
             'datatype' => 'text',
         ];
 
-        $tab = array_merge(parent::rawSearchOptions(), $tab);
-
-        return $tab;
+        return array_merge(parent::rawSearchOptions(), $tab);
     }
 }

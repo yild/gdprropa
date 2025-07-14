@@ -51,6 +51,9 @@ class SecurityMeasure extends CommonDropdown
 {
     public static $rightname = 'plugin_gdprropa_securitymeasure';
 
+    // TODO check description in Record class
+    protected static $showTitleInNavigationHeader = true;
+
     public $dohistory = true;
 
     public const SECURITYMEASURE_TYPE_ORGANIZATION = 1;
@@ -98,10 +101,10 @@ class SecurityMeasure extends CommonDropdown
         return '';
     }
 
-    public static function getSpecificValueToSelect($field, $name = '', $values = '', array $options = [])
+    public static function getSpecificValueToSelect($field, $name = '', $values = '', array $options = []): int|string
     {
         if (!is_array($values)) {
-             $values = [$field => $values];
+            $values = [$field => $values];
         }
         $options['display'] = false;
 
@@ -113,14 +116,14 @@ class SecurityMeasure extends CommonDropdown
         return parent::getSpecificValueToSelect($field, $name, $values, $options);
     }
 
-    public function displaySpecificTypeField($ID, $field = [], array $options = [])
+    public function displaySpecificTypeField($ID, $field = [], array $options = []): void
     {
         if ($field['name'] == 'type') {
             self::dropdownTypes($field['name'], $this->fields[$field['name']]);
         }
     }
 
-    public static function dropdownTypes($name, $value = 0, $display = true)
+    public static function dropdownTypes($name, $value = 0, $display = true): int|string
     {
         return Dropdown::showFromArray($name, self::getAllTypesArray(), ['value' => $value, 'display' => $display]);
     }
@@ -135,27 +138,27 @@ class SecurityMeasure extends CommonDropdown
         ];
     }
 
-    public function prepareInputForAdd($input)
+    public function prepareInputForAdd($input): bool|array
     {
         $input['users_id_creator'] = Session::getLoginUserID();
 
         return parent::prepareInputForAdd($input);
     }
 
-    public function prepareInputForUpdate($input)
+    public function prepareInputForUpdate($input): bool|array
     {
         $input['users_id_lastupdater'] = Session::getLoginUserID();
 
         return parent::prepareInputForUpdate($input);
     }
 
-    public function cleanDBonPurge()
+    public function cleanDBonPurge(): void
     {
         $rel = new Record_SecurityMeasure();
         $rel->deleteByCriteria(['plugin_gdprropa_securitymeasures_id' => $this->fields['id']]);
     }
 
-    public static function dropdown($options = [])
+    public static function dropdown($options = []): bool|int|string
     {
         global $DB;
 
@@ -206,7 +209,7 @@ class SecurityMeasure extends CommonDropdown
                 }
                 $entitiesStr2 = implode(',', $p['entity']);
             } else {
-                $entitiesStr2 = (string) $p['entity'];
+                $entitiesStr2 = (string)$p['entity'];
             }
             $entities = array_unique($entities);
             $entitiesStr = implode(',', $entities);

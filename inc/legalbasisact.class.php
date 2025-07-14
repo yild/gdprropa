@@ -51,6 +51,9 @@ class LegalBasisAct extends CommonDropdown
 {
     public static $rightname = 'plugin_gdprropa_legalbasisact';
 
+    // TODO check description in Record class
+    protected static $showTitleInNavigationHeader = true;
+
     public $dohistory = true;
 
     public const LEGALBASISACT_BLANK = 0;
@@ -60,12 +63,12 @@ class LegalBasisAct extends CommonDropdown
     public const LEGALBASISACT_INTERNAL = 4;
     public const LEGALBASISACT_OTHER = 5;
 
-    public static function getTypeName($nb = 0)
+    public static function getTypeName($nb = 0): string
     {
         return _n("Legal basis", "Legal bases", $nb, 'gdprropa');
     }
 
-    public function getAdditionalFields()
+    public function getAdditionalFields(): array
     {
         return [
             [
@@ -113,20 +116,22 @@ class LegalBasisAct extends CommonDropdown
         return parent::getSpecificValueToSelect($field, $name, $values, $options);
     }
 
-    public function displaySpecificTypeField($ID, $field = [], array $options = [])
+    public function displaySpecificTypeField($ID, $field = [], array $options = []): void
     {
         if ($field['name'] == 'type') {
-            self::dropdownTypes($field['name'], $this->fields[$field['name']], true);
+            self::dropdownTypes($field['name'], $this->fields[$field['name']]);
         }
     }
 
-    public static function dropdownTypes($name, $value = 0, $display = true)
+    public static function dropdownTypes($name, $value = 0, $display = true): int|string
     {
         return Dropdown::showFromArray($name, self::getAllTypesArray(), [
-            'value' => $value, 'display' => $display]);
+            'value' => $value,
+            'display' => $display
+        ]);
     }
 
-    public static function getAllTypesArray()
+    public static function getAllTypesArray(): array
     {
         return [
             self::LEGALBASISACT_BLANK => __("Undefined", 'gdprropa'),
@@ -138,27 +143,27 @@ class LegalBasisAct extends CommonDropdown
         ];
     }
 
-    public function prepareInputForAdd($input)
+    public function prepareInputForAdd($input): bool|array
     {
         $input['users_id_creator'] = Session::getLoginUserID();
 
         return parent::prepareInputForAdd($input);
     }
 
-    public function prepareInputForUpdate($input)
+    public function prepareInputForUpdate($input): bool|array
     {
         $input['users_id_lastupdater'] = Session::getLoginUserID();
 
         return parent::prepareInputForUpdate($input);
     }
 
-    public function cleanDBonPurge()
+    public function cleanDBonPurge(): void
     {
         $rel = new Record_LegalBasisAct();
         $rel->deleteByCriteria(['plugin_gdprropa_legalbasisacts_id' => $this->fields['id']]);
     }
 
-    public function rawSearchOptions()
+    public function rawSearchOptions(): array
     {
         $tab = [];
 

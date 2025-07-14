@@ -46,6 +46,7 @@ namespace GlpiPlugin\Gdprropa;
 use CommonDBRelation;
 use CommonDBTM;
 use CommonGLPI;
+use DBmysqlIterator;
 use Dropdown;
 use Entity;
 use Html;
@@ -63,32 +64,32 @@ class Record_Software extends CommonDBRelation
     public static $itemtype_2 = Software::class;
     public static $items_id_2 = 'softwares_id';
 
-    public function canPurgeItem()
+    public function canPurgeItem(): bool
     {
         return true;
     }
 
-    public function canDeleteItem()
+    public function canDeleteItem(): bool
     {
         return true;
     }
 
-    public static function canPurge()
+    public static function canPurge(): bool
     {
         return true;
     }
 
-    public static function canDelete()
+    public static function canDelete(): bool
     {
         return true;
     }
 
-    public static function getTypeName($nb = 0)
+    public static function getTypeName($nb = 0): string
     {
         return __("Software", 'gdprropa');
     }
 
-    public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
+    public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0): bool|string
     {
         if (!Software::canView() || !$item->canView()) {
             return false;
@@ -111,7 +112,7 @@ class Record_Software extends CommonDBRelation
         return '';
     }
 
-    public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
+    public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0): bool
     {
         switch ($item->getType()) {
             case Record::class:
@@ -121,7 +122,7 @@ class Record_Software extends CommonDBRelation
         return true;
     }
 
-    public static function showForRecord(Record $record, $withtemplate = 0)
+    public static function showForRecord(Record $record, $withtemplate = 0): bool
     {
         $id = $record->fields['id'];
         if (!Software::canView() || !$record->can($id, READ)) {
@@ -161,7 +162,7 @@ class Record_Software extends CommonDBRelation
             }
 
             Software::dropdown([
-                'addicon'  => Software::canCreate(),
+                'addicon' => Software::canCreate(),
                 'name' => 'softwares_id',
                 'entity' => $entity_sons,
                 //            'entity_sons' => $entity_sons,
@@ -187,8 +188,10 @@ class Record_Software extends CommonDBRelation
             if ($canedit && $number) {
                 $massive_action_form_id = 'mass' . str_replace('\\', '', static::class) . $rand;
                 Html::openMassiveActionsForm($massive_action_form_id);
-                $massive_action_params = ['container' => 'mass' . __class__ . $rand,
-                'num_displayed' => min($_SESSION['glpilist_limit'], $number)];
+                $massive_action_params = [
+                    'container' => 'mass' . __class__ . $rand,
+                    'num_displayed' => min($_SESSION['glpilist_limit'], $number)
+                ];
                 Html::showMassiveActions($massive_action_params);
             }
             echo "<table class='tab_cadre_fixehov'>";
@@ -199,10 +202,10 @@ class Record_Software extends CommonDBRelation
             $header_end = '';
 
             if ($canedit && $number) {
-                $header_begin   .= "<th width='10'>";
-                $header_top     .= Html::getCheckAllAsCheckbox('mass' . __class__ . $rand);
-                $header_bottom  .= Html::getCheckAllAsCheckbox('mass' . __class__ . $rand);
-                $header_end     .= "</th>";
+                $header_begin .= "<th width='10'>";
+                $header_top .= Html::getCheckAllAsCheckbox('mass' . __class__ . $rand);
+                $header_bottom .= Html::getCheckAllAsCheckbox('mass' . __class__ . $rand);
+                $header_end .= "</th>";
             }
 
             $header_end .= "<th>" . __("Name") . "</th>";
@@ -232,22 +235,25 @@ class Record_Software extends CommonDBRelation
                 echo ">" . $name . "</td>";
 
                 echo "<td class='left'>";
-                echo Dropdown::getDropdownName(
-                    Entity::getTable(),
-                    $data['entities_id']
-                ) . "</td>";
+                echo Dropdown::getDropdownName
+                    (
+                        Entity::getTable(),
+                        $data['entities_id']
+                    ) . "</td>";
 
                 echo "<td class='center'>";
-                echo Dropdown::getDropdownName(
-                    Manufacturer::getTable(),
-                    $data['manufacturers_id']
-                ) . "</td>";
+                echo Dropdown::getDropdownName
+                    (
+                        Manufacturer::getTable(),
+                        $data['manufacturers_id']
+                    ) . "</td>";
 
                 echo "<td class='center'>";
-                echo Dropdown::getDropdownName(
-                    SoftwareCategory::getTable(),
-                    $data['softwarecategories_id']
-                ) . "</td>";
+                echo Dropdown::getDropdownName
+                    (
+                        SoftwareCategory::getTable(),
+                        $data['softwarecategories_id']
+                    ) . "</td>";
 
                 echo "</tr>";
             }
@@ -269,7 +275,7 @@ class Record_Software extends CommonDBRelation
         return true;
     }
 
-    public static function countForItem(CommonDBTM $item)
+    public static function countForItem(CommonDBTM $item): int
     {
         return countElementsInTable(
             Record_Software::getTable(),
@@ -277,7 +283,7 @@ class Record_Software extends CommonDBRelation
         );
     }
 
-    public static function cleanForItem(CommonDBTM $item)
+    public static function cleanForItem(CommonDBTM $item): void
     {
         $rel = new Record_Software();
         $rel->deleteByCriteria([
@@ -286,24 +292,23 @@ class Record_Software extends CommonDBRelation
         ]);
     }
 
-    public static function getListForItem(CommonDBTM $item)
+    public static function getListForItem(CommonDBTM $item): DBmysqlIterator
     {
         global $DB;
 
         $params = static::getListForItemParams($item, true);
-        $iterator = $DB->request($params);
 
-        return $iterator;
+        return $DB->request($params);
     }
 
-    public function prepareInputForUpdate($input)
+    public function prepareInputForUpdate($input): bool|array
     {
         // override hack - there was a problem in CommonDBConnexity.checkAttachedItemChangesAllowed
         //  while purging item lined to master table - permissions errors
         return $input;
     }
 
-    public function getForbiddenStandardMassiveAction()
+    public function getForbiddenStandardMassiveAction(): array
     {
         $forbidden = parent::getForbiddenStandardMassiveAction();
         $forbidden[] = 'update';
@@ -311,13 +316,13 @@ class Record_Software extends CommonDBRelation
         return $forbidden;
     }
 
-    public static function rawSearchOptionsToAdd()
+    public static function rawSearchOptionsToAdd(): array
     {
         $tab = [];
 
         $tab[] = [
             'id' => 'software',
-            'name' => Software::getTypeName(0)
+            'name' => Software::getTypeName()
         ];
 
         $tab[] = [

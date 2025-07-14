@@ -49,12 +49,12 @@ class Menu extends CommonGLPI
 {
     public static $rightname = 'plugin_gdprropa_record';
 
-    public static function getMenuName()
+    public static function getMenuName(): string
     {
         return Record::getTypeName(2);
     }
 
-    public static function getMenuContent()
+    public static function getMenuContent(): array
     {
         $image = "<i class='fas fa-print fa-2x' title='" .
             __("Create PDF for all records within active entity and its sons", 'gdprropa') . "'></i>";
@@ -82,7 +82,7 @@ class Menu extends CommonGLPI
         return $menu;
     }
 
-    public static function removeRightsFromSession()
+    public static function removeRightsFromSession(): void
     {
         if (isset($_SESSION['glpimenu']['admin']['types']['Menu'])) {
             unset($_SESSION['glpimenu']['admin']['types']['Menu']);

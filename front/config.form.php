@@ -66,8 +66,8 @@ if ($plugin->isActivated('gdprropa')) {
         $config->installSampleData($_POST);
         Html::back();
     } else {
-        Html::header(Record::getTypeName(0), '', "management", Menu::class);
-        $config->showForm(-1, []);
+        Html::header(Record::getTypeName(), '', "management", Menu::class);
+        $config->showForm(-1);
         Html::footer();
     }
 }

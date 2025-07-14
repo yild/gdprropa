@@ -57,12 +57,12 @@ class Record_LegalBasisAct extends CommonDBRelation
     public static $itemtype_2 = LegalBasisAct::class;
     public static $items_id_2 = 'plugin_gdprropa_legalbasisacts_id';
 
-    public static function getTypeName($nb = 0)
+    public static function getTypeName($nb = 0): string
     {
         return _n("Legal basis", "Legal bases", $nb, 'gdprropa');
     }
 
-    public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
+    public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0): bool|string
     {
         if (!$item->canView()) {
             return false;
@@ -81,7 +81,7 @@ class Record_LegalBasisAct extends CommonDBRelation
         return '';
     }
 
-    public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
+    public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0): bool
     {
         switch ($item->getType()) {
             case Record::class:
@@ -92,7 +92,7 @@ class Record_LegalBasisAct extends CommonDBRelation
         return true;
     }
 
-    public static function showForRecord(Record $record, $withtemplate = 0)
+    public static function showForRecord(Record $record, $withtemplate = 0): bool
     {
         $id = $record->fields['id'];
         if (!$record->can($id, READ)) {
@@ -123,7 +123,7 @@ class Record_LegalBasisAct extends CommonDBRelation
             echo "<tr class='tab_bg_1'><td width='80%' class='center'>";
 
             LegalBasisAct::dropdown([
-                'addicon'  => LegalBasisAct::canCreate(),
+                'addicon' => LegalBasisAct::canCreate(),
                 'name' => 'plugin_gdprropa_legalbasisacts_id',
                 'entity' => $record->fields['entities_id'],
                 'entity_sons' => false,
@@ -142,8 +142,10 @@ class Record_LegalBasisAct extends CommonDBRelation
             if ($canedit && $number) {
                 $massive_action_form_id = 'mass' . str_replace('\\', '', static::class) . $rand;
                 Html::openMassiveActionsForm($massive_action_form_id);
-                $massive_action_params = ['container' => 'mass' . __class__ . $rand,
-                'num_displayed' => min($_SESSION['glpilist_limit'], $number)];
+                $massive_action_params = [
+                    'container' => 'mass' . __class__ . $rand,
+                    'num_displayed' => min($_SESSION['glpilist_limit'], $number)
+                ];
                 Html::showMassiveActions($massive_action_params);
             }
             echo "<table class='tab_cadre_fixehov'>";
@@ -154,10 +156,10 @@ class Record_LegalBasisAct extends CommonDBRelation
             $header_end = '';
 
             if ($canedit && $number) {
-                $header_begin   .= "<th width='10'>";
-                $header_top     .= Html::getCheckAllAsCheckbox('mass' . __class__ . $rand);
-                $header_bottom  .= Html::getCheckAllAsCheckbox('mass' . __class__ . $rand);
-                $header_end     .= "</th>";
+                $header_begin .= "<th width='10'>";
+                $header_top .= Html::getCheckAllAsCheckbox('mass' . __class__ . $rand);
+                $header_bottom .= Html::getCheckAllAsCheckbox('mass' . __class__ . $rand);
+                $header_end .= "</th>";
             }
 
             $header_end .= "<th>" . __("Name") . "</th>";
@@ -182,7 +184,7 @@ class Record_LegalBasisAct extends CommonDBRelation
                     $link = sprintf(__("%1\$s (%2\$s)"), $link, $data['id']);
                 }
                 $name = "<a href=\"" .
-                        LegalBasisAct::getFormURLWithID($data['id']) . "\">" . $link . "</a>";
+                    LegalBasisAct::getFormURLWithID($data['id']) . "\">" . $link . "</a>";
 
                 echo "<td class='left" . (isset($data['is_deleted']) && $data['is_deleted'] ? " tab_bg_2_2'" : "'");
                 echo ">" . $name . "</td>";
@@ -216,9 +218,11 @@ class Record_LegalBasisAct extends CommonDBRelation
 
             echo "</div>";
         }
+
+        return true;
     }
 
-    public function getForbiddenStandardMassiveAction()
+    public function getForbiddenStandardMassiveAction(): array
     {
         $forbidden = parent::getForbiddenStandardMassiveAction();
         $forbidden[] = 'update';
@@ -226,13 +230,13 @@ class Record_LegalBasisAct extends CommonDBRelation
         return $forbidden;
     }
 
-    public static function rawSearchOptionsToAdd()
+    public static function rawSearchOptionsToAdd(): array
     {
         $tab = [];
 
         $tab[] = [
-           'id' => 'legalbasisact',
-           'name' => LegalBasisAct::getTypeName(0)
+            'id' => 'legalbasisact',
+            'name' => LegalBasisAct::getTypeName()
         ];
 
         $tab[] = [

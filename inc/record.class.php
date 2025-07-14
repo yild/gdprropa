@@ -73,7 +73,8 @@ class Record extends CommonDBTM
 
     // TODO this should be remover or set to false - its a hack that remove error that is shown due to 'wrong' itemtype
     //      connection with table names, it has something to do with class names that contains '_' ie. Record_Contract
-    //      this example itemtype doesnt map to a valid table name and it generates exception when rendering twig header.
+    //      this example itemtype doesnt map to a valid table name and it generates exception
+    //      when rendering twig header.
     protected static $showTitleInNavigationHeader = true;
 
     public $dohistory = true;
@@ -92,12 +93,12 @@ class Record extends CommonDBTM
     private const PIA_STATUS_PENDING = 8;
     private const PIA_STATUS_CLOSED = 16;
 
-    public static function getTypeName($nb = 0)
+    public static function getTypeName($nb = 0): string
     {
         return __("GDPR Record of Processing Activities", 'gdprropa');
     }
 
-    public function showForm($ID, $options = [])
+    public function showForm($ID, $options = []): bool
     {
         global $CFG_GLPI;
 
@@ -109,7 +110,7 @@ class Record extends CommonDBTM
         echo "<td colspan='2'>";
         $processingActivity = Html::cleanInputText($this->fields['name']);
         echo "<input type='text' style='width:98%' maxlength=250 name='name' required value='" .
-             $processingActivity . "'>";
+            $processingActivity . "'>";
         echo "</td></tr>";
 
         echo "<tr class='tab_bg_1'>";
@@ -117,7 +118,7 @@ class Record extends CommonDBTM
         echo "<td colspan='2'>";
         $purpose = Sanitizer::sanitize($this->fields['content']);
         echo "<textarea style='width:98%' name='content' required maxlength='1000' rows='3'>" .
-                $purpose . "</textarea>";
+            $purpose . "</textarea>";
         echo "</td></tr>";
 
         echo "<tr class='tab_bg_1'>";
@@ -184,14 +185,14 @@ class Record extends CommonDBTM
         echo "<td colspan='2'>";
         $additional_info = Sanitizer::sanitize($this->fields['additional_info']);
         echo "<textarea style='width: 98%;' name='additional_info' maxlength='1000' rows='3'>" .
-                $additional_info . "</textarea>";
+            $additional_info . "</textarea>";
         echo "</td></tr>";
         $this->showFormButtons($options);
 
         return true;
     }
 
-    public static function showPIAStatus($data = [])
+    public static function showPIAStatus($data = []): void
     {
         if ($data['pia_required']) {
             echo "&nbsp;&nbsp;&nbsp;" . __("Status") . "&nbsp;&nbsp;";
@@ -199,19 +200,19 @@ class Record extends CommonDBTM
         }
     }
 
-    public static function showConsentRequired($data = [])
+    public static function showConsentRequired($data = []): void
     {
         if ($data['consent_required']) {
             echo "<td>" . __("Consent storage", 'gdprropa') . "</td>";
             echo "<td colspan='2'>";
             $consent_storage = Sanitizer::sanitize($data['consent_storage']);
             echo "<textarea style='width: 98%;' name='consent_storage' maxlength='1000' rows='3'>" .
-                    $consent_storage . "</textarea>";
+                $consent_storage . "</textarea>";
             echo "</td>";
         }
     }
 
-    public function defineTabs($options = [])
+    public function defineTabs($options = []): array
     {
         $ong = [];
 //        echo '<pre>';
@@ -234,7 +235,7 @@ class Record extends CommonDBTM
         return $ong;
     }
 
-    public function cleanDBonPurge()
+    public function cleanDBonPurge(): void
     {
         $this->deleteChildrenAndRelationsFromDb([
             Record_Contract::class,
@@ -250,7 +251,7 @@ class Record extends CommonDBTM
         $retention->deleteByCriteria(['plugin_gdprropa_records_id' => $this->fields['id']]);
     }
 
-    public static function getAllPiaStatusArray($withmetaforsearch = false)
+    public static function getAllPiaStatusArray($withmetaforsearch = false): array
     {
         $tab = [
             self::PIA_STATUS_UNDEFINED => __("Undefined", 'gdprropa'),
@@ -268,7 +269,7 @@ class Record extends CommonDBTM
         return $tab;
     }
 
-    public static function getAllStorageMediumArray($withmetaforsearch = false)
+    public static function getAllStorageMediumArray($withmetaforsearch = false): array
     {
         $tab = [
             self::STORAGE_MEDIUM_UNDEFINED => __("Undefined", 'gdprropa'),
@@ -284,7 +285,7 @@ class Record extends CommonDBTM
         return $tab;
     }
 
-    public static function dropdownStorageMedium($name, $value = 0, $display = true)
+    public static function dropdownStorageMedium($name, $value = 0, $display = true): int|string|null
     {
         return Dropdown::showFromArray($name, self::getAllStorageMediumArray(), [
             'value' => $value,
@@ -292,7 +293,7 @@ class Record extends CommonDBTM
         ]);
     }
 
-    public static function dropdownPiaStatus($name, $value = 0, $display = true)
+    public static function dropdownPiaStatus($name, $value = 0, $display = true): int|string|null
     {
         return Dropdown::showFromArray($name, self::getAllPiastatusArray(), ['value' => $value, 'display' => $display]);
     }
@@ -320,7 +321,11 @@ class Record extends CommonDBTM
         }
     }
 
-    public static function getSpecificValueToSelect($field, $name = '', $values = '', array $options = [])
+    public static function getSpecificValueToSelect(
+        $field, $name = '',
+        $values = '',
+        array $options = []
+    ): int|string|null
     {
         if (!is_array($values)) {
             $values = [$field => $values];
@@ -337,7 +342,7 @@ class Record extends CommonDBTM
         return parent::getSpecificValueToSelect($field, $name, $values, $options);
     }
 
-    public function prepareInputForAdd($input)
+    public function prepareInputForAdd($input): bool|array
     {
         $input['users_id_creator'] = Session::getLoginUserID();
 
@@ -356,7 +361,7 @@ class Record extends CommonDBTM
         return parent::prepareInputForAdd($input);
     }
 
-    public function prepareInputForUpdate($input)
+    public function prepareInputForUpdate($input): bool|array
     {
         $input['users_id_lastupdater'] = Session::getLoginUserID();
 
@@ -375,7 +380,7 @@ class Record extends CommonDBTM
         return parent::prepareInputForUpdate($input);
     }
 
-    public function post_updateItem($history = 1)
+    public function post_updateItem($history = 1): void
     {
         if (
             ($this->fields['storage_medium'] == self::STORAGE_MEDIUM_PAPER_ONLY) &&
@@ -386,7 +391,7 @@ class Record extends CommonDBTM
         }
     }
 
-    public function rawSearchOptions()
+    public function rawSearchOptions(): array
     {
         $tab = [];
 
@@ -513,11 +518,9 @@ class Record extends CommonDBTM
             Record_PersonalDataCategory::rawSearchOptionsToAdd()
         );
 
-        $tab = array_merge(
+        return array_merge(
             $tab,
             Record_Software::rawSearchOptionsToAdd()
         );
-
-        return $tab;
     }
 }

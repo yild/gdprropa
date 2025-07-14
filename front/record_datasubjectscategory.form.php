@@ -52,8 +52,10 @@ Session::checkLoginUser();
 
 if (
     isset($_POST['add']) &&
-    (isset($_POST['plugin_gdprropa_records_id']) &&
-    ($_POST['plugin_gdprropa_datasubjectscategories_id']))
+    (
+        isset($_POST['plugin_gdprropa_records_id']) &&
+        ($_POST['plugin_gdprropa_datasubjectscategories_id'])
+    )
 ) {
     $record = new Record();
     $record->check($_POST[Record::getForeignKeyField()], UPDATE);

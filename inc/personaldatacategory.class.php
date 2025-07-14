@@ -51,16 +51,19 @@ class PersonalDataCategory extends CommonTreeDropdown
 {
     public static $rightname = 'plugin_gdprropa_personaldatacategory';
 
+    // TODO check description in Record class
+    protected static $showTitleInNavigationHeader = true;
+
     public $dohistory = true;
 
     public $is_recursive = true;
 
-    public static function getTypeName($nb = 0)
+    public static function getTypeName($nb = 0): string
     {
         return _n("Personal Data Category", "Personal Data Categories", $nb, 'gdprropa');
     }
 
-    public function getAdditionalFields()
+    public function getAdditionalFields(): array
     {
         return [
             [
@@ -78,7 +81,7 @@ class PersonalDataCategory extends CommonTreeDropdown
         ];
     }
 
-    public function prepareInputForAdd($input)
+    public function prepareInputForAdd($input): bool|array
     {
         $input['users_id_creator'] = Session::getLoginUserID();
 
@@ -92,21 +95,21 @@ class PersonalDataCategory extends CommonTreeDropdown
         return parent::prepareInputForUpdate($input);
     }
 
-    public function post_addItem()
+    public function post_addItem(): void
     {
         if (Config::getConfig('system', 'keep_is_special_category_strict')) {
             self::updateSpecialCategory($this);
         }
     }
 
-    public function post_updateItem($history = 1)
+    public function post_updateItem($history = 1): void
     {
         if (Config::getConfig('system', 'keep_is_special_category_strict')) {
             self::updateSpecialCategory($this);
         }
     }
 
-    public function anySonIsSpecialCategory($item)
+    public function anySonIsSpecialCategory($item): bool
     {
         $id = 0;
         if (isset($item->input['id'])) {
@@ -131,7 +134,7 @@ class PersonalDataCategory extends CommonTreeDropdown
         return count($result) > 0;
     }
 
-    public function updateSpecialCategory($item)
+    public function updateSpecialCategory($item): void
     {
         global $DB;
 
@@ -149,20 +152,21 @@ class PersonalDataCategory extends CommonTreeDropdown
             }
         } elseif ($item->input['is_special_category'] == '0') {
             if (self::anySonIsSpecialCategory($item)) {
-                $DB->update($this->getTable(), ['is_special_category' => 1], ['id' =>
-                        $item->fields['plugin_gdprropa_personaldatacategories_id']]);
+                $DB->update($this->getTable(), ['is_special_category' => 1], [
+                    'id' => $item->fields['plugin_gdprropa_personaldatacategories_id']
+                ]);
                 $DB->update($this->getTable(), ['is_special_category' => 1], ['id' => $item->fields['id']]);
             }
         }
     }
 
-    public function cleanDBonPurge()
+    public function cleanDBonPurge(): void
     {
         $rel = new Record_PersonalDataCategory();
         $rel->deleteByCriteria(['plugin_gdprropa_personaldatacategories_id' => $this->fields['id']]);
     }
 
-    public static function dropdownLimitLevel($options = [])
+    public static function dropdownLimitLevel($options = []): int|string
     {
         global $DB;
 
@@ -254,7 +258,7 @@ class PersonalDataCategory extends CommonTreeDropdown
         return Dropdown::showFromArray($p['name'], $tab, $p);
     }
 
-    public function rawSearchOptions()
+    public function rawSearchOptions(): array
     {
         $tab = [];
 

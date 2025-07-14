@@ -59,7 +59,7 @@ use UserEmail;
 if (!defined('K_PATH_IMAGES')) {
     define('K_PATH_IMAGES', GLPI_ROOT . '/plugins/gdprropa/images/');
 }
-// TODO use null coalesce operator when N/A values are used
+
 class CreatePDF extends CreatePDFBase
 {
     public static $rightname = 'plugin_gdprropa_createpdf';
@@ -101,7 +101,7 @@ class CreatePDF extends CreatePDFBase
         'show_representative_dpo_per_record' => 0,
     ];
 
-    public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
+    public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0): bool|string
     {
         if (!$item->canView()) {
             return false;
@@ -115,7 +115,7 @@ class CreatePDF extends CreatePDFBase
         return '';
     }
 
-    public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
+    public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0): bool
     {
         switch ($item->getType()) {
             case Record::class:
@@ -126,18 +126,17 @@ class CreatePDF extends CreatePDFBase
         return true;
     }
 
-    protected function setEntityAndControllerInfo($entity_id)
+    protected function setEntityAndControllerInfo($entity_id): void
     {
         $this->entity = new Entity();
 
         $this->controller_info = ControllerInfo::getFirstControllerInfo($entity_id);
-        if (is_null($this->controller_info)) {
-        } else {
+        if (!is_null($this->controller_info)) {
             $this->entity->getFromDB($this->controller_info->fields['entities_id']);
         }
     }
 
-    public static function showConfigFormElements($config = [])
+    public static function showConfigFormElements($config = []): void
     {
         echo "<tr class='tab_bg_1'>";
         echo "<td width='25%'>" . __("Show 'introduced in'", 'gdprropa') . "</td>";
@@ -336,7 +335,7 @@ class CreatePDF extends CreatePDFBase
         echo "</tr>";
     }
 
-    public static function showPrepareForm($report_type)
+    public static function showPrepareForm($report_type): void
     {
         echo "<div class='glpi_tabs'>";
         echo '<div class="center vertical ui-tabs ui-widget ui-widget-content
@@ -354,7 +353,7 @@ class CreatePDF extends CreatePDFBase
         Html::footer();
     }
 
-    public static function showForm($report_type, $record_id = -1)
+    public static function showForm($report_type, $record_id = -1): void
     {
         global $CFG_GLPI;
 
@@ -385,7 +384,7 @@ class CreatePDF extends CreatePDFBase
         Html::closeForm();
     }
 
-    protected function prepareControllerInfo()
+    protected function prepareControllerInfo(): array
     {
         $controller_name = __("Controller name not set.", 'gdprropa');
         $info = "<strong>" . $controller_name . "</strong>";
@@ -398,42 +397,15 @@ class CreatePDF extends CreatePDFBase
                 $info = "<ul>";
                 $info .= "<li>" . __("Name") . ": <strong>" . $controller_name . "</strong>" . "</li>";
 
-                $address = __("N/A", 'gdprropa');
-                if (!is_null($this->entity->fields['address'])) {
-                    $address = trim($this->entity->fields['address']);
-                }
-                $postcode = __("N/A", 'gdprropa');
-                if (!is_null($this->entity->fields['postcode'])) {
-                    $postcode = trim($this->entity->fields['postcode']);
-                }
-                $town = __("N/A", 'gdprropa');
-                if (!is_null($this->entity->fields['town'])) {
-                    $town = trim($this->entity->fields['town']);
-                }
-                $state = __("N/A", 'gdprropa');
-                if (!is_null($this->entity->fields['state'])) {
-                    $state = trim($this->entity->fields['state']);
-                }
-                $country = __("N/A", 'gdprropa');
-                if (!is_null($this->entity->fields['country'])) {
-                    $country = trim($this->entity->fields['country']);
-                }
-                $phone = __("N/A", 'gdprropa');
-                if (!is_null($this->entity->fields['phonenumber'])) {
-                    $phone = trim($this->entity->fields['phonenumber']);
-                }
-                $fax = __("N/A", 'gdprropa');
-                if (!is_null($this->entity->fields['fax'])) {
-                    $fax = trim($this->entity->fields['fax']);
-                }
-                $email = __("N/A", 'gdprropa');
-                if (!is_null($this->entity->fields['email'])) {
-                    $email = trim($this->entity->fields['email']);
-                }
-                $web = __("N/A", 'gdprropa');
-                if (!is_null($this->entity->fields['website'])) {
-                    $web = trim($this->entity->fields['website']);
-                }
+                $address = trim($this->entity->fields['address'] ?? __("N/A", 'gdprropa'));
+                $postcode = trim(trim($this->entity->fields['postcode']) ?? __("N/A", 'gdprropa'));
+                $town = trim($this->entity->fields['town'] ?? __("N/A", 'gdprropa'));
+                $state = trim($this->entity->fields['state'] ?? __("N/A", 'gdprropa'));
+                $country = trim($this->entity->fields['country'] ?? __("N/A", 'gdprropa'));
+                $phone = trim($this->entity->fields['phonenumber'] ?? __("N/A", 'gdprropa'));
+                $fax = trim($this->entity->fields['fax'] ?? __("N/A", 'gdprropa'));
+                $email = trim($this->entity->fields['email'] ?? __("N/A", 'gdprropa'));
+                $web = trim($this->entity->fields['website'] ?? __("N/A", 'gdprropa'));
 
                 $address_full = $address . ", " . $postcode . " " . $town;
                 if ($state) {
@@ -459,7 +431,7 @@ class CreatePDF extends CreatePDFBase
         ];
     }
 
-    protected function preparePersonelInfo($person, $caption_not_set, $section_caption)
+    protected function preparePersonelInfo($person, $caption_not_set, $section_caption): array
     {
         if (
             (
@@ -471,73 +443,58 @@ class CreatePDF extends CreatePDFBase
             $info = "<strong>" . $caption_not_set . "</strong>";
         } else {
             $user = new User();
-            $user->getFromDB($this->controller_info->fields['users_id_' . $person]);
+            if (!$user->getFromDB($this->controller_info->fields['users_id_' . $person])) {
+                $info = "<strong>" . __('Not found', 'gdprropa') . "</strong>";
+            } else {
+                $email = new UserEmail();
+                $email->getFromDBByCrit(['users_id' => $user->fields['id'], 'is_default' => 1]);
 
-            // TODO react when no user was found in table
-            $email = new UserEmail();
-            $email->getFromDBByCrit(['users_id' => $user->fields['id'], 'is_default' => 1]);
+                $location = new Location();
+                $location->getFromDB($user->fields['locations_id']);
 
-            $location = new Location();
-            $location->getFromDB($user->fields['locations_id']);
+                $realname = trim($user->fields['realname'] ?? __("N/A", 'gdprropa'));
+                $firstname = trim($user->fields['firstname'] ?? __("N/A", 'gdprropa'));
 
-            $realname = __("N/A", 'gdprropa');
-            if (!is_null($user->fields['realname'])) {
-                $realname = trim($user->fields['realname']);
-            }
+                $info = "<ul>";
+                $info .= "<li>" . __("Surname") . ": <strong>" . $realname . "</strong>; " .
+                    __("First name") . ": <strong>" . $firstname . "</strong>" . "</li>";
 
-            $firstname = __("N/A", 'gdprropa');
-            if (!is_null($user->fields['firstname'])) {
-                $firstname = trim($user->fields['firstname']);
-            }
-
-            $info = "<ul>";
-            $info .= "<li>" . __("Surname") . ": <strong>" . $realname . "</strong>; " .
-                __("First name") . ": <strong>" . $firstname . "</strong>" . "</li>";
-
-            if ($this->print_options['show_' . $person]['show_title']) {
-                $title = trim(Dropdown::getDropdownName('glpi_usertitles', $user->fields['usertitles_id']));
-                if (empty($title) || ($title == '&nbsp;')) {
-                    $title = __("N/A", 'gdprropa');
+                if ($this->print_options['show_' . $person]['show_title']) {
+                    $title = trim(Dropdown::getDropdownName('glpi_usertitles', $user->fields['usertitles_id']));
+                    if (empty($title) || ($title == '&nbsp;')) {
+                        $title = __("N/A", 'gdprropa');
+                    }
+                    $info .= "<li>" . _x('person', "Title") . " : <strong>" . $title . "</strong></li>";
                 }
-                $info .= "<li>" . _x('person', "Title") . " : <strong>" . $title . "</strong></li>";
-            }
-            if ($this->print_options['show_' . $person]['show_address']) {
-                $address = isset($location->fields['address']) ? trim($location->fields['address']) :
-                    __("N/A", 'gdprropa');
-                $postcode = isset($location->fields['postcode']) ? trim($location->fields['postcode']) :
-                    __("N/A", 'gdprropa');
-                $town = isset($location->fields['town']) ? trim($location->fields['town']) :
-                    __("N/A", 'gdprropa');
-                $state = isset($location->fields['state']) ? trim($location->fields['state']) : '';
-                $country = isset($location->fields['country']) ? trim($location->fields['country']) : '';
+                if ($this->print_options['show_' . $person]['show_address']) {
+                    $address = trim($location->fields['address'] ?? __("N/A", 'gdprropa'));
+                    $postcode = trim($location->fields['postcode'] ?? __("N/A", 'gdprropa'));
+                    $town = trim($location->fields['town'] ?? __("N/A", 'gdprropa'));
+                    $state = trim($location->fields['state'] ?? '');
+                    $country = trim($location->fields['country'] ?? '');
 
-                $address_full = $address . ", " . $postcode . " " . $town;
-                if ($state) {
-                    $address_full .= " " . $state;
-                }
-                if ($country) {
-                    $address_full .= " " . $country;
+                    $address_full = $address . ", " . $postcode . " " . $town;
+                    if ($state) {
+                        $address_full .= " " . $state;
+                    }
+                    if ($country) {
+                        $address_full .= " " . $country;
+                    }
+
+                    $info .= "<li>" . __("Address") . ": <strong>" . $address_full . "</strong></li>";
                 }
 
-                $info .= "<li>" . __("Address") . ": <strong>" . $address_full . "</strong></li>";
-            }
-
-            if ($this->print_options['show_' . $person]['show_phone']) {
-                $phone = trim($user->fields['phone']);
-                if (empty($phone)) {
-                    $phone = __("N/A", 'gdprropa');
+                if ($this->print_options['show_' . $person]['show_phone']) {
+                    $phone = trim($user->fields['phone'] ?? __("N/A", 'gdprropa'));
+                    $info .= "<li>" . __("Phone") . ": <strong>" . $phone . "</strong>" . "</li>";
                 }
-                $info .= "<li>" . __("Phone") . ": <strong>" . $phone . "</strong>" . "</li>";
-            }
-            if ($this->print_options['show_' . $person]['show_email']) {
-                $email = isset($email->fields['email']) ? trim($email->fields['email']) : '';
-                if (empty($email)) {
-                    $email = __("N/A", 'gdprropa');
+                if ($this->print_options['show_' . $person]['show_email']) {
+                    $email = trim($email->fields['email'] ?? __("N/A", 'gdprropa'));
+                    $info .= "<li>" . __("Email") . ": <strong>" . $email . "</strong>" . "</li>";
                 }
-                $info .= "<li>" . __("Email") . ": <strong>" . $email . "</strong>" . "</li>";
-            }
 
-            $info .= "</ul>";
+                $info .= "</ul>";
+            }
         }
 
         return [
@@ -546,8 +503,11 @@ class CreatePDF extends CreatePDFBase
         ];
     }
 
-    protected function getRecordsForEntity($entity_id, $print_options = null, $include_recursive = false)
-    {
+    protected function getRecordsForEntity(
+        $entity_id,
+        $print_options = null,
+        $include_recursive = false
+    ): DBmysqlIterator {
         global $DB;
 
         if ($include_recursive) {
@@ -593,7 +553,7 @@ class CreatePDF extends CreatePDFBase
         return $DB->request($query);
     }
 
-    protected function getControllerName()
+    protected function getControllerName(): string
     {
         if (
             isset($this->controller_info->fields['controllername']) &&
@@ -605,9 +565,8 @@ class CreatePDF extends CreatePDFBase
         }
     }
 
-    public function generateReport($generator_options, $print_options)
+    public function generateReport($generator_options, $print_options): void
     {
-
         $this->preparePrintOptions($print_options);
         $this->preparePDF();
 
@@ -651,7 +610,7 @@ class CreatePDF extends CreatePDFBase
         }
     }
 
-    protected function printHeader()
+    protected function printHeader(): void
     {
         $header = __("GDPR Record of Processing Activities", 'gdprropa');
         if ($this->print_options['show_print_date_time']) {
@@ -666,7 +625,7 @@ class CreatePDF extends CreatePDFBase
         $this->setHeader($header, $name);
     }
 
-    protected function printActivitiesList($records)
+    protected function printActivitiesList($records): void
     {
         if ($records) {
             $display_introduced_in = $this->print_options['show_inherited_from'];
@@ -717,7 +676,7 @@ class CreatePDF extends CreatePDFBase
         }
     }
 
-    protected function printCoverPage($type, $records, $entities_id = -1)
+    protected function printCoverPage($type, $records, $entities_id = -1): void
     {
         $this->pdf->addPage($this->print_options['page_orientation'], 'A4');
 
@@ -732,11 +691,14 @@ class CreatePDF extends CreatePDFBase
             case CreatePDF::REPORT_FOR_ENTITY:
                 $entity = new Entity();
                 $entity->getFromDB($entities_id);
-                $this->printPageTitle("<h1><small>" .
+                $this->printPageTitle(
+                    "<h1><small>" .
                     sprintf(
                         __("GDPR Records of Processing Activity for entity:<br/>%1s", 'gdprropa'),
                         $entity->fields['name']
-                    ) . "</small><br/>" . '' . "</h1>");
+                    ) .
+                    "</small><br/>" . '' . "</h1>"
+                );
                 break;
             case CreatePDF::REPORT_ALL:
                 $this->printPageTitle(
@@ -782,8 +744,6 @@ class CreatePDF extends CreatePDFBase
             case CreatePDF::REPORT_SINGLE_RECORD:
                 break;
             case CreatePDF::REPORT_FOR_ENTITY:
-                $this->printActivitiesList($records);
-                break;
             case CreatePDF::REPORT_ALL:
                 $this->printActivitiesList($records);
                 break;
@@ -792,7 +752,7 @@ class CreatePDF extends CreatePDFBase
         $this->pdf->lastPage();
     }
 
-    protected function printRecordStatusInfo(Record $record)
+    protected function printRecordStatusInfo(Record $record): void
     {
         if ($this->print_options['show_is_deleted_header']) {
             if ($record->fields['is_deleted']) {
@@ -822,7 +782,7 @@ class CreatePDF extends CreatePDFBase
         }
     }
 
-    protected function addPageForRecord(Record $record, $reporty_type)
+    protected function addPageForRecord(Record $record, $reporty_type): void
     {
         $this->pdf->addPage('P', 'A4');
 
@@ -866,7 +826,7 @@ class CreatePDF extends CreatePDFBase
         $this->printSecurityMeasures($record, SecurityMeasure::SECURITYMEASURE_TYPE_IT);
     }
 
-    protected function printRecordInformation(Record $record)
+    protected function printRecordInformation(Record $record): void
     {
         $this->writeInternal(
             '<h2>' . __("Processing Activity information", 'gdprropa') . '</h2>',
@@ -964,7 +924,7 @@ class CreatePDF extends CreatePDFBase
         $this->insertNewPageIfBottomSpaceLeft();
     }
 
-    protected function printLegalBasisActs(Record $record)
+    protected function printLegalBasisActs(Record $record): void
     {
         global $DB;
 
@@ -1030,7 +990,6 @@ class CreatePDF extends CreatePDFBase
                 $dsc = new LegalBasisAct();
                 $dsc->getFromDB($item['plugin_gdprropa_legalbasisacts_id']);
 
-    //         while ($item = $result->next()) {
                 $tbl .=
                     '<tr>' .
                     '<td width="' . $cols_width[0] . '%">' . $dsc->fields['name'] . '</td>' .
@@ -1060,7 +1019,7 @@ class CreatePDF extends CreatePDFBase
         $this->insertNewPageIfBottomSpaceLeft();
     }
 
-    protected function printDataSubjectsCategories(Record $record)
+    protected function printDataSubjectsCategories(Record $record): void
     {
         $data_subjects = (new Record_DataSubjectsCategory())
             ->find([Record::getForeignKeyField() => $record->fields['id']]);
@@ -1131,7 +1090,7 @@ class CreatePDF extends CreatePDFBase
             $tbl .= '</tbody></table>';
 
             $this->pdf->SetTextColor(0, 0, 0);
-            $this->pdf->writeHTML($tbl, true, false, false, true, '');
+            $this->pdf->writeHTML($tbl, true, false, false, true);
         }
 
         $this->insertNewPageIfBottomSpaceLeft();
@@ -1142,7 +1101,7 @@ class CreatePDF extends CreatePDFBase
         $retention = (new Record_Retention())
             ->find([Record::getForeignKeyField() => $record->fields['id']]);
 
-        $this->writeInternal('<h2>' . Record_Retention::getTypeName(0) . '</h2>', [
+        $this->writeInternal('<h2>' . Record_Retention::getTypeName() . '</h2>', [
             'linebefore' => 1
         ]);
 
@@ -1235,11 +1194,8 @@ class CreatePDF extends CreatePDFBase
                     case Record_Retention::RETENTION_TYPE_LEGALBASISACT:
                         $legal_basis = new LegalBasisAct();
                         $legal_basis->getFromDB($item['plugin_gdprropa_legalbasisacts_id']);
+                        $name = $legal_basis->fields['name'] ?? __("N/A", 'gdprropa');
 
-                        $name = __("N/A", 'gdprropa');
-                        if (isset($legal_basis->fields['id'])) {
-                            $name = $legal_basis->fields['name'];
-                        }
                         $tbl .=
                             '</tr><tr>' .
                             '<td width="25%" style="background-color:#AFAFAF;color:#FFF;">' . '' . '</td>' .
@@ -1271,7 +1227,7 @@ class CreatePDF extends CreatePDFBase
         $this->insertNewPageIfBottomSpaceLeft();
     }
 
-    protected function printContracts(Record $record, $type, $print_header)
+    protected function printContracts(Record $record, $type, $print_header): int
     {
         $get_expired = $this->print_options['show_expired_contracts'];
         $iterator = Record_Contract::getContracts($record, $type, $get_expired);
@@ -1379,8 +1335,7 @@ class CreatePDF extends CreatePDFBase
                 $expiry = Infocom::getWarrantyExpir(
                     $data['contracts_begin_date'],
                     $data['contracts_duration'],
-                    $data['contracts_notice'],
-                    false
+                    $data['contracts_notice']
                 );
                 $expiry_bkg = '#FFFFFF';
                 if (new DateTime($expiry) < new DateTime()) {
@@ -1418,7 +1373,7 @@ class CreatePDF extends CreatePDFBase
         return $number;
     }
 
-    protected function printPersonalDataCategories(Record $record)
+    protected function printPersonalDataCategories(Record $record): void
     {
         $this->writeInternal(
             '<h2>' . Record_PersonalDataCategory::getTypeName(1) . '</h2>',
@@ -1513,7 +1468,7 @@ class CreatePDF extends CreatePDFBase
         $this->insertNewPageIfBottomSpaceLeft();
     }
 
-    protected function printSoftware(Record $record)
+    protected function printSoftware(Record $record): void
     {
         global $DB;
 
@@ -1655,7 +1610,7 @@ class CreatePDF extends CreatePDFBase
         $this->insertNewPageIfBottomSpaceLeft();
     }
 
-    protected function printSecurityMeasures(Record $record, $type, $header = false)
+    protected function printSecurityMeasures(Record $record, $type, $header = false): void
     {
         global $DB;
 
@@ -1770,7 +1725,7 @@ class CreatePDF extends CreatePDFBase
         $this->insertNewPageIfBottomSpaceLeft();
     }
 
-    public static function preparePrintOptionsFromForm($config = [])
+    public static function preparePrintOptionsFromForm($config = []): array
     {
         $mod_config = self::getDefaultPrintOptions();
 
@@ -1789,7 +1744,7 @@ class CreatePDF extends CreatePDFBase
         return $mod_config;
     }
 
-    public static function getDefaultPrintOptions()
+    public static function getDefaultPrintOptions(): array
     {
         $opt = self::$default_print_options;
 

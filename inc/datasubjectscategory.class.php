@@ -50,36 +50,39 @@ class DataSubjectsCategory extends CommonDropdown
 {
     public static $rightname = 'plugin_gdprropa_datasubjectscategory';
 
+    // TODO check description in Record class
+    protected static $showTitleInNavigationHeader = true;
+
     public $dohistory = true;
 
     protected $usenotepad = true;
 
-    public static function getTypeName($nb = 0)
+    public static function getTypeName($nb = 0): string
     {
         return _n("Category of data subjects", "Categories of data subjects", $nb, 'gdprropa');
     }
 
-    public function prepareInputForAdd($input)
+    public function prepareInputForAdd($input): bool|array
     {
         $input['users_id_creator'] = Session::getLoginUserID();
 
         return parent::prepareInputForAdd($input);
     }
 
-    public function prepareInputForUpdate($input)
+    public function prepareInputForUpdate($input): bool|array
     {
         $input['users_id_lastupdater'] = Session::getLoginUserID();
 
         return parent::prepareInputForUpdate($input);
     }
 
-    public function cleanDBonPurge()
+    public function cleanDBonPurge(): void
     {
         $rel = new Record_DataSubjectsCategory();
         $rel->deleteByCriteria(['plugin_gdprropa_datasubjectscategories_id' => $this->fields['id']]);
     }
 
-    public function rawSearchOptions()
+    public function rawSearchOptions(): array
     {
         $tab = [];
 

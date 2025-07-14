@@ -62,7 +62,7 @@ class Record_Retention extends CommonDBTM
         return __("Data Retention", 'gdprropa');
     }
 
-    public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
+    public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0): bool|string
     {
         if (!$item->canView()) {
             return false;
@@ -70,40 +70,40 @@ class Record_Retention extends CommonDBTM
 
         switch ($item->getType()) {
             case Record::class:
-                return self::createTabEntry(Record_Retention::getTypeName(), 0);
+                return self::createTabEntry(Record_Retention::getTypeName());
         }
 
         return '';
     }
 
-    public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
+    public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0): bool
     {
         switch ($item->getType()) {
             case Record::class:
                 $retention = new self();
-                $retention->showForRecord($item, $withtemplate = 0);
+                $retention->showForRecord($item, $withtemplate);
                 break;
         }
 
         return true;
     }
 
-    public static function canView()
+    public static function canView(): bool
     {
         return Record::canView();
     }
 
-    public static function canCreate()
+    public static function canCreate(): bool
     {
         return Record::canCreate();
     }
 
-    public static function canUpdate()
+    public static function canUpdate(): bool
     {
         return Record::canUpdate();
     }
 
-    public function showForRecord(Record $record, $withtemplate = 0)
+    public function showForRecord(Record $record, $withtemplate = 0): bool
     {
         global $CFG_GLPI;
 
@@ -137,8 +137,7 @@ class Record_Retention extends CommonDBTM
         echo "</td><td width='84%'>";
         $rand = self::dropdownTypes(
             'type',
-            array_key_exists('type', $this->fields) ? $this->fields['type'] : null,
-            true
+            array_key_exists('type', $this->fields) ? $this->fields['type'] : null
         );
         echo "</td></tr>";
         echo "<tr><td colspan='2'></td></tr>";
@@ -189,14 +188,14 @@ class Record_Retention extends CommonDBTM
 
         echo "</td></tr>";
 
-        echo "<tr><td></td><td>" .  __("Additional information", 'gdprropa') . "<br>";
+        echo "<tr><td></td><td>" . __("Additional information", 'gdprropa') . "<br>";
         echo "";
         $additional_info = '';
         if (array_key_exists('additional_info', $this->fields)) {
             $additional_info = $this->fields['additional_info'];
         }
         echo "<textarea style='width:98%' name='additional_info' maxlength='1000' rows='3'>" .
-                $additional_info . "</textarea>";
+            $additional_info . "</textarea>";
         echo "</td></tr>";
 
         echo "<tr class='tab_bg_1'>";
@@ -206,6 +205,8 @@ class Record_Retention extends CommonDBTM
         echo "</td></tr>";
 
         $this->showFormButtons($options);
+
+        return true;
     }
 
     public static function showContractInputs($data = []): void
@@ -287,7 +288,7 @@ class Record_Retention extends CommonDBTM
         echo "</table>";
     }
 
-    public static function showContractUntilIsValidInputs($data = [])
+    public static function showContractUntilIsValidInputs($data = []): void
     {
         echo "<table width='100%' border='0' cellpadding='0' cellspacing='0'>";
         echo "<tr>";
@@ -322,7 +323,7 @@ class Record_Retention extends CommonDBTM
         echo "</table>";
     }
 
-    public static function showLegalBasesInputs($data = [])
+    public static function showLegalBasesInputs($data = []): void
     {
         $value = null;
         if (array_key_exists('plugin_gdprropa_legalbasisacts_id', $data)) {
@@ -344,12 +345,12 @@ class Record_Retention extends CommonDBTM
     {
     }
 
-    public static function dropdownTypes($name, $value = 0, $display = true)
+    public static function dropdownTypes($name, $value = 0, $display = true): int|string
     {
-        return Dropdown::showFromArray($name, self::getAllTypesArray(), ['value'   => $value, 'display' => $display]);
+        return Dropdown::showFromArray($name, self::getAllTypesArray(), ['value' => $value, 'display' => $display]);
     }
 
-    public static function getAllTypesArray()
+    public static function getAllTypesArray(): array
     {
         return [
             '' => Dropdown::EMPTY_VALUE,
@@ -376,7 +377,7 @@ class Record_Retention extends CommonDBTM
         return $options;
     }
 
-    public static function dropdownRetentionScheduleScales($name, $options = [])
+    public static function dropdownRetentionScheduleScales($name, $options = []): int|string
     {
         $params['value'] = 0;
         $params['toadd'] = [];
@@ -399,7 +400,7 @@ class Record_Retention extends CommonDBTM
         return Dropdown::showFromArray($name, $items, $params);
     }
 
-    public function prepareInputForAdd($input)
+    public function prepareInputForAdd($input): bool|array
     {
         switch ($input['type']) {
             case Record_Retention::RETENTION_TYPE_NONE:
@@ -432,7 +433,7 @@ class Record_Retention extends CommonDBTM
         return parent::prepareInputForAdd($input);
     }
 
-    public function prepareInputForUpdate($input)
+    public function prepareInputForUpdate($input): bool|array
     {
         $input = self::prepareInputForAdd($input);
 

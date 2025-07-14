@@ -46,13 +46,14 @@ use GlpiPlugin\Gdprropa\Profile as GdprropaProfile;
 use GlpiPlugin\Gdprropa\Record;
 use GlpiPlugin\Gdprropa\Menu;
 
-define('PLUGIN_GDPRROPA_VERSION', '1.0');
-define('PLUGIN_GDPRROPA_ROOT', __DIR__);
+// TODO try to move this to Config class and use it from there, atm GLPI (tested on 10.0.11) can't find
+//      specific class when using namespaces
+define('GDPRROPA_PLUGIN_VERSION', '1.0.2');
 
 // Minimal GLPI version, inclusive
-define('PLUGIN_GDPRROPA_MIN_GLPI', '10.0.0');
+define('GDPRROPA_PLUGIN_MIN_GLPI_VERSION', '10.0.0');
 // Maximum GLPI version, exclusive
-define('PLUGIN_GDPRROPA_MAX_GLPI', '10.0.99');
+define('GDPRROPA_PLUGIN_MAX_GLPI_VERSION', '10.99.99');
 
 function plugin_init_gdprropa()
 {
@@ -64,7 +65,7 @@ function plugin_init_gdprropa()
         Plugin::registerClass(GdprropaProfile::class, ['addtabon' => Profile::class]);
         Plugin::registerClass(Record::class);
 
-        $PLUGIN_HOOKS['change_profile']['gdprropa'] = ['Profile', 'initProfile'];
+        $PLUGIN_HOOKS['change_profile']['gdprropa'] = [GdprropaProfile::class, 'initProfile'];
 
         $plugin = new Plugin();
         if (
@@ -91,15 +92,14 @@ function plugin_version_gdprropa()
 {
     return [
         'name' => __('GDPR Record of Processing Activities', 'gdprropa'),
-        'version' => PLUGIN_GDPRROPA_VERSION,
+        'version' => GDPRROPA_PLUGIN_VERSION,
         'author' => "<a href='https://github.com/yild/'>Yild</a>",
         'license' => 'GPLv3',
         'homepage' => 'https://github.com/yild/gdprropa',
-        'minGlpiVersion' => PLUGIN_GDPRROPA_MIN_GLPI,
         'requirements' => [
             'glpi' => [
-                'min' => PLUGIN_GDPRROPA_MIN_GLPI,
-                'max' => PLUGIN_GDPRROPA_MAX_GLPI,
+                'min' => GDPRROPA_PLUGIN_MIN_GLPI_VERSION,
+                'max' => GDPRROPA_PLUGIN_MAX_GLPI_VERSION,
             ]
         ]
     ];
@@ -121,13 +121,5 @@ function plugin_gdprropa_check_prerequisites()
 
 function plugin_gdprropa_check_config($verbose = false)
 {
-    if (true) {
-        return true;
-    }
-
-    if ($verbose) {
-        echo __("Installed / not configured");
-    }
-
-    return false;
+    return true;
 }
