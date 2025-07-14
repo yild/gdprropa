@@ -1,8 +1,9 @@
 <?php
+
 /*
  -------------------------------------------------------------------------
  GDPR Records of Processing Activities plugin for GLPI
- Copyright (C) 2020 by Yild.
+ Copyright © 2020-2025 by Yild.
 
  https://github.com/yild/gdprropa
  -------------------------------------------------------------------------
@@ -24,7 +25,7 @@
 
  You should have received a copy of the GNU General Public License
  along with GDPR Records of Processing Activities.
- If not, see <http://www.gnu.org/licenses/>.
+ If not, see <https://www.gnu.org/licenses/>.
 
  Based on DPO Register plugin, by Karhel Tmarr.
 
@@ -32,27 +33,33 @@
 
   @package   gdprropa
   @author    Yild
-  @copyright Copyright (c) 2020 by Yild
+  @copyright Copyright © 2020-2025 by Yild
   @license   GPLv3+
-             http://www.gnu.org/licenses/gpl.txt
+             https://www.gnu.org/licenses/gpl.txt
   @link      https://github.com/yild/gdprropa
-  @since     2020
+  @since     1.0.0
  --------------------------------------------------------------------------
  */
+
+namespace GlpiPlugin\Gdprropa;
+
+use Html;
+use Search;
+use Session;
 
 include("../../../inc/includes.php");
 
 if (Session::getCurrentInterface() == 'central') {
-   Html::header(PluginGdprropaRecord::getTypeName(2), '', 'management', 'plugingdprropamenu');
+    Html::header(Record::getTypeName(2), $_SERVER['PHP_SELF'], 'management', Menu::class, "");
 } else {
-   Html::helpHeader(PluginGdprropaRecord::getTypeName(2));
+    Html::helpHeader(Record::getTypeName(2), $_SERVER['PHP_SELF']);
 }
 
-$record = new PluginGdprropaRecord();
+$record = new Record();
 $record->checkGlobal(READ);
 
 if ($record->canView()) {
-   Search::show('PluginGdprropaRecord');
+    Search::show(Record::class);
 }
 
 Html::footer();

@@ -1,8 +1,9 @@
 <?php
+
 /*
  -------------------------------------------------------------------------
  GDPR Records of Processing Activities plugin for GLPI
- Copyright (C) 2020 by Yild.
+ Copyright © 2020-2025 by Yild.
 
  https://github.com/yild/gdprropa
  -------------------------------------------------------------------------
@@ -24,7 +25,7 @@
 
  You should have received a copy of the GNU General Public License
  along with GDPR Records of Processing Activities.
- If not, see <http://www.gnu.org/licenses/>.
+ If not, see <https://www.gnu.org/licenses/>.
 
  Based on DPO Register plugin, by Karhel Tmarr.
 
@@ -32,56 +33,62 @@
 
   @package   gdprropa
   @author    Yild
-  @copyright Copyright (c) 2020 by Yild
+  @copyright Copyright © 2020-2025 by Yild
   @license   GPLv3+
-             http://www.gnu.org/licenses/gpl.txt
+             https://www.gnu.org/licenses/gpl.txt
   @link      https://github.com/yild/gdprropa
-  @since     2020
+  @since     1.0.0
  --------------------------------------------------------------------------
  */
 
-class PluginGdprropaMenu extends CommonGLPI
+namespace GlpiPlugin\Gdprropa;
+
+use CommonGLPI;
+
+class Menu extends CommonGLPI
 {
-   static $rightname = 'plugin_gdprropa_record';
+    public static $rightname = 'plugin_gdprropa_record';
 
-   static function getMenuName() {
+    public static function getMenuName()
+    {
+        return Record::getTypeName(2);
+    }
 
-      return PluginGdprropaRecord::getTypeName(2);
+    public static function getMenuContent()
+    {
+        $image = "<i class='fas fa-print fa-2x' title='" .
+            __("Create PDF for all records within active entity and its sons", 'gdprropa') . "'></i>";
 
-   }
+        $menu = [];
+        $menu['title'] = Menu::getMenuName();
+        $menu['page'] = Record::getSearchURL(false);
+        $menu['icon'] = 'fas ti ti-report';
+        $menu['links']['search'] = Record::getSearchURL(false);
+        $menu['links'][$image] = CreatePDF::getSearchURL(false) .
+            '?createpdf&action=prepare&type=' . CreatePDF::REPORT_ALL;
+        if (Record::canCreate()) {
+            $menu['links']['add'] = Record::getFormURL(false);
+        }
 
-   static function getMenuContent() {
+        $menu['options']['record']['title'] = Menu::getMenuName();
+        $menu['options']['record']['page'] = Record::getSearchURL(false);
+        $menu['options']['record']['links']['search'] = Record::getSearchURL(false);
+        $menu['options']['record']['links'][$image] = CreatePDF::getSearchURL(false) .
+            '?createpdf&action=prepare&type=' . CreatePDF::REPORT_ALL;
+        if (Record::canCreate()) {
+            $menu['options']['record']['links']['add'] = Record::getFormURL(false);
+        }
 
-      $image = "<i class='fas fa-print fa-2x' title='" . __("Create PDF for all records within active entity and its sons", 'gdprropa') . "'></i>";
+        return $menu;
+    }
 
-      $menu = [];
-      $menu['title'] = PluginGdprropaMenu::getMenuName();
-      $menu['page'] = '/plugins/gdprropa/front/record.php';
-      $menu['links']['search'] = PluginGdprropaRecord::getSearchURL(false);
-      $menu['links'][$image] = PluginGdprropaCreatepdf::getSearchURL(false) . '?createpdf&action=prepare&type=' . PluginGdprropaCreatePDF::REPORT_ALL;
-      if (PluginGdprropaRecord::canCreate()) {
-         $menu['links']['add'] = PluginGdprropaRecord::getFormURL(false);
-      }
-
-      $menu['options']['gdprropa']['title'] = PluginGdprropaMenu::getMenuName();
-      $menu['options']['gdprropa']['page'] = PluginGdprropaRecord::getSearchURL(false);
-      $menu['options']['gdprropa']['links']['search'] = PluginGdprropaRecord::getSearchURL(false);
-      $menu['options']['gdprropa']['links'][$image] = PluginGdprropaCreatepdf::getSearchURL(false) . '?createpdf&action=prepare&type=' . PluginGdprropaCreatePDF::REPORT_ALL;
-      if (PluginGdprropaRecord::canCreate()) {
-         $menu['options']['gdprropa']['links']['add'] = PluginGdprropaRecord::getFormURL(false);
-      }
-
-      return $menu;
-   }
-
-   static function removeRightsFromSession() {
-
-      if (isset($_SESSION['glpimenu']['admin']['types']['PluginGdprropaMenu'])) {
-         unset($_SESSION['glpimenu']['admin']['types']['PluginGdprropaMenu']);
-      }
-      if (isset($_SESSION['glpimenu']['admin']['content']['PluginGdprropaMenu'])) {
-         unset($_SESSION['glpimenu']['admin']['content']['PluginGdprropaMenu']);
-      }
-
-   }
+    public static function removeRightsFromSession()
+    {
+        if (isset($_SESSION['glpimenu']['admin']['types']['Menu'])) {
+            unset($_SESSION['glpimenu']['admin']['types']['Menu']);
+        }
+        if (isset($_SESSION['glpimenu']['admin']['content']['Menu'])) {
+            unset($_SESSION['glpimenu']['admin']['content']['Menu']);
+        }
+    }
 }

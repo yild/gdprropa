@@ -1,8 +1,9 @@
 <?php
+
 /*
  -------------------------------------------------------------------------
  GDPR Records of Processing Activities plugin for GLPI
- Copyright (C) 2020 by Yild.
+ Copyright © 2020-2025 by Yild.
 
  https://github.com/yild/gdprropa
  -------------------------------------------------------------------------
@@ -24,7 +25,7 @@
 
  You should have received a copy of the GNU General Public License
  along with GDPR Records of Processing Activities.
- If not, see <http://www.gnu.org/licenses/>.
+ If not, see <https://www.gnu.org/licenses/>.
 
  Based on DPO Register plugin, by Karhel Tmarr.
 
@@ -32,13 +33,19 @@
 
   @package   gdprropa
   @author    Yild
-  @copyright Copyright (c) 2020 by Yild
+  @copyright Copyright © 2020-2025 by Yild
   @license   GPLv3+
-             http://www.gnu.org/licenses/gpl.txt
+             https://www.gnu.org/licenses/gpl.txt
   @link      https://github.com/yild/gdprropa
-  @since     2020
+  @since     1.0.0
  --------------------------------------------------------------------------
  */
+
+namespace GlpiPlugin\Gdprropa;
+
+use Html;
+use Plugin;
+use Session;
 
 include("../../../inc/includes.php");
 
@@ -47,27 +54,22 @@ Plugin::load('gdprropa', true);
 Session::checkCentralAccess();
 
 if (isset($_GET['createpdf'])) {
+    $print_options = CreatePDF::preparePrintOptionsFromForm($_GET);
 
-   $print_options = PluginGdprropaCreatePDF::preparePrintOptionsFromForm($_GET);
+    if (isset($_GET['action'])) {
+        if ($_GET['action'] == 'prepare') {
+            if (isset($_GET['report_type'])) {
+                $type = $_GET['report_type'];
+            } else {
+                $type = CreatePDF::REPORT_ALL;
+            }
 
-   if (isset($_GET['action'])) {
-
-      if ($_GET['action'] == 'prepare') {
-
-         if (isset($_GET['report_type'])) {
-            $type = $_GET['report_type'];
-         } else {
-            $type = PluginGdprropaCreatePDF::REPORT_ALL;
-         }
-
-         Html::header(PluginGdprropaRecord::getTypeName(0), '', "management", "plugingdprropamenu");
-         PluginGdprropaCreatePDF::showPrepareForm($type);
-      } else if ($_GET['action'] == 'print') {
-         $pdfoutput = new PluginGdprropaCreatePDF();
-         $pdfoutput->generateReport($_GET, $print_options);
-         $pdfoutput->showPDF();
-      }
-   }
-
+            Html::header(Record::getTypeName(0), '', "management", Menu::class);
+            CreatePDF::showPrepareForm($type);
+        } elseif ($_GET['action'] == 'print') {
+            $pdfoutput = new CreatePDF();
+            $pdfoutput->generateReport($_GET, $print_options);
+            $pdfoutput->showPDF();
+        }
+    }
 }
-

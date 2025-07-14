@@ -1,8 +1,9 @@
 <?php
+
 /*
  -------------------------------------------------------------------------
  GDPR Records of Processing Activities plugin for GLPI
- Copyright (C) 2020 by Yild.
+ Copyright © 2020-2025 by Yild.
 
  https://github.com/yild/gdprropa
  -------------------------------------------------------------------------
@@ -24,7 +25,7 @@
 
  You should have received a copy of the GNU General Public License
  along with GDPR Records of Processing Activities.
- If not, see <http://www.gnu.org/licenses/>.
+ If not, see <https://www.gnu.org/licenses/>.
 
  Based on DPO Register plugin, by Karhel Tmarr.
 
@@ -32,38 +33,41 @@
 
   @package   gdprropa
   @author    Yild
-  @copyright Copyright (c) 2020 by Yild
+  @copyright Copyright © 2020-2025 by Yild
   @license   GPLv3+
-             http://www.gnu.org/licenses/gpl.txt
+             https://www.gnu.org/licenses/gpl.txt
   @link      https://github.com/yild/gdprropa
-  @since     2020
+  @since     1.0.0
  --------------------------------------------------------------------------
  */
+
+namespace GlpiPlugin\Gdprropa;
+
+use Html;
+use Plugin;
 
 include("../../../inc/includes.php");
 
 $plugin = new Plugin();
 
 if ($plugin->isActivated('gdprropa')) {
+    $config = new Config();
 
-   $config = new PluginGdprropaConfig();
-
-   if (isset($_POST['add'])) {
-      $config->check(-1, CREATE, $_POST);
-      $config->add($_POST);
-      Html::back();
-   } else if (isset($_POST['update'])) {
-      $config->check($_POST['id'], UPDATE, $_POST);
-      $config->update($_POST);
-      Html::back();
-   } else if (isset($_POST['sampledata'])) {
-      $config->check(-1, CREATE, $_POST);
-      $config->installSampleData($_POST);
-      Html::back();
-   } else {
-      Html::header(PluginGdprropaRecord::getTypeName(0), '', "management", "plugingdprropamenu");
-      $config->showForm(-1, []);
-      Html::footer();
-   }
-
+    if (isset($_POST['add'])) {
+        $config->check(-1, CREATE, $_POST);
+        $config->add($_POST);
+        Html::back();
+    } elseif (isset($_POST['update'])) {
+        $config->check($_POST['id'], UPDATE, $_POST);
+        $config->update($_POST);
+        Html::back();
+    } elseif (isset($_POST['sampledata'])) {
+        $config->check(-1, CREATE, $_POST);
+        $config->installSampleData($_POST);
+        Html::back();
+    } else {
+        Html::header(Record::getTypeName(0), '', "management", Menu::class);
+        $config->showForm(-1, []);
+        Html::footer();
+    }
 }

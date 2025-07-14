@@ -1,8 +1,9 @@
 <?php
+
 /*
  -------------------------------------------------------------------------
  GDPR Records of Processing Activities plugin for GLPI
- Copyright (C) 2020 by Yild.
+ Copyright © 2020-2025 by Yild.
 
  https://github.com/yild/gdprropa
  -------------------------------------------------------------------------
@@ -24,7 +25,7 @@
 
  You should have received a copy of the GNU General Public License
  along with GDPR Records of Processing Activities.
- If not, see <http://www.gnu.org/licenses/>.
+ If not, see <https://www.gnu.org/licenses/>.
 
  Based on DPO Register plugin, by Karhel Tmarr.
 
@@ -32,62 +33,57 @@
 
   @package   gdprropa
   @author    Yild
-  @copyright Copyright (c) 2020 by Yild
+  @copyright Copyright © 2020-2025 by Yild
   @license   GPLv3+
-             http://www.gnu.org/licenses/gpl.txt
+             https://www.gnu.org/licenses/gpl.txt
   @link      https://github.com/yild/gdprropa
-  @since     2020
+  @since     1.0.0
  --------------------------------------------------------------------------
  */
+
+namespace GlpiPlugin\Gdprropa;
+
+use Html;
+use Session;
 
 include("../../../inc/includes.php");
 
 if (!isset($_GET['id'])) {
-   $_GET['id'] = "";
+    $_GET['id'] = "";
 }
 
-$record = new PluginGdprropaRecord();
+$record = new Record();
 
 if (isset($_POST['add'])) {
-
-   $record->check(-1, CREATE, $_POST);
-   $record->add($_POST);
-   Html::back();
-
-} else if (isset($_POST['update'])) {
-
-   $record->check($_POST['id'], UPDATE);
-   $record->update($_POST);
-   Html::back();
-
-} else if (isset($_POST['delete'])) {
-
-   $record->check($_POST['id'], DELETE);
-   $record->delete($_POST);
-   $record->redirectToList();
-
-} else if (isset($_POST['purge'])) {
-
-   $record->check($_POST['id'], PURGE);
-   $record->purge($_POST);
-   $record->redirectToList();
-
+    $record->check(-1, CREATE, $_POST);
+    $record->add($_POST);
+    Html::back();
+} elseif (isset($_POST['update'])) {
+    $record->check($_POST['id'], UPDATE);
+    $record->update($_POST);
+    Html::back();
+} elseif (isset($_POST['delete'])) {
+    $record->check($_POST['id'], DELETE);
+    $record->delete($_POST);
+    $record->redirectToList();
+} elseif (isset($_POST['purge'])) {
+    $record->check($_POST['id'], PURGE);
+    $record->purge($_POST);
+    $record->redirectToList();
 } else {
+    $record->checkGlobal(READ);
 
-   $record->checkGlobal(READ);
+    if (Session::getCurrentInterface() == 'central') {
+        Html::header(Record::getTypeName(0), $_SERVER['PHP_SELF'], 'management', Menu::class, "");
+    } else {
+        Html::helpHeader(Record::getTypeName(0), $_SERVER['PHP_SELF']);
+    }
 
-   if (Session::getCurrentInterface() == 'central') {
-      Html::header(PluginGdprropaRecord::getTypeName(0), '', 'management', 'plugingdprropamenu');
-   } else {
-      Html::helpHeader(PluginGdprropaRecord::getTypeName(0));
-   }
+    $record->display($_GET);
 
-   $record->display(['id' => $_GET['id']]);
-
-   if (Session::getCurrentInterface() == 'central') {
-      Html::footer();
-   } else {
-      Html::helpFooter();
-   }
-
+    if (Session::getCurrentInterface() == 'central') {
+        Html::footer();
+    } else {
+        Html::helpFooter();
+    }
 }

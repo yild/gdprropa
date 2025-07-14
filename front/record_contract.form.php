@@ -1,8 +1,9 @@
 <?php
+
 /*
  -------------------------------------------------------------------------
  GDPR Records of Processing Activities plugin for GLPI
- Copyright (C) 2020 by Yild.
+ Copyright © 2020-2025 by Yild.
 
  https://github.com/yild/gdprropa
  -------------------------------------------------------------------------
@@ -24,7 +25,7 @@
 
  You should have received a copy of the GNU General Public License
  along with GDPR Records of Processing Activities.
- If not, see <http://www.gnu.org/licenses/>.
+ If not, see <https://www.gnu.org/licenses/>.
 
  Based on DPO Register plugin, by Karhel Tmarr.
 
@@ -32,27 +33,33 @@
 
   @package   gdprropa
   @author    Yild
-  @copyright Copyright (c) 2020 by Yild
+  @copyright Copyright © 2020-2025 by Yild
   @license   GPLv3+
-             http://www.gnu.org/licenses/gpl.txt
+             https://www.gnu.org/licenses/gpl.txt
   @link      https://github.com/yild/gdprropa
   @since     2020
  --------------------------------------------------------------------------
  */
 
+namespace GlpiPlugin\Gdprropa;
+
+use Html;
+use Session;
+
 include("../../../inc/includes.php");
 
 Session::checkLoginUser();
 
-if (isset($_POST['add'])
-   && (isset($_POST['plugin_gdprropa_records_id']) && ($_POST['contracts_id']))) {
+if (
+    isset($_POST['add']) &&
+    (isset($_POST['plugin_gdprropa_records_id']) &&
+        ($_POST['contracts_id']))
+) {
+    $record = new Record();
+    $record->check($_POST[Record::getForeignKeyField()], UPDATE);
 
-   $record = new PluginGdprropaRecord();
-   $record->check($_POST[PluginGdprropaRecord::getForeignKeyField()], UPDATE);
-
-   $item = new PluginGdprropaRecord_Contract();
-   $item->add($_POST);
-
+    $item = new Record_Contract();
+    $item->add($_POST);
 }
 
 Html::back();

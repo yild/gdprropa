@@ -1,8 +1,9 @@
 <?php
+
 /*
  -------------------------------------------------------------------------
  GDPR Records of Processing Activities plugin for GLPI
- Copyright (C) 2020 by Yild.
+ Copyright © 2020-2025 by Yild.
 
  https://github.com/yild/gdprropa
  -------------------------------------------------------------------------
@@ -24,7 +25,7 @@
 
  You should have received a copy of the GNU General Public License
  along with GDPR Records of Processing Activities.
- If not, see <http://www.gnu.org/licenses/>.
+ If not, see <https://www.gnu.org/licenses/>.
 
  Based on DPO Register plugin, by Karhel Tmarr.
 
@@ -32,221 +33,225 @@
 
   @package   gdprropa
   @author    Yild
-  @copyright Copyright (c) 2020 by Yild
+  @copyright Copyright © 2020-2025 by Yild
   @license   GPLv3+
-             http://www.gnu.org/licenses/gpl.txt
+             https://www.gnu.org/licenses/gpl.txt
   @link      https://github.com/yild/gdprropa
-  @since     2020
+  @since     1.0.0
  --------------------------------------------------------------------------
  */
 
-if (!defined('GLPI_ROOT')) {
-   die("Sorry. You can't access this file directly");
-}
+namespace GlpiPlugin\Gdprropa;
 
-class PluginGdprropaRecord_DataSubjectsCategory extends CommonDBRelation {
+use CommonDBRelation;
+use CommonGLPI;
+use Dropdown;
+use Entity;
+use Html;
+use Toolbox;
 
-   static public $itemtype_1 = 'PluginGdprropaRecord';
-   static public $items_id_1 = 'plugin_gdprropa_records_id';
-   static public $itemtype_2 = 'PluginGdprropaDataSubjectsCategory';
-   static public $items_id_2 = 'plugin_gdprropa_datasubjectscategories_id';
+class Record_DataSubjectsCategory extends CommonDBRelation
+{
+    public static $itemtype_1 = Record::class;
+    public static $items_id_1 = 'plugin_gdprropa_records_id';
+    public static $itemtype_2 = DataSubjectsCategory::class;
+    public static $items_id_2 = 'plugin_gdprropa_datasubjectscategories_id';
 
-   static function getTypeName($nb = 0) {
+    public static function getTypeName($nb = 0)
+    {
+        return _n("Category of data subjects", "Categories of data subjects", $nb, 'gdprropa');
+    }
 
-      return _n("Category of data subjects", "Categories of data subjects", $nb, 'gdprropa');
-   }
+    public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
+    {
+        if (!$item->canView()) {
+            return false;
+        }
 
-   function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {
+        switch ($item->getType()) {
+            case Record::class:
+                $nb = 0;
+                if ($_SESSION['glpishow_count_on_tabs']) {
+                    $nb = self::countForItem($item);
+                }
 
-      if (!$item->canView()) {
-         return false;
-      }
+                return self::createTabEntry(Record_DataSubjectsCategory::getTypeName($nb), $nb);
+        }
 
-      switch ($item->getType()) {
-         case PluginGdprropaRecord::class :
+        return '';
+    }
 
-            $nb = 0;
-            if ($_SESSION['glpishow_count_on_tabs']) {
-               $nb = self::countForItem($item);
+    public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
+    {
+        switch ($item->getType()) {
+            case Record::class:
+                return self::showForRecord($item, $withtemplate);
+        }
+
+        return true;
+    }
+
+    public static function showForRecord(Record $record, $withtemplate = 0)
+    {
+        $id = $record->fields['id'];
+        if (!$record->can($id, READ)) {
+            return false;
+        }
+
+        $canedit = Record::canUpdate();
+        $rand = mt_rand(1, mt_getrandmax());
+
+        $iterator = self::getListForItem($record);
+        $number = count($iterator);
+
+        $items_list = [];
+        $used = [];
+        foreach ($iterator as $data) {
+            $items_list[$data['id']] = $data;
+            $used[$data['id']] = $data['id'];
+        }
+
+        if ($canedit) {
+            echo "<div class='firstbloc'>";
+            echo "<form name='ticketitem_form$rand' id='ticketitem_form$rand' method='post'
+                action='" . Toolbox::getItemTypeFormURL(__class__) . "'>";
+            echo "<input type='hidden' name='plugin_gdprropa_records_id' value='$id' />";
+
+            echo "<table class='tab_cadre_fixe'>";
+            echo "<tr class='tab_bg_2'><th>" . __("Add Category of Data Subjects", 'gdprropa') . "</th></tr>";
+            echo "<tr class='tab_bg_3'><td><center><strong>";
+            echo __("GDPR Article 30 1c", 'gdprropa');
+            echo "</strong></center></td></tr>";
+            echo "<tr class='tab_bg_1'><td width='80%' class='center'>";
+            DataSubjectsCategory::dropdown([
+                'addicon'  => DataSubjectsCategory::canCreate(),
+                'name' => 'plugin_gdprropa_datasubjectscategories_id',
+                'entity' => $record->fields['entities_id'],
+                'entity_sons' => false,
+                'used' => $used,
+            ]);
+            echo "</td></tr><tr><td width='20%' class='center'>";
+            echo "<input type='submit' name='add' value=\"" . _sx('button', 'Add') . "\" class='submit'>";
+            echo "</td></tr>";
+            echo "</table>";
+            Html::closeForm();
+            echo "</div>";
+        }
+
+        if ($iterator) {
+            echo "<div class='spaced'>";
+            if ($canedit && $number) {
+                $massive_action_form_id = 'mass' . str_replace('\\', '', static::class) . $rand;
+                Html::openMassiveActionsForm($massive_action_form_id);
+                $massive_action_params = ['container' => 'mass' . __class__ . $rand,
+                'num_displayed' => min($_SESSION['glpilist_limit'], $number)];
+                Html::showMassiveActions($massive_action_params);
             }
+            echo "<table class='tab_cadre_fixehov'>";
 
-            return self::createTabEntry(PluginGdprropaRecord_DataSubjectsCategory::getTypeName($nb), $nb);
-      }
-
-      return '';
-   }
-
-   static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0) {
-
-      switch ($item->getType()) {
-         case PluginGdprropaRecord::class :
-            self::showForRecord($item, $withtemplate);
-            break;
-      }
-
-      return true;
-   }
-
-   static function showForRecord(PluginGdprropaRecord $record, $withtemplate = 0) {
-
-      $id = $record->fields['id'];
-      if (!$record->can($id, READ)) {
-         return false;
-      }
-
-      $canedit = PluginGdprropaRecord::canUpdate();
-      $rand = mt_rand(1, mt_getrandmax());
-
-      $iterator = self::getListForItem($record);
-      $number = count($iterator);
-
-      $items_list = [];
-      $used = [];
-      foreach ($iterator as $data) {
-         $items_list[$data['id']] = $data;
-         $used[$data['id']] = $data['id'];
-      }
-
-      if ($canedit) {
-         echo "<div class='firstbloc'>";
-         echo "<form name='ticketitem_form$rand' id='ticketitem_form$rand' method='post'
-            action='" . Toolbox::getItemTypeFormURL(__class__) . "'>";
-         echo "<input type='hidden' name='plugin_gdprropa_records_id' value='$id' />";
-
-         echo "<table class='tab_cadre_fixe'>";
-         echo "<tr class='tab_bg_2'><th>" . __("Add Category of Data Subjects", 'gdprropa') . "</th></tr>";
-         echo "<tr class='tab_bg_3'><td><center><strong>";
-         echo __("GDPR Article 30 1c", 'gdprropa');
-         echo "</strong></center></td></tr>";
-         echo "<tr class='tab_bg_1'><td width='80%' class='center'>";
-         PluginGdprropaDataSubjectsCategory::dropdown([
-            'addicon'  => PluginGdprropaDataSubjectsCategory::canCreate(),
-            'name' => 'plugin_gdprropa_datasubjectscategories_id',
-            'entity' => $record->fields['entities_id'],
-            'entity_sons' => false,
-            'used' => $used,
-         ]);
-         echo "</td></tr><tr><td width='20%' class='center'>";
-         echo "<input type='submit' name='add' value=\"" . _sx('button', 'Add') . "\" class='submit'>";
-         echo "</td></tr>";
-         echo "</table>";
-         Html::closeForm();
-         echo "</div>";
-      }
-
-      if ($iterator) {
-
-         echo "<div class='spaced'>";
-         if ($canedit && $number) {
-            Html::openMassiveActionsForm('mass' . __class__ . $rand);
-            $massive_action_params = ['container' => 'mass' . __class__ . $rand,
-               'num_displayed' => min($_SESSION['glpilist_limit'], $number)];
-            Html::showMassiveActions($massive_action_params);
-         }
-         echo "<table class='tab_cadre_fixehov'>";
-
-         $header_begin = "<tr>";
-         $header_top = '';
-         $header_bottom = '';
-         $header_end = '';
-
-         if ($canedit && $number) {
-
-            $header_begin   .= "<th width='10'>";
-            $header_top     .= Html::getCheckAllAsCheckbox('mass' . __class__ . $rand);
-            $header_bottom  .= Html::getCheckAllAsCheckbox('mass' . __class__ . $rand);
-            $header_end     .= "</th>";
-         }
-
-         $header_end .= "<th>" . __("Name") . "</th>";
-         $header_end .= "<th>" . __("Introduced in", 'gdprropa') . "</th>";
-         $header_end .= "<th>" . __("Comment") . "</th>";
-         $header_end .= "</tr>";
-
-         echo $header_begin . $header_top . $header_end;
-
-         foreach ($items_list as $data) {
-
-            echo "<tr class='tab_bg_1'>";
+            $header_begin = "<tr>";
+            $header_top = '';
+            $header_bottom = '';
+            $header_end = '';
 
             if ($canedit && $number) {
-               echo "<td width='10'>";
-               Html::showMassiveActionCheckBox(__class__, $data['linkid']);
-               echo "</td>";
+                $header_begin   .= "<th width='10'>";
+                $header_top     .= Html::getCheckAllAsCheckbox('mass' . __class__ . $rand);
+                $header_bottom  .= Html::getCheckAllAsCheckbox('mass' . __class__ . $rand);
+                $header_end     .= "</th>";
             }
 
-            $link = $data['name'];
-            if ($_SESSION['glpiis_ids_visible'] || empty($data['name'])) {
-               $link = sprintf(__("%1\$s (%2\$s)"), $link, $data['id']);
+            $header_end .= "<th>" . __("Name") . "</th>";
+            $header_end .= "<th>" . __("Introduced in", 'gdprropa') . "</th>";
+            $header_end .= "<th>" . __("Comment") . "</th>";
+            $header_end .= "</tr>";
+
+            echo $header_begin . $header_top . $header_end;
+
+            foreach ($items_list as $data) {
+                echo "<tr class='tab_bg_1'>";
+
+                if ($canedit && $number) {
+                    echo "<td width='10'>";
+                    Html::showMassiveActionCheckBox(__class__, $data['linkid']);
+                    echo "</td>";
+                }
+
+                $link = $data['name'];
+                if ($_SESSION['glpiis_ids_visible'] || empty($data['name'])) {
+                    $link = sprintf(__("%1\$s (%2\$s)"), $link, $data['id']);
+                }
+                $name = "<a href=\"" .
+                        DataSubjectsCategory::getFormURLWithID($data['id']) . "\">" . $link . "</a>";
+
+                echo "<td class='left" . (isset($data['is_deleted']) && $data['is_deleted'] ? " tab_bg_2_2'" : "'");
+                echo ">" . $name . "</td>";
+
+                echo "<td class='left'>";
+                echo Dropdown::getDropdownName(
+                    Entity::getTable(),
+                    $data['entities_id']
+                );
+                echo "</td>";
+
+                echo "<td class='center'>" . $data['comment'] . "</td>";
+
+                echo "</tr>";
             }
-            $name = "<a href=\"" . PluginGdprropaDataSubjectsCategory::getFormURLWithID($data['id']) . "\">" . $link . "</a>";
 
-            echo "<td class='left" . (isset($data['is_deleted']) && $data['is_deleted'] ? " tab_bg_2_2'" : "'");
-            echo ">" . $name . "</td>";
+            if ($iterator->count() > 10) {
+                echo $header_begin . $header_bottom . $header_end;
+            }
+            echo "</table>";
 
-            echo "<td class='left'>";
-            echo Dropdown::getDropdownName(
-               Entity::getTable(),
-               $data['entities_id']);
-            echo "</td>";
+            if ($canedit && $number) {
+                $massive_action_params['ontop'] = false;
+                Html::showMassiveActions($massive_action_params);
+                Html::closeForm();
+            }
 
-            echo "<td class='center'>" . $data['comment'] . "</td>";
+            echo "</div>";
+        }
 
-            echo "</tr>";
-         }
+        return true;
+    }
 
-         if ($iterator->count() > 10) {
-            echo $header_begin . $header_bottom . $header_end;
-         }
-         echo "</table>";
+    public function getForbiddenStandardMassiveAction()
+    {
+        $forbidden = parent::getForbiddenStandardMassiveAction();
+        $forbidden[] = 'update';
 
-         if ($canedit && $number) {
-            $massive_action_params['ontop'] = false;
-            Html::showMassiveActions($massive_action_params);
-            Html::closeForm();
-         }
+        return $forbidden;
+    }
 
-         echo "</div>";
-      }
-   }
+    public static function rawSearchOptionsToAdd()
+    {
+        $tab = [];
 
-   function getForbiddenStandardMassiveAction() {
+        $tab[] = [
+            'id' => 'datasubjectscategory',
+            'name' => DataSubjectsCategory::getTypeName(0)
+        ];
 
-      $forbidden = parent::getForbiddenStandardMassiveAction();
-      $forbidden[] = 'update';
-
-      return $forbidden;
-   }
-
-   static function rawSearchOptionsToAdd() {
-
-      $tab = [];
-
-      $tab[] = [
-         'id' => 'datasubjectscategory',
-         'name' => PluginGdprropaDataSubjectsCategory::getTypeName(0)
-      ];
-
-      $tab[] = [
-         'id' => '41',
-         'table' => PluginGdprropaDataSubjectsCategory::getTable(),
-         'field' => 'name',
-         'name' => __("Name"),
-         'forcegroupby' => true,
-         'massiveaction' => false,
-         'datatype' => 'dropdown',
-         'searchtype' => ['equals', 'notequals'],
-         'joinparams' => [
-            'beforejoin' => [
-               'table' => self::getTable(),
-               'joinparams' => [
-                  'jointype' => 'child'
-               ]
+        $tab[] = [
+            'id' => '41',
+            'table' => DataSubjectsCategory::getTable(),
+            'field' => 'name',
+            'name' => __("Name"),
+            'forcegroupby' => true,
+            'massiveaction' => false,
+            'datatype' => 'dropdown',
+            'searchtype' => ['equals', 'notequals'],
+            'joinparams' => [
+                'beforejoin' => [
+                    'table' => self::getTable(),
+                    'joinparams' => [
+                        'jointype' => 'child'
+                    ]
+                ]
             ]
-         ]
-      ];
+        ];
 
-      return $tab;
-   }
-
+        return $tab;
+    }
 }

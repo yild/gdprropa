@@ -1,8 +1,9 @@
 <?php
+
 /*
  -------------------------------------------------------------------------
  GDPR Records of Processing Activities plugin for GLPI
- Copyright (C) 2020 by Yild.
+ Copyright © 2020-2025 by Yild.
 
  https://github.com/yild/gdprropa
  -------------------------------------------------------------------------
@@ -24,7 +25,7 @@
 
  You should have received a copy of the GNU General Public License
  along with GDPR Records of Processing Activities.
- If not, see <http://www.gnu.org/licenses/>.
+ If not, see <https://www.gnu.org/licenses/>.
 
  Based on DPO Register plugin, by Karhel Tmarr.
 
@@ -32,24 +33,28 @@
 
   @package   gdprropa
   @author    Yild
-  @copyright Copyright (c) 2020 by Yild
+  @copyright Copyright © 2020-2025 by Yild
   @license   GPLv3+
-             http://www.gnu.org/licenses/gpl.txt
+             https://www.gnu.org/licenses/gpl.txt
   @link      https://github.com/yild/gdprropa
-  @since     2020
+  @since     1.0.0
  --------------------------------------------------------------------------
  */
 
+namespace GlpiPlugin\Gdprropa;
+
+use Html;
+
 include("../../../inc/includes.php");
 
-$controller_info = new PluginGdprropaControllerInfo();
+$controller_info = new ControllerInfo();
 
 if (isset($_POST['add'])) {
-   $controller_info->check(-1, CREATE, $_POST);
-   $controller_info->add($_POST);
-} else if (isset($_POST['update'])) {
-   $controller_info->check($_POST['id'], UPDATE, $_POST);
-   $controller_info->update($_POST);
+    $controller_info->check(-1, CREATE, $_POST);
+    $controller_info->add($_POST);
+} elseif (isset($_POST['update'])) {
+    $controller_info->check($_POST['id'], UPDATE, $_POST);
+    $controller_info->update($_POST);
 }
 
 Html::back();
