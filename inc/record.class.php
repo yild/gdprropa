@@ -305,8 +305,6 @@ class Record extends CommonDBTM
         }
 
         switch ($field) {
-            case 'status':
-                return self::getStatusIcon($values[$field]) . '&nbsp;' . self::getStatus($values[$field]);
             case 'pia_status':
                 if (!$values[$field]) {
                     return '&nbsp;';
@@ -325,8 +323,7 @@ class Record extends CommonDBTM
         $field, $name = '',
         $values = '',
         array $options = []
-    ): int|string|null
-    {
+    ): int|string|null {
         if (!is_array($values)) {
             $values = [$field => $values];
         }
