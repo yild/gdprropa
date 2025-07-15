@@ -56,7 +56,7 @@ class PersonalDataCategory extends CommonTreeDropdown
 
     public $dohistory = true;
 
-    public $is_recursive = true;
+    public bool $is_recursive = true;
 
     public static function getTypeName($nb = 0): string
     {

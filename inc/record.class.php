@@ -41,18 +41,6 @@
  --------------------------------------------------------------------------
  */
 
-/*
-// TODO sprawdzic:
-      RECORD przypisany do ENTITIES_ID,
-      SOFTWARE, CONTRACT przypisany do ENTITIES_ID_2 (może być recursive)
-
-      RECORD widzi SOFTWARE, CONTRACT (przez jedną z opcji: entities i sons, recursive)
-
-      zmieniamy SOFTWARE ENTITIES_ID_2 na inny nie będący son wczesniejszego entity,
-      jak reagować:
-         czy ignorowac? (będzie widoczne póki powiązane, bedzie mozna usunąć ale poźniej nie będzie tego widać)
-         czy odpiąć od RECORD?
-*/
 
 namespace GlpiPlugin\Gdprropa;
 
@@ -317,10 +305,13 @@ class Record extends CommonDBTM
 
                 return $storage_medium[$values[$field]];
         }
+
+        return '';
     }
 
     public static function getSpecificValueToSelect(
-        $field, $name = '',
+        $field,
+        $name = '',
         $values = '',
         array $options = []
     ): int|string|null {

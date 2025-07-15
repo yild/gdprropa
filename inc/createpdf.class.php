@@ -926,8 +926,6 @@ class CreatePDF extends CreatePDFBase
 
     protected function printLegalBasisActs(Record $record): void
     {
-        global $DB;
-
         $this->writeInternal(
             '<h2>' . LegalBasisAct::getTypeName(1) . '</h2>',
             [
