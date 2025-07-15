@@ -606,7 +606,7 @@ class Record_Contract extends CommonDBRelation
         $tab[] = [
             'id' => '151',
             'table' => 'glpi_contracts',
-            'field' => 'id',
+            'field' => 'name',
             'name' => __("Name (select from list)", 'gdprropa'),
             'forcegroupby' => true,
             'massiveaction' => false,
