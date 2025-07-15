@@ -48,7 +48,7 @@ use GlpiPlugin\Gdprropa\Menu;
 
 // TODO try to move this to Config class and use it from there, atm GLPI (tested on 10.0.11) can't find
 //      specific class when using namespaces
-define('GDPRROPA_PLUGIN_VERSION', '1.0.2');
+define('GDPRROPA_PLUGIN_VERSION', '1.0.3');
 
 // Minimal GLPI version, inclusive
 define('GDPRROPA_PLUGIN_MIN_GLPI_VERSION', '10.0.0');
@@ -85,6 +85,8 @@ function plugin_init_gdprropa()
         Plugin::registerClass(ControllerInfo::class, ['addtabon' => Entity::class]);
 
         $PLUGIN_HOOKS['post_init']['gdprropa'] = 'plugin_gdprropa_postinit';
+
+        $PLUGIN_HOOKS['dashboard_cards']['gdprropa'] = [Record::class, 'dashboardCards'];
     }
 }
 

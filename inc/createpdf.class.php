@@ -505,7 +505,7 @@ class CreatePDF extends CreatePDFBase
 
     protected function getRecordsForEntity(
         $entity_id,
-        $print_options = null,
+        $include_deleted = false,
         $include_recursive = false
     ): DBmysqlIterator {
         global $DB;
@@ -517,7 +517,7 @@ class CreatePDF extends CreatePDFBase
         }
         array_push($entities, $entity_id);
 
-        if ($print_options['show_deleted_records_for_entity']) {
+        if ($include_deleted) {
             $include_deleted = [0, 1];
         } else {
             $include_deleted = [0];
@@ -580,12 +580,19 @@ class CreatePDF extends CreatePDFBase
                 break;
             case CreatePDF::REPORT_FOR_ENTITY:
                 $entities_id = $generator_options['entities_id'];
-                $record = CreatePDF::getRecordsForEntity($entities_id, $print_options, true);
+                $record = CreatePDF::getRecordsForEntity(
+                    $entities_id,
+                    $print_options['show_deleted_records_for_entity'],
+                    true
+                );
 
                 break;
             case CreatePDF::REPORT_ALL:
                 $entities_id = $_SESSION['glpiactive_entity'];
-                $record = CreatePDF::getRecordsForEntity($entities_id, $print_options);
+                $record = CreatePDF::getRecordsForEntity(
+                    $entities_id,
+                    $print_options['show_deleted_records_for_entity']
+                );
 
                 break;
         }

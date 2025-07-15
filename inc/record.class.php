@@ -511,4 +511,42 @@ class Record extends CommonDBTM
             Record_Software::rawSearchOptionsToAdd()
         );
     }
+
+    public static function dashboardCards($cards = []): array
+    {
+        if (is_null($cards)) {
+            $cards = [];
+        }
+        $newCards = [
+            'plugin_gdprropa_card_with_core_widget' => [
+                'widgettype' => ["bigNumber"],
+                'label' => self::getTypeName(2),
+                'provider' => Record::class . "::cardBigNumberRecordsCount",
+            ],
+        ];
+
+        return array_merge($cards, $newCards);
+    }
+
+    public static function cardBigNumberRecordsCount(array $params = []): array
+    {
+        global $DB;
+
+        $iterator = $DB->request([
+            'SELECT' => [
+                'COUNT' => '* as cpt'
+            ],
+            'FROM' => self::getTable(),
+            'WHERE' => ['is_deleted' => '0'] + getEntitiesRestrictCriteria(self::getTable())
+        ]);
+        $num = $iterator->current()['cpt'];
+
+        return [
+            'number' => $num,
+            'url' => "/plugins/gdprropa/front/record.php",
+            'label' => self::getTypeName($num),
+            'alt' => self::getTypeName($num),
+            'icon' => "fas ti ti-report",
+        ];
+    }
 }
