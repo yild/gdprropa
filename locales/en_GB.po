@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GDPRROPA 1.0\n"
+"Project-Id-Version: GDPRROPA 1.0.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-13 20:40+0200\n"
+"POT-Creation-Date: 2025-07-15 23:50+0200\n"
 "PO-Revision-Date: 2020-06-04 07:44-0400\n"
 "Last-Translator:  Yild\n"
 "Language-Team: English\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: setup.php:93 inc/record.class.php:91 inc/createpdf.class.php:668
+#: setup.php:96 inc/record.class.php:86 inc/createpdf.class.php:622
 msgid "GDPR Record of Processing Activities"
 msgstr "GDPR Records of Processing Activities"
 
@@ -26,60 +26,60 @@ msgstr "GDPR Records of Processing Activities"
 msgid "Create PDF"
 msgstr "Create PDF"
 
-#: inc/legalbasisact.class.php:65 inc/record_retention.class.php:362
+#: inc/legalbasisact.class.php:68 inc/record_retention.class.php:359
 #: inc/record_legalbasisact.class.php:62
 msgid "Legal basis"
 msgid_plural "Legal bases"
 msgstr[0] "Legal basis"
 msgstr[1] "Legal bases"
 
-#: inc/legalbasisact.class.php:132 inc/config.class.php:503
-#: inc/record.class.php:251 inc/record.class.php:269
+#: inc/legalbasisact.class.php:137 inc/config.class.php:520
+#: inc/record.class.php:245 inc/record.class.php:263
 msgid "Undefined"
 msgstr "Undefined"
 
-#: inc/legalbasisact.class.php:133
+#: inc/legalbasisact.class.php:138
 msgid "GDPR Article"
 msgstr "GDPR Article"
 
-#: inc/legalbasisact.class.php:134
+#: inc/legalbasisact.class.php:139
 msgid "Local law regulation"
 msgstr "Local law regulation"
 
-#: inc/legalbasisact.class.php:135
+#: inc/legalbasisact.class.php:140
 msgid "International regulation"
 msgstr "International regulation"
 
-#: inc/legalbasisact.class.php:136
+#: inc/legalbasisact.class.php:141
 msgid "Controller internal regulation"
 msgstr "Controller internal regulation"
 
-#: inc/legalbasisact.class.php:137
+#: inc/legalbasisact.class.php:142
 msgid "Other regulation"
 msgstr "Other regulation"
 
-#: inc/legalbasisact.class.php:193
-#: inc/record_personaldatacategory.class.php:166
-#: inc/record_legalbasisact.class.php:163 inc/createpdf.class.php:1033
-#: inc/createpdf.class.php:1622 inc/record_securitymeasure.class.php:167
-#: inc/securitymeasure.class.php:320
+#: inc/legalbasisact.class.php:198
+#: inc/record_personaldatacategory.class.php:169
+#: inc/record_legalbasisact.class.php:166 inc/createpdf.class.php:974
+#: inc/createpdf.class.php:1560 inc/record_securitymeasure.class.php:171
+#: inc/securitymeasure.class.php:323
 msgid "Type"
 msgstr "Type"
 
-#: inc/personaldatacategory.class.php:60
+#: inc/personaldatacategory.class.php:63
 #: inc/record_personaldatacategory.class.php:63
 msgid "Personal Data Category"
 msgid_plural "Personal Data Categories"
 msgstr[0] "Personal Data Category"
 msgstr[1] "Personal Data Categories"
 
-#: inc/personaldatacategory.class.php:74 inc/personaldatacategory.class.php:289
-#: inc/record_personaldatacategory.class.php:195 inc/createpdf.class.php:1481
+#: inc/personaldatacategory.class.php:77 inc/personaldatacategory.class.php:293
+#: inc/record_personaldatacategory.class.php:198 inc/createpdf.class.php:1419
 msgid "Special category"
 msgstr "Special category"
 
 #: inc/record_datasubjectscategory.class.php:62
-#: inc/datasubjectscategory.class.php:59
+#: inc/datasubjectscategory.class.php:62
 msgid "Category of data subjects"
 msgid_plural "Categories of data subjects"
 msgstr[0] "Category of data subjects"
@@ -94,13 +94,13 @@ msgstr "Add Category of Data Subjects"
 msgid "GDPR Article 30 1c"
 msgstr "GDPR Article 30 1c"
 
-#: inc/record_datasubjectscategory.class.php:164
-#: inc/record_personaldatacategory.class.php:167
-#: inc/record_legalbasisact.class.php:164 inc/record_contract.class.php:236
-#: inc/createpdf.class.php:709 inc/createpdf.class.php:1037
-#: inc/createpdf.class.php:1125 inc/createpdf.class.php:1485
-#: inc/createpdf.class.php:1629 inc/createpdf.class.php:1754
-#: inc/record_securitymeasure.class.php:168
+#: inc/record_datasubjectscategory.class.php:167
+#: inc/record_personaldatacategory.class.php:170
+#: inc/record_legalbasisact.class.php:167 inc/record_contract.class.php:242
+#: inc/createpdf.class.php:663 inc/createpdf.class.php:978
+#: inc/createpdf.class.php:1065 inc/createpdf.class.php:1423
+#: inc/createpdf.class.php:1567 inc/createpdf.class.php:1693
+#: inc/record_securitymeasure.class.php:172
 msgid "Introduced in"
 msgstr "Introduced in"
 
@@ -116,68 +116,68 @@ msgstr "Manage data retention"
 msgid "GDPR Article 30 1f"
 msgstr "GDPR Article 30 1f"
 
-#: inc/record_retention.class.php:136 inc/createpdf.class.php:1185
+#: inc/record_retention.class.php:136 inc/createpdf.class.php:1125
 msgid "Retention regulated by"
 msgstr "Retention regulated by"
 
-#: inc/record_retention.class.php:192 inc/record.class.php:177
-#: inc/record.class.php:424 inc/createpdf.class.php:902
-#: inc/createpdf.class.php:1286
+#: inc/record_retention.class.php:191 inc/record.class.php:172
+#: inc/record.class.php:423 inc/createpdf.class.php:856
+#: inc/createpdf.class.php:1223
 msgid "Additional information"
 msgstr "Additional information"
 
-#: inc/record_retention.class.php:224
+#: inc/record_retention.class.php:225
 msgid "Contract name"
 msgstr "Contract name"
 
-#: inc/record_retention.class.php:257 inc/createpdf.class.php:1208
+#: inc/record_retention.class.php:254 inc/createpdf.class.php:1148
 msgid "Until contract is valid"
 msgstr "Until contract is valid"
 
-#: inc/record_retention.class.php:298
+#: inc/record_retention.class.php:295
 msgid "Period"
 msgstr "Period"
 
-#: inc/record_retention.class.php:317
+#: inc/record_retention.class.php:314
 msgid "After contract is terminated"
 msgstr "After contract is terminated"
 
-#: inc/record_retention.class.php:336 inc/config.class.php:431
-#: inc/config.class.php:435
+#: inc/record_retention.class.php:333 inc/config.class.php:445
+#: inc/config.class.php:449
 msgid "Legal bases"
 msgstr "Legal bases"
 
-#: inc/record_retention.class.php:360
+#: inc/record_retention.class.php:357
 msgid "Not required"
 msgstr "Not required"
 
-#: inc/record_retention.class.php:361
+#: inc/record_retention.class.php:358
 msgid "Contractual term"
 msgstr "Contractual term"
 
-#: inc/record_retention.class.php:363
+#: inc/record_retention.class.php:360
 msgid "Other regulations"
 msgstr "Other regulations"
 
-#: inc/record_retention.class.php:370
+#: inc/record_retention.class.php:367
 msgid "Year"
 msgid_plural "Years"
 msgstr[0] "Year"
 msgstr[1] "Years"
 
-#: inc/record_retention.class.php:371
+#: inc/record_retention.class.php:368
 msgid "Month"
 msgid_plural "Months"
 msgstr[0] "Month"
 msgstr[1] "Months"
 
-#: inc/record_retention.class.php:372
+#: inc/record_retention.class.php:369
 msgid "Day"
 msgid_plural "Days"
 msgstr[0] "Day"
 msgstr[1] "Days"
 
-#: inc/record_retention.class.php:373
+#: inc/record_retention.class.php:370
 msgid "Hour"
 msgid_plural "Hours"
 msgstr[0] "Hour"
@@ -187,15 +187,15 @@ msgstr[1] "Hours"
 msgid "Add a personal data category"
 msgstr "Add a personal data category"
 
-#: inc/record_personaldatacategory.class.php:258
+#: inc/record_personaldatacategory.class.php:265
 msgid "Selected item is already on list."
 msgstr "Selected item is already on list."
 
-#: inc/record_personaldatacategory.class.php:263
+#: inc/record_personaldatacategory.class.php:270
 msgid "Cannot add child item if parent is already on the list."
 msgstr "Cannot add child item if parent is already on the list."
 
-#: inc/record_personaldatacategory.class.php:269
+#: inc/record_personaldatacategory.class.php:276
 msgid ""
 "Cannot add Parent item if child is already on the list.<br>Remove child "
 "items before adding parent."
@@ -203,7 +203,7 @@ msgstr ""
 "Cannot add Parent item if child is already on the list.<br>Remove child "
 "items before adding parent."
 
-#: inc/record_personaldatacategory.class.php:316
+#: inc/record_personaldatacategory.class.php:323
 msgid "Any special category"
 msgstr "Any special category"
 
@@ -211,7 +211,7 @@ msgstr "Any special category"
 msgid "GDPR Controller Info"
 msgstr "GDPR Controller Info"
 
-#: inc/controllerinfo.class.php:128 inc/createpdf.class.php:616
+#: inc/controllerinfo.class.php:128 inc/createpdf.class.php:564
 msgid "Controller information not set."
 msgstr "Controller information not set"
 
@@ -223,18 +223,18 @@ msgstr "Manage entity Controller information"
 msgid "GDPR Article 30 1a"
 msgstr "GDPR Article 30 1a"
 
-#: inc/controllerinfo.class.php:144 inc/controllerinfo.class.php:327
-#: inc/createpdf.class.php:767
+#: inc/controllerinfo.class.php:144 inc/controllerinfo.class.php:329
+#: inc/createpdf.class.php:724
 msgid "Legal representative"
 msgstr "Legal representative"
 
-#: inc/controllerinfo.class.php:156 inc/controllerinfo.class.php:345
-#: inc/createpdf.class.php:772
+#: inc/controllerinfo.class.php:156 inc/controllerinfo.class.php:347
+#: inc/createpdf.class.php:729
 msgid "Data Protection Officer"
 msgstr "Data Protection Officer"
 
-#: inc/controllerinfo.class.php:166 inc/controllerinfo.class.php:362
-#: inc/controllerinfo.class.php:380
+#: inc/controllerinfo.class.php:166 inc/controllerinfo.class.php:364
+#: inc/controllerinfo.class.php:382
 msgid "Controller Name"
 msgstr "Controller Name"
 
@@ -262,7 +262,7 @@ msgstr "Internal Contract Type"
 msgid "Other Contract Type"
 msgstr "Other Contract Type"
 
-#: inc/controllerinfo.class.php:247 inc/createpdf.class.php:373
+#: inc/controllerinfo.class.php:247 inc/createpdf.class.php:368
 msgid "PDF creation settings"
 msgstr "PDF creation settings"
 
@@ -270,165 +270,165 @@ msgstr "PDF creation settings"
 msgid "Create Controller RoPA PDF for Entity"
 msgstr "Create Controller RoPA PDF for Entity"
 
-#: inc/config.class.php:76
+#: inc/config.class.php:81
 msgid "Config"
 msgid_plural "Config"
 msgstr[0] "Config"
 msgstr[1] "Config"
 
-#: inc/config.class.php:185
+#: inc/config.class.php:190
 msgid "Manage GDPR RoPA configuration"
 msgstr "Manage GDPR RoPA configuration"
 
-#: inc/config.class.php:188
+#: inc/config.class.php:193
 msgid "System configuration"
 msgstr "System configuration"
 
-#: inc/config.class.php:191
+#: inc/config.class.php:196
 msgid "Keep 'is special category' strict"
 msgstr "Keep 'is special category' strict"
 
-#: inc/config.class.php:203
+#: inc/config.class.php:209
 msgid "Limit retention contracts list to those selected in controller info"
 msgstr "Limit retention contracts list to those selected in controller info"
 
-#: inc/config.class.php:216
+#: inc/config.class.php:223
 #, fuzzy
 msgid ""
-"Remove sofrware when record storage medium set to\n"
-"            Paper only if any was assigned previously"
+"Remove sofrware when record storage medium set to Paper only if any was "
+"assigned previously"
 msgstr ""
 "Remove sofrware when record storage medium set to Paper only if any was "
 "assigned previously"
 
-#: inc/config.class.php:228
+#: inc/config.class.php:237
 msgid "Allow add expired contract (show expired on dropdown list)"
 msgstr "Allow add expired contract (show expired on dropdown list)"
 
-#: inc/config.class.php:239
+#: inc/config.class.php:248
 msgid "Allow add software from any entity"
 msgstr "Allow add software from any entity"
 
-#: inc/config.class.php:250
+#: inc/config.class.php:260
 #, fuzzy
 msgid ""
-"Allow retrieve controller info from ancestor entity\n"
-"            (set as recursive) when current entity controller info is not set"
+"Allow retrieve controller info from ancestor entity (set as recursive) when "
+"current entity controller info is not set"
 msgstr ""
 "Allow retrieve controller info from ancestor entity (set as recursive) when "
 "current entity controller info is not set"
 
-#: inc/config.class.php:262
+#: inc/config.class.php:274
 msgid "PDF creating configuration"
 msgstr "PDF creating configuration"
 
-#: inc/config.class.php:266
+#: inc/config.class.php:278
 msgid "Codepage"
 msgstr "Codepage"
 
-#: inc/config.class.php:275
+#: inc/config.class.php:287
 msgid "Font name"
 msgstr "Font name"
 
-#: inc/config.class.php:284
+#: inc/config.class.php:296
 msgid "Font size"
 msgstr "Font size"
 
-#: inc/config.class.php:297
+#: inc/config.class.php:309
 msgid "Margin left"
 msgstr "Margin left"
 
-#: inc/config.class.php:309
+#: inc/config.class.php:321
 msgid "Margin top"
 msgstr "Margin top"
 
-#: inc/config.class.php:321
+#: inc/config.class.php:333
 msgid "Margin right"
 msgstr "Margin right"
 
-#: inc/config.class.php:333
+#: inc/config.class.php:345
 msgid "Margin bottom"
 msgstr "Margin bottom"
 
-#: inc/config.class.php:345
+#: inc/config.class.php:357
 msgid "Header margin (from top)"
 msgstr "Header margin (from top)"
 
-#: inc/config.class.php:357
+#: inc/config.class.php:369
 msgid "Footer margin (from bottom)"
 msgstr "Footer margin (from bottom)"
 
-#: inc/config.class.php:369
+#: inc/config.class.php:381
 msgid "Show logo"
 msgstr "Show logo"
 
-#: inc/config.class.php:377
+#: inc/config.class.php:389
 msgid "Logo image filename (located in /plugins/gdprropa/images/)"
 msgstr "Logo image filename (located in /plugins/gdprropa/images/)"
 
-#: inc/config.class.php:413
+#: inc/config.class.php:425
 msgid "Install sample data"
 msgstr "Install sample data"
 
-#: inc/config.class.php:417
+#: inc/config.class.php:430
 msgid "Sample data will be installed for current active entity."
 msgstr "Sample data will be installed for current active entity."
 
-#: inc/config.class.php:422 inc/config.class.php:426
+#: inc/config.class.php:435 inc/config.class.php:439
 msgid "Categories of data subjects"
 msgstr "Categories of data subjects"
 
-#: inc/config.class.php:440 inc/config.class.php:444
+#: inc/config.class.php:455 inc/config.class.php:459
 msgid "Security measures"
 msgstr "Security measures"
 
-#: inc/config.class.php:450 inc/config.class.php:454
+#: inc/config.class.php:465 inc/config.class.php:469
 msgid "Contract types"
 msgstr "Contract types"
 
-#: inc/config.class.php:459 inc/config.class.php:463
+#: inc/config.class.php:475 inc/config.class.php:479
 msgid "Personal data types"
 msgstr "Personal data types"
 
-#: inc/config.class.php:471
+#: inc/config.class.php:488
 msgid "Install"
 msgstr "Install"
 
-#: inc/config.class.php:488
+#: inc/config.class.php:505
 msgid "Employees"
 msgstr "Employees"
 
-#: inc/config.class.php:489
+#: inc/config.class.php:506
 msgid "Company employees"
 msgstr "Company employees"
 
-#: inc/config.class.php:494
+#: inc/config.class.php:511
 msgid "Consumers"
 msgstr "Consumers"
 
-#: inc/config.class.php:495
+#: inc/config.class.php:512
 msgid "Company consumers/clients"
 msgstr "Company consumers/clients"
 
-#: inc/config.class.php:504 inc/createpdf.class.php:406
-#: inc/createpdf.class.php:410 inc/createpdf.class.php:414
-#: inc/createpdf.class.php:418 inc/createpdf.class.php:422
-#: inc/createpdf.class.php:426 inc/createpdf.class.php:430
-#: inc/createpdf.class.php:434 inc/createpdf.class.php:438
-#: inc/createpdf.class.php:491 inc/createpdf.class.php:496
-#: inc/createpdf.class.php:508 inc/createpdf.class.php:514
-#: inc/createpdf.class.php:516 inc/createpdf.class.php:518
-#: inc/createpdf.class.php:536 inc/createpdf.class.php:543
-#: inc/createpdf.class.php:930 inc/createpdf.class.php:1225
-#: inc/createpdf.class.php:1263
+#: inc/config.class.php:521 inc/createpdf.class.php:400
+#: inc/createpdf.class.php:401 inc/createpdf.class.php:402
+#: inc/createpdf.class.php:403 inc/createpdf.class.php:404
+#: inc/createpdf.class.php:405 inc/createpdf.class.php:406
+#: inc/createpdf.class.php:407 inc/createpdf.class.php:408
+#: inc/createpdf.class.php:455 inc/createpdf.class.php:456
+#: inc/createpdf.class.php:465 inc/createpdf.class.php:470
+#: inc/createpdf.class.php:471 inc/createpdf.class.php:472
+#: inc/createpdf.class.php:488 inc/createpdf.class.php:492
+#: inc/createpdf.class.php:884 inc/createpdf.class.php:1165
+#: inc/createpdf.class.php:1202
 msgid "N/A"
 msgstr "N/A"
 
-#: inc/config.class.php:510
+#: inc/config.class.php:527
 msgid "Article 6-1a"
 msgstr "Article 6-1a"
 
-#: inc/config.class.php:511
+#: inc/config.class.php:529
 msgid ""
 "The data subject has given consent to the processing of his or her personal "
 "data for one or more specific purposes."
@@ -436,11 +436,11 @@ msgstr ""
 "The data subject has given consent to the processing of his or her personal "
 "data for one or more specific purposes."
 
-#: inc/config.class.php:517
+#: inc/config.class.php:538
 msgid "Article 6-1b"
 msgstr "Article 6-1b"
 
-#: inc/config.class.php:518
+#: inc/config.class.php:540
 msgid ""
 "Processing is necessary for the performance of a contract to which the data "
 "subject is party or in order to take steps at the request of the data "
@@ -450,11 +450,11 @@ msgstr ""
 "subject is party or in order to take steps at the request of the data "
 "subject prior to entering into a contract."
 
-#: inc/config.class.php:524
+#: inc/config.class.php:550
 msgid "Article 6-1c"
 msgstr "Article 6-1c"
 
-#: inc/config.class.php:525
+#: inc/config.class.php:552
 msgid ""
 "Processing is necessary for compliance with a legal obligation to which the "
 "controller is subject."
@@ -462,11 +462,11 @@ msgstr ""
 "Processing is necessary for compliance with a legal obligation to which the "
 "controller is subject."
 
-#: inc/config.class.php:531
+#: inc/config.class.php:561
 msgid "Article 6-1d"
 msgstr "Article 6-1d"
 
-#: inc/config.class.php:532
+#: inc/config.class.php:563
 msgid ""
 "Processing is necessary in order to protect the vital interests of the data "
 "subject or of another natural person."
@@ -474,11 +474,11 @@ msgstr ""
 "Processing is necessary in order to protect the vital interests of the data "
 "subject or of another natural person."
 
-#: inc/config.class.php:538
+#: inc/config.class.php:572
 msgid "Article 6-1e"
 msgstr "Article 6-1e"
 
-#: inc/config.class.php:539
+#: inc/config.class.php:574
 msgid ""
 "Processing is necessary for the performance of a task carried out in the "
 "public interest or in the exercise of official authority vested in the "
@@ -488,11 +488,11 @@ msgstr ""
 "public interest or in the exercise of official authority vested in the "
 "controller."
 
-#: inc/config.class.php:545
+#: inc/config.class.php:584
 msgid "Article 6-1f"
 msgstr "Article 6-1f"
 
-#: inc/config.class.php:546
+#: inc/config.class.php:586
 msgid ""
 "Processing is necessary for the purposes of the legitimate interests pursued "
 "by the controller or by a third party, except where such interests are "
@@ -506,154 +506,154 @@ msgstr ""
 "subject which require protection of personal data, in particular where the "
 "data subject is a child."
 
-#: inc/config.class.php:556
+#: inc/config.class.php:601
 msgid "DPO was appointed"
 msgstr "DPO was appointed"
 
-#: inc/config.class.php:558
+#: inc/config.class.php:603
 msgid "Data Protection Officer was appointed"
 msgstr "Data Protection Officer was appointed"
 
-#: inc/config.class.php:562
+#: inc/config.class.php:607
 msgid "Computers Usage Policy"
 msgstr "Computers Usage Policy"
 
-#: inc/config.class.php:564
+#: inc/config.class.php:609
 msgid "Internal policy regarding usage of computers"
 msgstr "Internal policy regarding usage of computers"
 
-#: inc/config.class.php:568
+#: inc/config.class.php:613
 msgid "24h Security"
 msgstr "24h Security"
 
-#: inc/config.class.php:570
+#: inc/config.class.php:615
 msgid "Securtiy personel on site for 24h"
 msgstr "Securtiy personel on site for 24h"
 
-#: inc/config.class.php:574
+#: inc/config.class.php:619
 msgid "UPS system"
 msgstr "UPS system"
 
-#: inc/config.class.php:576
+#: inc/config.class.php:621
 msgid "Uninterruptidle power supply is installed"
 msgstr "Uninterruptidle power supply is installed"
 
-#: inc/config.class.php:580
+#: inc/config.class.php:625
 msgid "Antivirus App"
 msgstr "Antivirus App"
 
-#: inc/config.class.php:582
+#: inc/config.class.php:627
 msgid "Computers have Antivirus app installed"
 msgstr "Computers have Antivirus app installed"
 
-#: inc/config.class.php:586
+#: inc/config.class.php:631
 msgid "Firewall"
 msgstr "Firewall"
 
-#: inc/config.class.php:588
+#: inc/config.class.php:633
 msgid "Firewall protects internal network"
 msgstr "Firewall protects internal network"
 
-#: inc/config.class.php:596 inc/config.class.php:597
+#: inc/config.class.php:641 inc/config.class.php:642
 msgid "GDPR Joint Controller Contract"
 msgstr "Joint controller contract"
 
-#: inc/config.class.php:600 inc/config.class.php:601
+#: inc/config.class.php:645 inc/config.class.php:646
 msgid "GDPR Processor Contract"
 msgstr "Processor contract"
 
-#: inc/config.class.php:604 inc/config.class.php:605
+#: inc/config.class.php:649 inc/config.class.php:650
 msgid "GDPR Thirdparty Contract"
 msgstr "Thirdparty contract"
 
-#: inc/config.class.php:608 inc/config.class.php:609
+#: inc/config.class.php:653 inc/config.class.php:654
 msgid "GDPR Internal Contract"
 msgstr "Internal contract"
 
-#: inc/config.class.php:612 inc/config.class.php:613
+#: inc/config.class.php:657 inc/config.class.php:658
 msgid "GDPR Other Contract"
 msgstr "Other contract"
 
-#: inc/config.class.php:620
+#: inc/config.class.php:665
 msgid "Employees record"
 msgstr "Employees record"
 
-#: inc/config.class.php:621
+#: inc/config.class.php:666
 msgid "Employee personal data"
 msgstr "Employee personal data"
 
-#: inc/config.class.php:627
+#: inc/config.class.php:672
 msgid "First name"
 msgstr "First name"
 
-#: inc/config.class.php:628
+#: inc/config.class.php:673
 msgid "Employee first name"
 msgstr "Employee first name"
 
-#: inc/config.class.php:634
+#: inc/config.class.php:679
 msgid "Last name"
 msgstr "Last name"
 
-#: inc/config.class.php:635
+#: inc/config.class.php:680
 msgid "Employee last name"
 msgstr "Employee last name"
 
-#: inc/config.class.php:641
+#: inc/config.class.php:686
 msgid "Personal ID"
 msgstr "Personal ID"
 
-#: inc/config.class.php:642
+#: inc/config.class.php:687
 msgid "Employee personal ID"
 msgstr "Employee personal ID"
 
-#: inc/record.class.php:102
+#: inc/record.class.php:97
 #, fuzzy
 msgid "Processing activity"
 msgstr "Processing Activity information"
 
-#: inc/record.class.php:110
+#: inc/record.class.php:105
 msgid "Purpose (GDPR Article 30 1b)"
 msgstr "Purpose (GDPR Article 30 1b)"
 
-#: inc/record.class.php:125 inc/record.class.php:479
-#: inc/createpdf.class.php:913
+#: inc/record.class.php:120 inc/record.class.php:478
+#: inc/createpdf.class.php:867
 msgid "Storage medium"
 msgstr "Storage medium"
 
-#: inc/record.class.php:129 inc/record.class.php:460
-#: inc/createpdf.class.php:917
+#: inc/record.class.php:124 inc/record.class.php:459
+#: inc/createpdf.class.php:871
 msgid "PIA required"
 msgstr "PIA Required"
 
-#: inc/record.class.php:149 inc/createpdf.class.php:933
+#: inc/record.class.php:144 inc/createpdf.class.php:887
 msgid "Consent required"
 msgstr "Consent required"
 
-#: inc/record.class.php:171 inc/createpdf.class.php:943
+#: inc/record.class.php:166 inc/createpdf.class.php:897
 msgid "First entry date"
 msgstr "First entry date"
 
-#: inc/record.class.php:199 inc/createpdf.class.php:938
+#: inc/record.class.php:194 inc/createpdf.class.php:892
 msgid "Consent storage"
 msgstr "Consent storage"
 
-#: inc/record.class.php:270
+#: inc/record.class.php:264
 msgid "Paper only"
 msgstr "Paper only"
 
-#: inc/record.class.php:271
+#: inc/record.class.php:265
 msgid "Paper and electronic"
 msgstr "Paper and electronic"
 
-#: inc/record.class.php:272
+#: inc/record.class.php:266
 msgid "Electronic only"
 msgstr "Electronic only"
 
-#: inc/record.class.php:415 inc/createpdf.class.php:897
+#: inc/record.class.php:414 inc/createpdf.class.php:851
 msgid "Purpose"
 msgstr "Purpose"
 
-#: inc/record.class.php:469 inc/createpdf.class.php:923
+#: inc/record.class.php:468 inc/createpdf.class.php:877
 msgid "PIA status"
 msgstr "PIA Status"
 
@@ -661,359 +661,363 @@ msgstr "PIA Status"
 msgid "Add Legal Basis"
 msgstr "Add Legal Basis"
 
-#: inc/record_contract.class.php:76
+#: inc/record_contract.class.php:78
 msgid "Contract"
 msgid_plural "Contracts"
 msgstr[0] "Contract"
 msgstr[1] "Contracts"
 
-#: inc/record_contract.class.php:113
+#: inc/record_contract.class.php:115
 msgid "Joint controller contract type not set."
 msgstr "Joint controller contract type not set."
 
-#: inc/record_contract.class.php:116
+#: inc/record_contract.class.php:118
 msgid "Processor contract type not set."
 msgstr "Processor contract type not set."
 
-#: inc/record_contract.class.php:120
+#: inc/record_contract.class.php:123
 msgid "Third country/internalional organization contract type not set."
 msgstr "Third country/internalional organization contract type not set."
 
-#: inc/record_contract.class.php:125
+#: inc/record_contract.class.php:128
 msgid "Internal contract type not set."
 msgstr "Other contract type not set."
 
-#: inc/record_contract.class.php:128
+#: inc/record_contract.class.php:131
 msgid "Other contract type not set."
 msgstr "Other contract type not set."
 
-#: inc/record_contract.class.php:134
+#: inc/record_contract.class.php:137
 #, php-format
 msgid "Go to %s tab at %s and assign contract type."
 msgstr "Go to %s tab at %s and assign contract type."
 
-#: inc/record_contract.class.php:174
+#: inc/record_contract.class.php:177
 msgid "Add Joint Controller/Processor"
 msgstr "Add Joint Controller/Processor"
 
-#: inc/record_contract.class.php:176
+#: inc/record_contract.class.php:179
 msgid "GDPR Article 30 1d, 1e"
 msgstr "GDPR Article 30 1d, 1e"
 
-#: inc/record_contract.class.php:357
+#: inc/record_contract.class.php:364
 msgid "Joint controller contract"
 msgstr "Joint controller contract"
 
-#: inc/record_contract.class.php:359
+#: inc/record_contract.class.php:366
 msgid "Processor contract"
 msgstr "Processor contract"
 
-#: inc/record_contract.class.php:361
+#: inc/record_contract.class.php:368
 msgid "Thirdparty contract"
 msgstr "Thirdparty contract"
 
-#: inc/record_contract.class.php:363
+#: inc/record_contract.class.php:370
 msgid "Internal contract"
 msgstr "Internal contract"
 
-#: inc/record_contract.class.php:365
+#: inc/record_contract.class.php:372
 msgid "Other contract"
 msgstr "Other contract"
 
-#: inc/record_contract.class.php:604
+#: inc/record_contract.class.php:610
 msgid "Name (select from list)"
 msgstr "Name (select from list)"
 
-#: inc/record_software.class.php:88 inc/createpdf.class.php:1579
+#: inc/record_software.class.php:89 inc/createpdf.class.php:1517
 #, fuzzy
 msgid "Software"
 msgstr "Software"
 
-#: inc/record_software.class.php:151
+#: inc/record_software.class.php:152
 msgid "Add a software"
 msgstr "Add a software"
 
-#: inc/createpdf.class.php:146
+#: inc/createpdf.class.php:142
 msgid "Show 'introduced in'"
 msgstr "Show 'introduced in'"
 
-#: inc/createpdf.class.php:153
+#: inc/createpdf.class.php:149
 msgid "Show comments"
 msgstr "Show comments"
 
-#: inc/createpdf.class.php:165
+#: inc/createpdf.class.php:161
 msgid "Show deleted records"
 msgstr "Show deleted records"
 
-#: inc/createpdf.class.php:173
+#: inc/createpdf.class.php:167
 msgid "Show legal representative and DPO for each record"
 msgstr "Show legal representative and DPO for each record"
 
-#: inc/createpdf.class.php:182
+#: inc/createpdf.class.php:176
 msgid "Show record owner information"
 msgstr "Show record owner information"
 
-#: inc/createpdf.class.php:189
+#: inc/createpdf.class.php:183
 msgid "Show assets owners"
 msgstr "Show assets owners"
 
-#: inc/createpdf.class.php:197
+#: inc/createpdf.class.php:191
 msgid "Show full personal data category list"
 msgstr "Show full personal data category list"
 
-#: inc/createpdf.class.php:204
+#: inc/createpdf.class.php:198
 #, fuzzy
 msgid "Show expired contracts"
 msgstr "Other contract"
 
-#: inc/createpdf.class.php:211
+#: inc/createpdf.class.php:205
 msgid "Show contracts types header if empty list"
 msgstr "Show contracts types header if empty list"
 
-#: inc/createpdf.class.php:218
+#: inc/createpdf.class.php:212
 msgid "Show 'is deleted' information in info header"
 msgstr "Show 'is deleted' information in info header"
 
-#: inc/createpdf.class.php:225
+#: inc/createpdf.class.php:219
 msgid "Show print date/time"
 msgstr "Show print date/time"
 
-#: inc/createpdf.class.php:232
+#: inc/createpdf.class.php:226
 msgid "Page orientation"
 msgstr "Page orientation"
 
-#: inc/createpdf.class.php:236
+#: inc/createpdf.class.php:230
 msgid "Portrait"
 msgstr "Portrait"
 
-#: inc/createpdf.class.php:237
+#: inc/createpdf.class.php:231
 msgid "Landscape"
 msgstr "Landscape"
 
-#: inc/createpdf.class.php:245
+#: inc/createpdf.class.php:240
 msgid "Show record status in info header"
 msgstr "Show record status in info header"
 
-#: inc/createpdf.class.php:260
+#: inc/createpdf.class.php:255
 msgid "Show legal representative"
 msgstr "Show legal representative"
 
-#: inc/createpdf.class.php:267 inc/createpdf.class.php:307
+#: inc/createpdf.class.php:262 inc/createpdf.class.php:302
 msgid "Show title"
 msgstr "Show title"
 
-#: inc/createpdf.class.php:274 inc/createpdf.class.php:314
+#: inc/createpdf.class.php:269 inc/createpdf.class.php:309
 msgid "Show address"
 msgstr "Show address"
 
-#: inc/createpdf.class.php:281 inc/createpdf.class.php:321
+#: inc/createpdf.class.php:276 inc/createpdf.class.php:316
 msgid "Show phone"
 msgstr "Show phone"
 
-#: inc/createpdf.class.php:288 inc/createpdf.class.php:328
+#: inc/createpdf.class.php:283 inc/createpdf.class.php:323
 msgid "Show email"
 msgstr "Show email"
 
-#: inc/createpdf.class.php:300
+#: inc/createpdf.class.php:295
 msgid "Show DPO"
 msgstr "Show DPO"
 
-#: inc/createpdf.class.php:394
+#: inc/createpdf.class.php:389
 #, fuzzy
 msgid "Controller name not set."
 msgstr "Controller info not set."
 
-#: inc/createpdf.class.php:462
+#: inc/createpdf.class.php:429
 #, fuzzy
 msgid "Controller"
 msgstr "Controller Name"
 
-#: inc/createpdf.class.php:671
+#: inc/createpdf.class.php:447
+msgid "Not found"
+msgstr ""
+
+#: inc/createpdf.class.php:625
 #, php-format
 msgid "print date/time: %1s"
 msgstr "print date/time: %1s"
 
-#: inc/createpdf.class.php:689
+#: inc/createpdf.class.php:643
 msgid "List of processing activities for which entity deals with personal data"
 msgstr ""
 "List of processing activities for which entity deals with personal data"
 
-#: inc/createpdf.class.php:696
+#: inc/createpdf.class.php:650
 msgid "There are no activities."
 msgstr "There are no activities."
 
-#: inc/createpdf.class.php:704
+#: inc/createpdf.class.php:658
 msgid "No"
 msgstr "No"
 
-#: inc/createpdf.class.php:706
+#: inc/createpdf.class.php:660
 msgid "Description of the activity"
 msgstr "Description of the activity"
 
-#: inc/createpdf.class.php:739
+#: inc/createpdf.class.php:693
 #, fuzzy
 msgid "Record of Processing Activities"
 msgstr "GDPR Records of Processing Activities"
 
-#: inc/createpdf.class.php:749
+#: inc/createpdf.class.php:704
 #, php-format
 msgid "GDPR Records of Processing Activity for entity:<br/>%1s"
 msgstr "GDPR Records of Processing Activities for entity:<br/>%1s"
 
-#: inc/createpdf.class.php:755
+#: inc/createpdf.class.php:712
 msgid "GDPR Records of Processing Activity"
 msgstr "GDPR Records of Processing Activity"
 
-#: inc/createpdf.class.php:766
+#: inc/createpdf.class.php:723
 msgid "Legal representative not set."
 msgstr "Legal representative not set."
 
-#: inc/createpdf.class.php:771
+#: inc/createpdf.class.php:728
 msgid "DPO not set."
 msgstr "DPO not set."
 
-#: inc/createpdf.class.php:812
+#: inc/createpdf.class.php:767
 msgid "The record is marked as DELETED"
 msgstr "The record is marked as DELETED"
 
-#: inc/createpdf.class.php:826
+#: inc/createpdf.class.php:781
 #, php-format
 msgid "Record status: %s"
 msgstr "Record status: %s"
 
-#: inc/createpdf.class.php:843
+#: inc/createpdf.class.php:798
 msgid "Sheet for GDPR Record of Processing Activities"
 msgstr "Sheet for GDPR Record of Processing Activities"
 
-#: inc/createpdf.class.php:885
+#: inc/createpdf.class.php:839
 msgid "Processing Activity information"
 msgstr "Processing Activity information"
 
-#: inc/createpdf.class.php:893 inc/createpdf.class.php:1031
-#: inc/createpdf.class.php:1620
+#: inc/createpdf.class.php:847 inc/createpdf.class.php:972
+#: inc/createpdf.class.php:1558
 msgid "Name"
 msgstr "Name"
 
-#: inc/createpdf.class.php:953 inc/createpdf.class.php:1634
+#: inc/createpdf.class.php:907 inc/createpdf.class.php:1572
 msgid "Owner"
 msgstr "Owner"
 
-#: inc/createpdf.class.php:1007
+#: inc/createpdf.class.php:948
 msgid "No legal basis act(s)."
 msgstr "No legal basis act(s)."
 
-#: inc/createpdf.class.php:1041
+#: inc/createpdf.class.php:982
 msgid "Content"
 msgstr "Content"
 
-#: inc/createpdf.class.php:1098
+#: inc/createpdf.class.php:1038
 msgid "No data subjects category/ies assigned."
 msgstr "No data subjects category/ies assigned."
 
-#: inc/createpdf.class.php:1174
+#: inc/createpdf.class.php:1114
 msgid "Data retention not set."
 msgstr "Data retention not set."
 
-#: inc/createpdf.class.php:1203
+#: inc/createpdf.class.php:1143
 #, php-format
 msgid "Data retention: %1$s after contract is terminated"
 msgstr "Data retention: %1$s after contract is terminated"
 
-#: inc/createpdf.class.php:1228
+#: inc/createpdf.class.php:1168
 #, php-format
 msgid "Contract name/number: %1$s %2$s"
 msgstr "Contract name/number: %1$s %2$s"
 
-#: inc/createpdf.class.php:1232
+#: inc/createpdf.class.php:1172
 #, php-format
 msgid "Begin date: %1$s"
 msgstr "Begin date: %1$s"
 
-#: inc/createpdf.class.php:1236
+#: inc/createpdf.class.php:1176
 #, php-format
 msgid "Comment: %1$s"
 msgstr "Comment: %1$s"
 
-#: inc/createpdf.class.php:1243 inc/createpdf.class.php:1345
+#: inc/createpdf.class.php:1183 inc/createpdf.class.php:1284
 msgid "Contract info"
 msgstr "Contract info"
 
-#: inc/createpdf.class.php:1247
+#: inc/createpdf.class.php:1187
 msgid "Supplier"
 msgstr "Supplier"
 
-#: inc/createpdf.class.php:1270
+#: inc/createpdf.class.php:1207
 #, php-format
 msgid "Name: %1$s"
 msgstr "Name: %1$s"
 
-#: inc/createpdf.class.php:1277
+#: inc/createpdf.class.php:1214
 msgid "Data retention is not required"
 msgstr "Data retention is not required"
 
-#: inc/createpdf.class.php:1312
+#: inc/createpdf.class.php:1249
 msgid "Contracts related to processing activity"
 msgstr "Contracts related to processing activity"
 
-#: inc/createpdf.class.php:1324
+#: inc/createpdf.class.php:1263
 msgid "None."
 msgstr "None."
 
-#: inc/createpdf.class.php:1348
+#: inc/createpdf.class.php:1287
 msgid "Expiration"
 msgstr ""
 
-#: inc/createpdf.class.php:1398
+#: inc/createpdf.class.php:1337
 msgid "Begin date:"
 msgstr "Begin date:"
 
-#: inc/createpdf.class.php:1456
+#: inc/createpdf.class.php:1394
 msgid "None assigned."
 msgstr "None assigned."
 
-#: inc/createpdf.class.php:1479
+#: inc/createpdf.class.php:1417
 msgid "Complete name"
 msgstr "Complete name"
 
-#: inc/createpdf.class.php:1584
+#: inc/createpdf.class.php:1522
 msgid "Software not assigned."
 msgstr "Software not assigned."
 
-#: inc/createpdf.class.php:1624
+#: inc/createpdf.class.php:1562
 msgid "Publisher"
 msgstr "Publisher"
 
-#: inc/createpdf.class.php:1658
+#: inc/createpdf.class.php:1596
 msgid "Not assigned"
 msgstr "Not assigned"
 
-#: inc/createpdf.class.php:1722
+#: inc/createpdf.class.php:1661
 msgid "None implemented."
 msgstr "None implemented."
 
-#: inc/record_securitymeasure.class.php:63 inc/securitymeasure.class.php:66
+#: inc/record_securitymeasure.class.php:64 inc/securitymeasure.class.php:69
 msgid "Security Measure"
 msgid_plural "Security Measures"
 msgstr[0] "Security Measure"
 msgstr[1] "Security Measures"
 
-#: inc/record_securitymeasure.class.php:123
+#: inc/record_securitymeasure.class.php:124
 msgid "Add Security Measure"
 msgstr "Add Security Measure"
 
-#: inc/record_securitymeasure.class.php:125
+#: inc/record_securitymeasure.class.php:126
 msgid "GDPR Article 30 1g"
 msgstr "GDPR Article 30 1g"
 
-#: inc/securitymeasure.class.php:132
+#: inc/securitymeasure.class.php:135
 msgid "Organizational"
 msgstr "Organizational"
 
-#: inc/securitymeasure.class.php:133
+#: inc/securitymeasure.class.php:136
 msgid "Physical"
 msgstr "Physical"
 
-#: inc/securitymeasure.class.php:134
+#: inc/securitymeasure.class.php:137
 msgid "IT"
 msgstr "IT"
 

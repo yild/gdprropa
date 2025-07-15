@@ -23,6 +23,7 @@
          * Assign software
          * PDF output
          * Each entity can have separated controller info: legal representative, DPO and name, different contract types
+         * Dashboard widget with Records per entity and its sons
          * additional configuration
 
          Based on DPO Register plugin, by Karhel Tmarr plugin. Some code was included or is similar to DPO Register.
@@ -41,6 +42,7 @@
          * Przypisanie oprogramowania
          * Generowanie PDF
          * Każda jednostka może mieć osobne informacje: przedstawiciel prawny, IOD, nazwę, inne typy umów
+         * Kafel (widget) na dashboard pokazujący liczbę Czynności dla bieżącej jednostki i pozycji podrzędnych.
          * dodatkowa konfiguracja
 
          Na podstawie pluginu DPO Register napisanego przez Karhel Tmarr. Część kodu została wykorzystana lub jest podobna do DPO Register.
@@ -56,7 +58,7 @@
    </authors>
    <versions>
       <version>
-         <num>1.0.2</num>
+         <num>1.0.3</num>
          <compatibility>10.0</compatibility>
       </version>
    </versions>
