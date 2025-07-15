@@ -20,6 +20,7 @@ Main features:
 * Assign software
 * PDF output
 * Each entity can have separated controller info: legal representative, DPO and name, different contract types
+* Dashboard widget with number of Records per entity (and its sons).
 * additional configuration
 
 
