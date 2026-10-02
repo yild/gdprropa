@@ -1,0 +1,25 @@
+{#
+ # ---------------------------------------------------------------------
+ # GDPR Records of Processing Activities plugin for GLPI
+ # Copyright © 2020-2025 by Yild.
+ #
+ # https://github.com/yild/gdprropa
+ # ---------------------------------------------------------------------
+ #}
+
+<div class="glpi_tabs">
+    <div class="center vertical ui-tabs ui-widget ui-widget-content ui-corner-all ui-tabs-vertical ui-helper-clearfix ui-corner-left">
+        <div class="ui-tabs-panel ui-widget-content ui-corner-bottom" aria-live="polite" role="tabpanel" aria-expanded="true" aria-hidden="false">
+            <div class="firstbloc">
+                {% include '@gdprropa/createpdf.form.html.twig' with {
+                    config: config,
+                    report_type: report_type,
+                    record_id: record_id,
+                    report_single_record: report_single_record,
+                    is_gdprowner_plugin_active: is_gdprowner_plugin_active,
+                    type_name: type_name,
+                } only %}
+            </div>
+        </div>
+    </div>
+</div>

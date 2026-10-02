@@ -5,6 +5,11 @@ Based on [DPO Register](https://github.com/karhel/glpi-dporegister) plugin, by K
 
 Registry of Processing Activities for GDPR - [GLPI](https://github.com/glpi-project/glpi/) Plugin
 
+## Requirements
+
+* GLPI 11.0 or later (tested with GLPI 11.0.x)
+* PHP 8.2 or later
+
 GDPR EU regulation require controllers (data administrators) to maintain Registry of Processing Activities (article 30 of GDPR) for each personal data processing.
 
 This plugin adds to GLPI managment of Processing Activities Registry, can be maintained for each entity.
@@ -26,13 +31,13 @@ Main features:
 
 ## Translation
 
-Currently en_GB and pl_PL translations available.
+Currently en_GB, pl_PL and fr_FR translations available.
 
 ## Documentation
 
 ### Installation
 
-Install as normal plugin (currently no 9.5 GLPI Marketplace).
+Install as normal plugin (GLPI 11 or later).
 
 Plugin settings can be changed in Setup->Plugins->GDPR Records of Processing Activities. Also sample data can be injected.
 

@@ -45,7 +45,7 @@ namespace GlpiPlugin\Gdprropa;
 
 use CommonGLPI;
 use DbUtils;
-use Html;
+use Glpi\Application\View\TemplateRenderer;
 use Profile as GlpiProfile;
 use ProfileRight;
 use Session;
@@ -81,27 +81,20 @@ class Profile extends GlpiProfile
     {
         $profile = new GlpiProfile();
 
-        if (($can_update = Session::haveRightsOr(self::$rightname, [CREATE, UPDATE, PURGE]))) {
-            echo "<form method='post' action='" . $profile->getFormURL() . "'>";
-        }
+        $can_update = Session::haveRightsOr(self::$rightname, [CREATE, UPDATE, PURGE]);
 
         $profile->getFromDB($ID);
+
+        $rights = [];
         if ($profile->getField('interface') == 'central') {
             $rights = $this->getAllRights();
-            $profile->displayRightsChoiceMatrix($rights, [
-                'canedit' => $can_update,
-                'default_class' => 'tab_bg_2',
-                'title' => __("General")
-            ]);
         }
 
-        if ($can_update) {
-            echo "<div class='center'>";
-            echo Html::hidden('id', ['value' => $ID]);
-            echo Html::submit(_sx('button', 'Save'), ['name' => 'update']);
-            echo "</div>\n";
-            Html::closeForm();
-        }
+        TemplateRenderer::getInstance()->display('@gdprropa/profile.html.twig', [
+            'profile'    => $profile,
+            'rights'     => $rights,
+            'can_update' => $can_update,
+        ]);
     }
 
     public static function addDefaultProfileInfos($profiles_id, $rights, $drop_existing = false): void
@@ -264,12 +257,14 @@ class Profile extends GlpiProfile
             }
         }
 
-        $profiles = $DB->request(
-            "SELECT *
-            FROM `glpi_profilerights`
-            WHERE `profiles_id`='" . $_SESSION['glpiactiveprofile']['id'] . "'
-            AND `name` LIKE 'plugin_gdprropa_%'"
-        );
+        $profiles = $DB->request([
+            'SELECT' => ['name', 'rights'],
+            'FROM'   => 'glpi_profilerights',
+            'WHERE'  => [
+                'profiles_id' => $_SESSION['glpiactiveprofile']['id'] ?? 0,
+                'name'        => ['LIKE', 'plugin_gdprropa_%'],
+            ],
+        ]);
 
         foreach ($profiles as $prof) {
             $_SESSION['glpiactiveprofile'][$prof['name']] = $prof['rights'];

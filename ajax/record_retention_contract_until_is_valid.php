@@ -50,13 +50,9 @@ include("../../../inc/includes.php");
 
 Plugin::load('gdprropa', true);
 
-if (strpos($_SERVER['PHP_SELF'], 'record_retention_contract_until_is_valid.php')) {
-    $AJAX_INCLUDE = 1;
+header("Content-Type: text/html; charset=UTF-8");
+Html::header_nocache();
 
-    header("Content-Type: text/html; charset=UTF-8");
-    Html::header_nocache();
-}
-
-if ($_POST['checked'] != '1') {
+if (array_key_exists('checked', $_POST) && $_POST['checked'] != '1') {
     Record_Retention::showContractUntilIsValidInputs($_POST);
 }

@@ -1,0 +1,31 @@
+{#
+ # ---------------------------------------------------------------------
+ # GDPR Records of Processing Activities plugin for GLPI
+ # Copyright © 2020-2025 by Yild.
+ #
+ # https://github.com/yild/gdprropa
+ # ---------------------------------------------------------------------
+ #}
+
+{% import 'components/form/basic_inputs_macros.html.twig' as inputs %}
+
+{% if can_update %}
+    <form method="post" action="{{ profile.getFormURL() }}">
+{% endif %}
+
+{% if profile.getField('interface') == 'central' %}
+    {% do profile.displayRightsChoiceMatrix(rights, {
+        canedit: can_update,
+        default_class: 'tab_bg_2',
+        title: __('General'),
+    }) %}
+{% endif %}
+
+{% if can_update %}
+        <div class="center">
+            {{ inputs.hidden('id', profile.getID()) }}
+            {{ inputs.hidden('_glpi_csrf_token', csrf_token()) }}
+            {{ inputs.submit('update', _x('button', 'Save'), 1) }}
+        </div>
+    </form>
+{% endif %}

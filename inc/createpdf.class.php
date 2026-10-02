@@ -49,6 +49,7 @@ use DateTime;
 use DBmysqlIterator;
 use Dropdown;
 use Entity;
+use Glpi\Application\View\TemplateRenderer;
 use Html;
 use Infocom;
 use Location;
@@ -138,250 +139,43 @@ class CreatePDF extends CreatePDFBase
 
     public static function showConfigFormElements($config = []): void
     {
-        echo "<tr class='tab_bg_1'>";
-        echo "<td width='25%'>" . __("Show 'introduced in'", 'gdprropa') . "</td>";
-        echo "<td width='75%'>";
-        Dropdown::showYesNo('show_inherited_from', $config['show_inherited_from']);
-        echo "</td>";
-        echo "</tr>";
-
-        echo "<tr class='tab_bg_1'>";
-        echo "<td>" . __("Show comments", 'gdprropa') . "</td>";
-        echo "<td>";
-        Dropdown::showYesNo('show_comments', $config['show_comments']);
-        echo "</td>";
-        echo "</tr>";
-
-        if (!isset($config['report_type'])) {
-            $config['report_type'] = CreatePDF::REPORT_SINGLE_RECORD;
-        }
-
-        if ($config['report_type'] != CreatePDF::REPORT_SINGLE_RECORD) {
-            echo "<tr class='tab_bg_1'>";
-            echo "<td>" . __("Show deleted records", 'gdprropa') . "</td>";
-            echo "<td>";
-            Dropdown::showYesNo('show_deleted_records_for_entity', $config['show_deleted_records_for_entity']);
-            echo "</td>";
-            echo "</tr>";
-            echo "<tr class='tab_bg_1'>";
-            echo "<td>" . __("Show legal representative and DPO for each record", 'gdprropa') . "</td>";
-            echo "<td>";
-            Dropdown::showYesNo('show_representative_dpo_per_record', $config['show_representative_dpo_per_record']);
-            echo "</td>";
-            echo "</tr>";
-        }
-
-        if (CreatePDFBase::isGdprownerPluginActive()) {
-            echo "<tr class='tab_bg_1'>";
-            echo "<td>" . __("Show record owner information", 'gdprropa') . "</td>";
-            echo "<td>";
-            Dropdown::showYesNo('show_record_owner', $config['show_record_owner']);
-            echo "</td>";
-            echo "</tr>";
-
-            echo "<tr class='tab_bg_1'>";
-            echo "<td>" . __("Show assets owners", 'gdprropa') . "</td>";
-            echo "<td>";
-            Dropdown::showYesNo('show_assets_owners', $config['show_assets_owners']);
-            echo "</td>";
-            echo "</tr>";
-        }
-
-        echo "<tr class='tab_bg_1'>";
-        echo "<td>" . __("Show full personal data category list", 'gdprropa') . "</td>";
-        echo "<td>";
-        Dropdown::showYesNo('show_full_personaldatacategorylist', $config['show_full_personaldatacategorylist']);
-        echo "</td>";
-        echo "</tr>";
-
-        echo "<tr class='tab_bg_1'>";
-        echo "<td>" . __("Show expired contracts", 'gdprropa') . "</td>";
-        echo "<td>";
-        Dropdown::showYesNo('show_expired_contracts', $config['show_expired_contracts']);
-        echo "</td>";
-        echo "</tr>";
-
-        echo "<tr class='tab_bg_1'>";
-        echo "<td>" . __("Show contracts types header if empty list", 'gdprropa') . "</td>";
-        echo "<td>";
-        Dropdown::showYesNo('show_contracs_types_header_if_empty', $config['show_contracs_types_header_if_empty']);
-        echo "</td>";
-        echo "</tr>";
-
-        echo "<tr class='tab_bg_1'>";
-        echo "<td>" . __("Show 'is deleted' information in info header", 'gdprropa') . "</td>";
-        echo "<td>";
-        Dropdown::showYesNo('show_is_deleted_header', $config['show_is_deleted_header']);
-        echo "</td>";
-        echo "</tr>";
-
-        echo "<tr class='tab_bg_1'>";
-        echo "<td>" . __("Show print date/time", 'gdprropa') . "</td>";
-        echo "<td>";
-        Dropdown::showYesNo('show_print_date_time', $config['show_print_date_time']);
-        echo "</td>";
-        echo "</tr>";
-
-        echo "<tr class='tab_bg_1'>";
-        echo "<td>" . __("Page orientation", 'gdprropa') . "</td>";
-        echo "<td colspan='2'>";
-
-        $orientation = [];
-        $orientation['P'] = __("Portrait", 'gdprropa');
-        $orientation['L'] = __("Landscape", 'gdprropa');
-        Dropdown::showFromArray('page_orientation', $orientation, [
-            'value' => $config['page_orientation'],
-            'display' => true
+        TemplateRenderer::getInstance()->display('@gdprropa/createpdf.config_elements.html.twig', [
+            'config'                     => $config,
+            'report_single_record'       => self::REPORT_SINGLE_RECORD,
+            'is_gdprowner_plugin_active' => CreatePDFBase::isGdprownerPluginActive(),
         ]);
-        echo "</td>";
-        echo "</tr>";
-
-        echo "<tr class='tab_bg_1'>";
-        echo "<td>" . __("Show record status in info header", 'gdprropa') . "</td>";
-        echo "<td>";
-        Dropdown::showYesNo('show_status_in_header', $config['show_status_in_header']);
-        echo "</td>";
-        echo "</tr>";
-
-        echo "<tr class='tab_bg_1'>";
-        echo "<td colspan='2'>";
-
-        echo "<table width='100%' align='left'><tbody>";
-        echo "<tr>";
-        echo "<td width='50%'>";
-
-        echo "<table><tbody>";
-        echo "<tr class='tab_bg_1'>";
-        echo "<td width='75%'>" . __("Show legal representative", 'gdprropa') . "</td>";
-        echo "<td width='25%'>";
-        Dropdown::showYesNo('show_representative[show]', $config['show_representative']['show']);
-        echo "</td>";
-        echo "</tr>";
-
-        echo "<tr class='tab_bg_1'>";
-        echo "<td style='padding-left: 50px;'>" . __("Show title", 'gdprropa') . "</td>";
-        echo "<td>";
-        Dropdown::showYesNo('show_representative[show_title]', $config['show_representative']['show_title']);
-        echo "</td>";
-        echo "</tr>";
-
-        echo "<tr class='tab_bg_1'>";
-        echo "<td style='padding-left: 50px;'>" . __("Show address", 'gdprropa') . "</td>";
-        echo "<td>";
-        Dropdown::showYesNo('show_representative[show_address]', $config['show_representative']['show_address']);
-        echo "</td>";
-        echo "</tr>";
-
-        echo "<tr class='tab_bg_1'>";
-        echo "<td style='padding-left: 50px;'>" . __("Show phone", 'gdprropa') . "</td>";
-        echo "<td>";
-        Dropdown::showYesNo('show_representative[show_phone]', $config['show_representative']['show_phone']);
-        echo "</td>";
-        echo "</tr>";
-
-        echo "<tr class='tab_bg_1'>";
-        echo "<td style='padding-left: 50px;'>" . __("Show email", 'gdprropa') . "</td>";
-        echo "<td>";
-        Dropdown::showYesNo('show_representative[show_email]', $config['show_representative']['show_email']);
-        echo "</td>";
-        echo "</tr>";
-        echo "</tbody></table>";
-
-        echo "</td>";
-        echo "<td width='50%'>";
-
-        echo "<table><tbody>";
-        echo "<tr class='tab_bg_1'>";
-        echo "<td width='75%'>" . __("Show DPO", 'gdprropa') . "</td>";
-        echo "<td width='25%'>";
-        Dropdown::showYesNo('show_dpo[show]', $config['show_dpo']['show']);
-        echo "</td>";
-        echo "</tr>";
-
-        echo "<tr class='tab_bg_1'>";
-        echo "<td style='padding-left: 50px;'>" . __("Show title", 'gdprropa') . "</td>";
-        echo "<td>";
-        Dropdown::showYesNo('show_dpo[show_title]', $config['show_dpo']['show_title']);
-        echo "</td>";
-        echo "</tr>";
-
-        echo "<tr class='tab_bg_1'>";
-        echo "<td style='padding-left: 50px;'>" . __("Show address", 'gdprropa') . "</td>";
-        echo "<td>";
-        Dropdown::showYesNo('show_dpo[show_address]', $config['show_dpo']['show_address']);
-        echo "</td>";
-        echo "</tr>";
-
-        echo "<tr class='tab_bg_1'>";
-        echo "<td style='padding-left: 50px;'>" . __("Show phone", 'gdprropa') . "</td>";
-        echo "<td>";
-        Dropdown::showYesNo('show_dpo[show_phone]', $config['show_dpo']['show_phone']);
-        echo "</td>";
-        echo "</tr>";
-
-        echo "<tr class='tab_bg_1'>";
-        echo "<td style='padding-left: 50px;'>" . __("Show email", 'gdprropa') . "</td>";
-        echo "<td>";
-        Dropdown::showYesNo('show_dpo[show_email]', $config['show_dpo']['show_email']);
-        echo "</td>";
-        echo "</tr>";
-        echo "</tbody></table>";
-
-        echo "</td>";
-        echo "</tr>";
-        echo "</tbody></table>";
-
-        echo "</td>";
-        echo "</tr>";
     }
 
     public static function showPrepareForm($report_type): void
     {
-        echo "<div class='glpi_tabs'>";
-        echo '<div class="center vertical ui-tabs ui-widget ui-widget-content
-                    ui-corner-all ui-tabs-vertical ui-helper-clearfix ui-corner-left">';
-        echo '<div class="ui-tabs-panel ui-widget-content ui-corner-bottom"
-                    aria-live="polite" role="tabpanel" aria-expanded="true" aria-hidden="false">';
-        echo '<div class="firstbloc">';
+        $config = self::getDefaultPrintOptions();
+        $config['report_type'] = $report_type;
 
-        self::showForm($report_type);
+        TemplateRenderer::getInstance()->display('@gdprropa/createpdf.prepare.html.twig', [
+            'config'                     => $config,
+            'report_type'                => $report_type,
+            'record_id'                  => -1,
+            'report_single_record'       => self::REPORT_SINGLE_RECORD,
+            'is_gdprowner_plugin_active' => CreatePDFBase::isGdprownerPluginActive(),
+            'type_name'                  => self::getTypeName(1),
+        ]);
 
-        echo "</div>";
-        echo "</div>";
-        echo "</div>";
-        echo "</div>";
         Html::footer();
     }
 
     public static function showForm($report_type, $record_id = -1): void
     {
-        global $CFG_GLPI;
+        $config = self::getDefaultPrintOptions();
+        $config['report_type'] = $report_type;
 
-        echo "<form name='form' method='GET' action=\"" . $CFG_GLPI['root_doc'] .
-            "/plugins/gdprropa/front/createpdf.php\" enctype='multipart/form-data'>";
-
-        echo "<div class='spaced' id='tabsbody'>";
-
-        echo "<table class='tab_cadre_fixe' id='mainformtable'>";
-        echo "<tbody>";
-        echo "<tr class='headerRow'>";
-        echo "<th colspan='3' class=''>" . __("PDF creation settings", 'gdprropa') . "</th>";
-        echo "</tr>";
-
-        $_config = CreatePDF::getDefaultPrintOptions();
-        $_config['report_type'] = $report_type;
-        CreatePDF::showConfigFormElements($_config);
-
-        echo "</table>";
-        echo "</div>";
-        echo "<input type='hidden' name='report_type' value=\"" . $report_type . "\">";
-        if ($report_type == CreatePDF::REPORT_SINGLE_RECORD) {
-            echo "<input type='hidden' name='record_id' value=\"" . $record_id . "\">";
-        }
-        echo "<input type='hidden' name='action' value=\"print\">";
-        echo "<input type='submit' class='submit' name='createpdf' value='" .
-            CreatePDF::getTypeName(1) . "' />";
-        Html::closeForm();
+        TemplateRenderer::getInstance()->display('@gdprropa/createpdf.form.html.twig', [
+            'config'                     => $config,
+            'report_type'                => $report_type,
+            'record_id'                  => $record_id,
+            'report_single_record'       => self::REPORT_SINGLE_RECORD,
+            'is_gdprowner_plugin_active' => CreatePDFBase::isGdprownerPluginActive(),
+            'type_name'                  => self::getTypeName(1),
+        ]);
     }
 
     protected function prepareControllerInfo(): array
@@ -523,34 +317,47 @@ class CreatePDF extends CreatePDFBase
             $include_deleted = [0];
         }
 
-        if ($include_recursive) {
-            $include = '
-                (`glpi_plugin_gdprropa_records`.`is_recursive` = 1 AND
-                `glpi_plugin_gdprropa_records`.`entities_id` IN (' . implode(',', $entities) . ')
-                ) OR (
-                `glpi_plugin_gdprropa_records`.`entities_id` = ' . $entity_id . '
-                )
-                ';
-        } else {
-            $include = '`glpi_plugin_gdprropa_records`.`entities_id` IN (' . implode(',', $entities) . ')';
-        }
-        $query = '
-            SELECT
-                `glpi_plugin_gdprropa_records`.*
-            FROM
-                `glpi_plugin_gdprropa_records`
-            LEFT JOIN
-                `glpi_entities` ON (`glpi_plugin_gdprropa_records`.`entities_id` = `glpi_entities`.`id`)
-            WHERE
-                ('
-                . $include .
-                ') AND (
-                    `glpi_plugin_gdprropa_records`.`is_deleted` IN (' . implode(',', $include_deleted) . ')
-                )
-            ORDER BY
-                `glpi_plugin_gdprropa_records`.`name`';
+        $entities = array_values($entities);
 
-        return $DB->request($query);
+        if ($include_recursive) {
+            $where = [
+                'OR' => [
+                    [
+                        'glpi_plugin_gdprropa_records.is_recursive' => 1,
+                        'glpi_plugin_gdprropa_records.entities_id'  => $entities,
+                    ],
+                    [
+                        'glpi_plugin_gdprropa_records.entities_id' => $entity_id,
+                    ],
+                ],
+            ];
+        } else {
+            $where = [
+                'glpi_plugin_gdprropa_records.entities_id' => $entities,
+            ];
+        }
+
+        return $DB->request([
+            'SELECT' => [
+                'glpi_plugin_gdprropa_records.*',
+            ],
+            'FROM' => 'glpi_plugin_gdprropa_records',
+            'LEFT JOIN' => [
+                'glpi_entities' => [
+                    'ON' => [
+                        'glpi_plugin_gdprropa_records' => 'entities_id',
+                        'glpi_entities'                => 'id',
+                    ],
+                ],
+            ],
+            'WHERE' => [
+                $where,
+                'glpi_plugin_gdprropa_records.is_deleted' => $include_deleted,
+            ],
+            'ORDER' => [
+                'glpi_plugin_gdprropa_records.name',
+            ],
+        ]);
     }
 
     protected function getControllerName(): string
@@ -1484,35 +1291,46 @@ class CreatePDF extends CreatePDFBase
             return;
         }
 
-        $query = '
-            SELECT
-                glpi_softwares.id AS software_id,
-                glpi_softwares.name AS software_name,
-                glpi_softwares.comment AS software_comment,
-                glpi_softwares.entities_id AS software_entities_id,
-                glpi_softwarecategories.name AS software_category_name,
-                glpi_softwarecategories.id AS softwarecategories_id,
-                glpi_softwarecategories.completename AS sotwarecategories_completename,
-                glpi_softwarecategories.comment AS softwarecategories_comment,
-                glpi_manufacturers.id AS manufacturer_id,
-                glpi_manufacturers.name AS manufacturer_name,
-                glpi_manufacturers.comment AS manufacturer_comment
-            FROM
-                glpi_plugin_gdprropa_records_softwares
-            LEFT JOIN
-                glpi_softwares
-                    ON (glpi_plugin_gdprropa_records_softwares.softwares_id = glpi_softwares.id)
-            LEFT JOIN
-                glpi_manufacturers
-                    ON (glpi_softwares.manufacturers_id = glpi_manufacturers.id)
-            LEFT JOIN
-                glpi_softwarecategories
-                    ON (glpi_softwares.softwarecategories_id = glpi_softwarecategories.id)
-            WHERE
-                glpi_plugin_gdprropa_records_softwares.plugin_gdprropa_records_id = ' . $record->fields['id'] . ' AND
-                glpi_softwares.is_deleted = 0
-            ';
-        $software_list = $DB->request($query);
+        $software_list = $DB->request([
+            'SELECT' => [
+                'glpi_softwares.id AS software_id',
+                'glpi_softwares.name AS software_name',
+                'glpi_softwares.comment AS software_comment',
+                'glpi_softwares.entities_id AS software_entities_id',
+                'glpi_softwarecategories.name AS software_category_name',
+                'glpi_softwarecategories.id AS softwarecategories_id',
+                'glpi_softwarecategories.completename AS sotwarecategories_completename',
+                'glpi_softwarecategories.comment AS softwarecategories_comment',
+                'glpi_manufacturers.id AS manufacturer_id',
+                'glpi_manufacturers.name AS manufacturer_name',
+                'glpi_manufacturers.comment AS manufacturer_comment',
+            ],
+            'FROM' => 'glpi_plugin_gdprropa_records_softwares',
+            'LEFT JOIN' => [
+                'glpi_softwares' => [
+                    'ON' => [
+                        'glpi_plugin_gdprropa_records_softwares' => 'softwares_id',
+                        'glpi_softwares'                         => 'id',
+                    ],
+                ],
+                'glpi_manufacturers' => [
+                    'ON' => [
+                        'glpi_softwares'     => 'manufacturers_id',
+                        'glpi_manufacturers' => 'id',
+                    ],
+                ],
+                'glpi_softwarecategories' => [
+                    'ON' => [
+                        'glpi_softwares'          => 'softwarecategories_id',
+                        'glpi_softwarecategories' => 'id',
+                    ],
+                ],
+            ],
+            'WHERE' => [
+                'glpi_plugin_gdprropa_records_softwares.plugin_gdprropa_records_id' => $record->fields['id'],
+                'glpi_softwares.is_deleted' => 0,
+            ],
+        ]);
 
         $this->writeInternal('<h2>' . __("Software", 'gdprropa') . '</h2>', [
             'linebefore' => 1
@@ -1591,7 +1409,10 @@ class CreatePDF extends CreatePDFBase
                         Dropdown::getDropdownName(Entity::getTable(), $item['software_entities_id']) . '</td>';
                 }
                 if ($this->print_options['show_assets_owners']) {
-                    $owner_info = PluginGdprownerOwner::getOwnerInfo($item['software_id'], Software::class);
+                    $owner_info = [];
+                    if (class_exists('\\PluginGdprownerOwner')) {
+                        $owner_info = \PluginGdprownerOwner::getOwnerInfo($item['software_id'], Software::class);
+                    }
                     if (empty($owner_info)) {
                         $owner = __("Not assigned", 'gdprropa');
                     } else {

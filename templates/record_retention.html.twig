@@ -1,0 +1,34 @@
+{#
+ # ---------------------------------------------------------------------
+ # GDPR Records of Processing Activities plugin for GLPI
+ # Copyright © 2020-2025 by Yild.
+ #
+ # https://github.com/yild/gdprropa
+ # ---------------------------------------------------------------------
+ #}
+
+{% extends "generic_show_form.html.twig" %}
+{% import 'components/form/fields_macros.html.twig' as fields %}
+
+{% block form_fields %}
+    <div id="gdprropa-record-retention" class="col-12">
+        <p class="text-center mb-2"><strong>{{ __("GDPR Article 30 1f", 'gdprropa') }}</strong></p>
+
+        {{ fields.dropdownArrayField('type', current_type, retention_types, __("Retention regulated by", 'gdprropa'), {
+            full_width: true,
+        }) }}
+
+        <div id="gdprropa-retention-type" class="ms-3">
+            {{ type_form_html|raw }}
+        </div>
+
+        {{ fields.textareaField('additional_info', item.fields['additional_info']|default(''), __("Additional information", 'gdprropa'), {
+            maxlength: 1000,
+            rows: 3,
+            full_width: true,
+        }) }}
+
+        {{ fields.hiddenField('plugin_gdprropa_records_id', record.fields['id']) }}
+        {{ fields.hiddenField('is_record_recursive', record.fields['is_recursive']) }}
+    </div>
+{% endblock %}

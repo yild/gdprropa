@@ -1,0 +1,13 @@
+{#
+ # ---------------------------------------------------------------------
+ # GDPR Records of Processing Activities plugin for GLPI
+ # Copyright © 2020-2025 by Yild.
+ #
+ # https://github.com/yild/gdprropa
+ # ---------------------------------------------------------------------
+ #}
+
+{% if consent_required %}
+    <label class="form-label">{{ __("Consent storage", 'gdprropa') }}</label>
+    <textarea class="form-control" name="consent_storage" maxlength="1000" rows="3">{{ consent_storage }}</textarea>
+{% endif %}

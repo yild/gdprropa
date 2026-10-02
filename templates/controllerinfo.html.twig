@@ -1,0 +1,79 @@
+{#
+ # ---------------------------------------------------------------------
+ # GDPR Records of Processing Activities plugin for GLPI
+ # Copyright © 2020-2025 by Yild.
+ #
+ # https://github.com/yild/gdprropa
+ # ---------------------------------------------------------------------
+ #}
+
+{% import 'components/form/basic_inputs_macros.html.twig' as inputs %}
+
+{% embed "generic_show_form.html.twig" %}
+    {% block form_fields %}
+        {% import 'components/form/fields_macros.html.twig' as fields %}
+
+        <div class="col-12 text-center">
+            <strong>{{ __("GDPR Article 30 1a", 'gdprropa') }}</strong>
+        </div>
+
+        {{ fields.dropdownField('User', 'users_id_representative', item.fields['users_id_representative'] ?? null, __("Legal representative", 'gdprropa'), {
+            right: 'all',
+        }) }}
+
+        {{ fields.dropdownField('User', 'users_id_dpo', item.fields['users_id_dpo'] ?? null, __("Data Protection Officer", 'gdprropa'), {
+            right: 'all',
+        }) }}
+
+        {{ fields.textField('controllername', item.fields['controllername'] ?? '', __("Controller Name", 'gdprropa'), {
+            full_width: true,
+            maxlength: 250,
+            required: true,
+        }) }}
+
+        <div class="col-12 text-center">
+            <strong>{{ __("Controller configuration - contract types", 'gdprropa') }}</strong>
+        </div>
+
+        {{ fields.dropdownField('ContractType', 'contracttypes_id_jointcontroller', item.fields['contracttypes_id_jointcontroller'] ?? null, __("Joint Controller Contract Type", 'gdprropa'), {
+            width: '75%',
+        }) }}
+
+        {{ fields.dropdownField('ContractType', 'contracttypes_id_processor', item.fields['contracttypes_id_processor'] ?? null, __("Processor Contract Type", 'gdprropa'), {
+            width: '75%',
+        }) }}
+
+        {{ fields.dropdownField('ContractType', 'contracttypes_id_thirdparty', item.fields['contracttypes_id_thirdparty'] ?? null, __("Thirdparty Contract Type", 'gdprropa'), {
+            width: '75%',
+        }) }}
+
+        {{ fields.dropdownField('ContractType', 'contracttypes_id_internal', item.fields['contracttypes_id_internal'] ?? null, __("Internal Contract Type", 'gdprropa'), {
+            width: '75%',
+        }) }}
+
+        {{ fields.dropdownField('ContractType', 'contracttypes_id_other', item.fields['contracttypes_id_other'] ?? null, __("Other Contract Type", 'gdprropa'), {
+            width: '75%',
+        }) }}
+    {% endblock %}
+{% endembed %}
+
+{% if config is not null %}
+    <div class="firstbloc">
+        <form method="GET" action="{{ config('root_doc') }}/plugins/gdprropa/front/createpdf.php">
+            <table class="tab_cadre_fixe">
+                <tbody>
+                    <tr class="headerRow">
+                        <th colspan="3">{{ __('PDF creation settings', 'gdprropa') }}</th>
+                    </tr>
+                    {% do call('GlpiPlugin\\Gdprropa\\CreatePDF::showConfigFormElements', [config]) %}
+                </tbody>
+            </table>
+            {{ inputs.hidden('report_type', config.report_type) }}
+            {{ inputs.hidden('entities_id', entity.fields['id']) }}
+            {{ inputs.hidden('action', 'print') }}
+            {{ inputs.submit('createpdf', __("Create Controller RoPA PDF for Entity", 'gdprropa'), 1) }}
+        </form>
+    </div>
+{% endif %}
+
+<p></p>

@@ -1,0 +1,47 @@
+{#
+ # ---------------------------------------------------------------------
+ # GDPR Records of Processing Activities plugin for GLPI
+ # Copyright © 2020-2025 by Yild.
+ #
+ # https://github.com/yild/gdprropa
+ # ---------------------------------------------------------------------
+ #}
+
+{% import 'components/form/basic_inputs_macros.html.twig' as inputs %}
+
+{% if canedit %}
+    <div class="firstbloc">
+        <form name="ticketitem_form{{ rand }}" id="ticketitem_form{{ rand }}" method="post" action="{{ form_url }}">
+            {{ inputs.hidden('_glpi_csrf_token', csrf_token()) }}
+            {{ inputs.hidden('plugin_gdprropa_records_id', record_id) }}
+            <table class="tab_cadre_fixe">
+                <tr class="tab_bg_2"><th>{{ __("Add Joint Controller/Processor", 'gdprropa') }}</th></tr>
+                <tr class="tab_bg_3"><td><center><strong>{{ __("GDPR Article 30 1d, 1e", 'gdprropa') }}</strong></center></td></tr>
+                <tr class="tab_bg_1">
+                    <td width="80%" class="center">
+                        {% if contracttypes_not_set_info is not empty %}
+                            {{ contracttypes_not_set_info|raw }}
+                        {% endif %}
+                        {% do call('GlpiPlugin\\Gdprropa\\Record_Contract::getContractsDropdown', [dropdown_options]) %}
+                        &nbsp;&nbsp;<input type="submit" name="add" value="{{ add_label }}" class="submit">
+                    </td>
+                </tr>
+                <tr><td width="20%" class="center"></td></tr>
+            </table>
+        </form>
+    </div>
+{% endif %}
+
+<div class="spaced">
+    {{ include('components/datatable.html.twig', {
+        'columns': columns,
+        'entries': entries,
+        'formatters': formatters,
+        'total_number': total_number,
+        'showmassiveactions': showmassiveactions,
+        'massiveactionparams': massiveactionparams,
+        'nofilter': true,
+        'nosort': true,
+        'use_pager': false,
+    }, with_context = false) }}
+</div>

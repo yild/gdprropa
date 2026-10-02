@@ -58,6 +58,10 @@
    </authors>
    <versions>
       <version>
+         <num>1.1.0</num>
+         <compatibility>11.0</compatibility>
+      </version>
+      <version>
          <num>1.0.3</num>
          <compatibility>10.0</compatibility>
       </version>
@@ -65,6 +69,7 @@
    <langs>
       <lang>en_GB</lang>
       <lang>pl_PL</lang>
+      <lang>fr_FR</lang>
    </langs>
    <license>GPL v3+</license>
    <tags>

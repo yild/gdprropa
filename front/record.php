@@ -50,9 +50,9 @@ use Session;
 include("../../../inc/includes.php");
 
 if (Session::getCurrentInterface() == 'central') {
-    Html::header(Record::getTypeName(2), $_SERVER['PHP_SELF'], 'management', Menu::class, "");
+    Html::header(Record::getTypeName(2), Record::getSearchURL(false), 'management', Menu::class, "");
 } else {
-    Html::helpHeader(Record::getTypeName(2), $_SERVER['PHP_SELF']);
+    Html::helpHeader(Record::getTypeName(2), Record::getSearchURL(false));
 }
 
 $record = new Record();

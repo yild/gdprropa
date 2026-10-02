@@ -44,16 +44,13 @@
 
 namespace GlpiPlugin\Gdprropa;
 
-use Ajax;
 use CommonDBTM;
 use Document_Item;
 use Dropdown;
-use Glpi\Toolbox\Sanitizer;
-use Html;
+use Glpi\Application\View\TemplateRenderer;
 use Log;
 use Notepad;
 use Session;
-use State;
 
 class Record extends CommonDBTM
 {
@@ -88,116 +85,34 @@ class Record extends CommonDBTM
 
     public function showForm($ID, $options = []): bool
     {
-        global $CFG_GLPI;
-
         $this->initForm($ID, $options);
-        $this->showFormHeader($options);
+        $options['canedit'] = $this->can($ID, UPDATE);
 
-        echo "<tr class='tab_bg_1'>";
-        echo "<td>" . __("Processing activity", 'gdprropa') . "</td>";
-        echo "<td colspan='2'>";
-        $processingActivity = Html::cleanInputText($this->fields['name']);
-        echo "<input type='text' style='width:98%' maxlength=250 name='name' required value='" .
-            $processingActivity . "'>";
-        echo "</td></tr>";
-
-        echo "<tr class='tab_bg_1'>";
-        echo "<td>" . __("Purpose (GDPR Article 30 1b)", 'gdprropa') . "</td>";
-        echo "<td colspan='2'>";
-        $purpose = Sanitizer::sanitize($this->fields['content']);
-        echo "<textarea style='width:98%' name='content' required maxlength='1000' rows='3'>" .
-            $purpose . "</textarea>";
-        echo "</td></tr>";
-
-        echo "<tr class='tab_bg_1'>";
-        echo "<td>" . __("Status") . "</td>";
-        echo "<td colspan='2'>";
-        State::dropdown([
-            'value' => $this->fields['states_id']
+        TemplateRenderer::getInstance()->display('@gdprropa/record.form.html.twig', [
+            'item'            => $this,
+            'params'          => $options,
+            'storage_mediums' => self::getAllStorageMediumArray(),
+            'pia_statuses'    => self::getAllPiaStatusArray(),
         ]);
-        echo "</td></tr>";
-
-        echo "<tr class='tab_bg_1'><td>" . __("Storage medium", 'gdprropa') . "</td>";
-        echo "<td colspan='2'>";
-        self::dropdownStorageMedium('storage_medium', $this->fields['storage_medium']);
-        echo "</td></tr>";
-        echo "<tr class='tab_bg_1'><td>" . __("PIA required", 'gdprropa') . "</td>";
-        echo "<td>";
-        $rand = Dropdown::showYesNo('pia_required', $this->fields['pia_required']);
-
-        $params = [
-            'pia_required' => '__VALUE__',
-            'pia_status' => $this->fields['pia_status']
-        ];
-        Ajax::updateItemOnSelectEvent(
-            "dropdown_pia_required$rand",
-            'pia_status_td',
-            $CFG_GLPI['root_doc'] . '/plugins/gdprropa/ajax/record_pia_required_dropdown.php',
-            $params
-        );
-
-        echo "<td colspan='2' id='pia_status_td'>";
-        Record::showPIAStatus($this->fields);
-        echo "</td>";
-
-        echo "</tr>";
-        echo "<tr class='tab_bg_1'><td>" . __("Consent required", 'gdprropa') . "</td>";
-        echo "<td colspan='2'>";
-        $rand = Dropdown::showYesNo('consent_required', $this->fields['consent_required']);
-
-        $params = [
-            'consent_required' => '__VALUE__',
-            'consent_storage' => $this->fields['consent_storage']
-        ];
-        Ajax::updateItemOnSelectEvent(
-            "dropdown_consent_required$rand",
-            'consent_storage_tr',
-            $CFG_GLPI['root_doc'] . '/plugins/gdprropa/ajax/record_consent_required_dropdown.php',
-            $params
-        );
-
-        echo "</td></tr>";
-
-        echo "<tr class='tab_bg_1' id='consent_storage_tr'>";
-        Record::showConsentRequired($this->fields);
-        echo "</tr>";
-
-        echo "<tr class='tab_bg_1'>";
-        echo "<td>" . __("First entry date", 'gdprropa') . "</td>";
-        echo "<td colspan='2'>";
-        Html::showDateField('first_entry_date', ['value' => $this->fields['first_entry_date']]);
-        echo "</td></tr>";
-
-        echo "<tr class='tab_bg_1'>";
-        echo "<td>" . __("Additional information", 'gdprropa') . "</td>";
-        echo "<td colspan='2'>";
-        $additional_info = Sanitizer::sanitize($this->fields['additional_info']);
-        echo "<textarea style='width: 98%;' name='additional_info' maxlength='1000' rows='3'>" .
-            $additional_info . "</textarea>";
-        echo "</td></tr>";
-        $this->showFormButtons($options);
 
         return true;
     }
 
     public static function showPIAStatus($data = []): void
     {
-        if ($data['pia_required']) {
-            echo "&nbsp;&nbsp;&nbsp;" . __("Status") . "&nbsp;&nbsp;";
-            self::dropdownPiaStatus('pia_status', $data['pia_status']);
-        }
+        TemplateRenderer::getInstance()->display('@gdprropa/record.pia_status.html.twig', [
+            'pia_required' => $data['pia_required'] ?? 0,
+            'pia_status'   => $data['pia_status'] ?? 0,
+            'pia_statuses' => self::getAllPiaStatusArray(),
+        ]);
     }
 
     public static function showConsentRequired($data = []): void
     {
-        if ($data['consent_required']) {
-            echo "<td>" . __("Consent storage", 'gdprropa') . "</td>";
-            echo "<td colspan='2'>";
-            $consent_storage = Sanitizer::sanitize($data['consent_storage']);
-            echo "<textarea style='width: 98%;' name='consent_storage' maxlength='1000' rows='3'>" .
-                $consent_storage . "</textarea>";
-            echo "</td>";
-        }
+        TemplateRenderer::getInstance()->display('@gdprropa/record.consent_storage.html.twig', [
+            'consent_required' => $data['consent_required'] ?? 0,
+            'consent_storage'  => $data['consent_storage'] ?? '',
+        ]);
     }
 
     public function defineTabs($options = []): array

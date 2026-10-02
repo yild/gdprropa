@@ -50,12 +50,8 @@ include("../../../inc/includes.php");
 
 Plugin::load('gdprropa', true);
 
-if (strpos($_SERVER['PHP_SELF'], 'record_retention_retention_type_dropdown.php')) {
-    $AJAX_INCLUDE = 1;
-
-    header("Content-Type: text/html; charset=UTF-8");
-    Html::header_nocache();
-}
+header("Content-Type: text/html; charset=UTF-8");
+Html::header_nocache();
 
 if (array_key_exists('type', $_POST)) {
     switch ($_POST['type']) {

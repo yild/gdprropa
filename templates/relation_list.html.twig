@@ -1,0 +1,46 @@
+{#
+ # ---------------------------------------------------------------------
+ # GDPR Records of Processing Activities plugin for GLPI
+ # Copyright © 2020-2025 by Yild.
+ #
+ # https://github.com/yild/gdprropa
+ # ---------------------------------------------------------------------
+ #}
+
+{% import 'components/form/basic_inputs_macros.html.twig' as inputs %}
+
+{% if canedit %}
+    <div class="firstbloc">
+        <form method="post" action="{{ form_url }}">
+            {{ inputs.hidden('_glpi_csrf_token', csrf_token()) }}
+            {{ inputs.hidden('plugin_gdprropa_records_id', record_id) }}
+            <table class="tab_cadre_fixe">
+                {% if add_title is not empty %}
+                    <tr class="tab_bg_2"><th>{{ add_title }}</th></tr>
+                {% endif %}
+                {% if article is not empty %}
+                    <tr class="tab_bg_3"><td><center><strong>{{ article }}</strong></center></td></tr>
+                {% endif %}
+                <tr class="tab_bg_1"><td width="80%" class="center">
+                    {% do call(add_dropdown_callable, [add_dropdown_options]) %}
+                </td></tr>
+                <tr><td width="20%" class="center">
+                    {{ inputs.submit('add', _x('button', 'Add'), 1, {class: 'btn btn-primary'}) }}
+                </td></tr>
+            </table>
+        </form>
+    </div>
+{% endif %}
+
+{% include 'components/datatable.html.twig' with {
+    datatable_id: datatable_id,
+    columns: columns,
+    formatters: formatters,
+    entries: entries,
+    total_number: total_number,
+    showmassiveactions: showmassiveactions,
+    massiveactionparams: massiveactionparams,
+    nofilter: true,
+    nosort: true,
+    use_pager: false
+} only %}

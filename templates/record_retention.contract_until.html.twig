@@ -1,0 +1,21 @@
+{#
+ # ---------------------------------------------------------------------
+ # GDPR Records of Processing Activities plugin for GLPI
+ # Copyright © 2020-2025 by Yild.
+ #
+ # https://github.com/yild/gdprropa
+ # ---------------------------------------------------------------------
+ #}
+
+{% import 'components/form/fields_macros.html.twig' as fields %}
+
+{% set value = data['contract_retention_value'] ?? null %}
+{% set scale = data['contract_retention_scale'] ?? null %}
+{% set after = data['contract_after_end_of'] ?? null %}
+
+<div class="ms-3">
+    {{ fields.numberField('contract_retention_value', value, __("Period", 'gdprropa')) }}
+    {% set scale_options = scale is not null ? {value: scale} : {} %}
+    {% do call('GlpiPlugin\\Gdprropa\\Record_Retention::dropdownRetentionScheduleScales', ['contract_retention_scale', scale_options]) %}
+    {{ fields.dropdownYesNo('contract_after_end_of', after, __("After contract is terminated", 'gdprropa')) }}
+</div>

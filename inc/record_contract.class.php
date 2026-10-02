@@ -54,6 +54,8 @@ use Contract;
 use DBmysqlIterator;
 use Dropdown;
 use Entity;
+use Glpi\Application\View\TemplateRenderer;
+use Glpi\DBAL\QueryExpression;
 use Html;
 use Infocom;
 use Supplier;
@@ -167,168 +169,112 @@ class Record_Contract extends CommonDBRelation
             $used[$data['id']] = $data['id'];
         }
 
-        if ($canedit) {
-            echo "<div class='firstbloc'>";
-            echo "<form name='ticketitem_form$rand' id='ticketitem_form$rand' method='post'
-                action='" . Toolbox::getItemTypeFormURL(__class__) . "'>";
-            echo "<input type='hidden' name='plugin_gdprropa_records_id' value='$id' />";
+        $contracttypes = ControllerInfo::getContractTypes($record->fields['entities_id']);
 
-            echo "<table class='tab_cadre_fixe'>";
-            echo "<tr class='tab_bg_2'><th>" . __("Add Joint Controller/Processor", 'gdprropa') . "</th></tr>";
-            echo "<tr class='tab_bg_3'><td><center><strong>";
-            echo __("GDPR Article 30 1d, 1e", 'gdprropa');
-            echo "</strong></center></td></tr>";
-            echo "<tr class='tab_bg_1'><td width='80%' class='center'>";
-
-            $contractypes = ControllerInfo::getContractTypes($record->fields['entities_id']);
-
-            $info = Record_Contract::showContractTypesNotSetInfo(
-                $contractypes,
-                $record->fields['entities_id']
-            );
-            if (!empty($info)) {
-                echo $info;
+        $entries = [];
+        foreach ($items_list as $data) {
+            $link = $data['name'];
+            if ($_SESSION['glpiis_ids_visible'] || empty($data['name'])) {
+                $link = sprintf(__("%1\$s (%2\$s)"), $link, $data['id']);
             }
+            $name = "<a href=\"" . Contract::getFormURLWithID($data['id']) . "\">" .
+                htmlescape($link) . "</a>";
 
-            Record_Contract::getContractsDropdown([
-                'name' => 'contracts_id',
-                'entity' => $record->fields['is_recursive'] ?
-                    getSonsOf('glpi_entities', $record->fields['entities_id']) : $record->fields['entities_id'],
-                'entity_sons' => !$record->fields['is_recursive'],
-                'used' => $used,
-                'expired' => Config::getConfig('system', 'allow_select_expired_contracts'),
-                'nochecklimit' => true,
-                'contracttypes' => $contractypes,
-            ]);
-            echo "&nbsp;&nbsp;<input type='submit' name='add' value=\"" . _sx('button', 'Add') . "\" class='submit'>";
-
-            echo "</td></tr><tr><td width='20%' class='center'>";
-            echo "</td></tr>";
-            echo "</table>";
-            Html::closeForm();
-            echo "</div>";
-        }
-
-        if ($iterator) {
-            echo "<div class='spaced'>";
-            if ($canedit && $number) {
-                $massive_action_form_id = 'mass' . str_replace('\\', '', static::class) . $rand;
-                Html::openMassiveActionsForm($massive_action_form_id);
-                $massive_action_params = [
-                    'container' => 'mass' . __class__ . $rand,
-                    'num_displayed' => min($_SESSION['glpilist_limit'], $number)
-                ];
-                Html::showMassiveActions($massive_action_params);
-            }
-            echo "<table class='tab_cadre_fixehov'>";
-
-            $header_begin = "<tr>";
-            $header_top = '';
-            $header_bottom = '';
-            $header_end = '';
-
-            if ($canedit && $number) {
-                $header_begin .= "<th width='10'>";
-                $header_top .= Html::getCheckAllAsCheckbox('mass' . __class__ . $rand);
-                $header_bottom .= Html::getCheckAllAsCheckbox('mass' . __class__ . $rand);
-                $header_end .= "</th>";
-            }
-
-            $header_end .= "<th>" . __("Name") . "</th>";
-            $header_end .= "<th>" . __("Supplier") . "</th>";
-            $header_end .= "<th>" . __("Type") . "</th>";
-            $header_end .= "<th>" . __("Number") . "</th>";
-            $header_end .= "<th>" . __("Begin date") . "</th>";
-            $header_end .= "<th>" . __("Introduced in", 'gdprropa') . "</th>";
-            $header_end .= "<th>" . __("Comment") . "</th>";
-            $header_end .= "<th>" . __("Expiry") . "</th>";
-            $header_end .= "</tr>";
-
-            echo $header_begin . $header_top . $header_end;
-            foreach ($items_list as $data) {
-                echo "<tr class='tab_bg_1'>";
-
-                if ($canedit && $number) {
-                    echo "<td width='10'>";
-                    Html::showMassiveActionCheckBox(__class__, $data['linkid']);
-                    echo "</td>";
-                }
-
-                $link = $data['name'];
-                if ($_SESSION['glpiis_ids_visible'] || empty($data['name'])) {
-                    $link = sprintf(__("%1\$s (%2\$s)"), $link, $data['id']);
-                }
-                $name = "<a href=\"" . Contract::getFormURLWithID($data['id']) . "\">" . $link . "</a>";
-
-                echo "<td class='left" . (isset($data['is_deleted']) && $data['is_deleted'] ? " tab_bg_2_2'" : "'");
-                echo ">" . $name . "</td>";
-
-                $iterator_2 = $DB->request([
-                    'SELECT' => ['glpi_suppliers.id', 'glpi_suppliers.name'],
-                    'FROM' => 'glpi_suppliers',
-                    'INNER JOIN' => [
-                        'glpi_contracts_suppliers' => [
-                            'ON' => [
-                                'glpi_contracts_suppliers' => 'suppliers_id',
-                                'glpi_suppliers' => 'id'
-                            ]
+            $iterator_2 = $DB->request([
+                'SELECT' => ['glpi_suppliers.id', 'glpi_suppliers.name'],
+                'FROM' => 'glpi_suppliers',
+                'INNER JOIN' => [
+                    'glpi_contracts_suppliers' => [
+                        'ON' => [
+                            'glpi_contracts_suppliers' => 'suppliers_id',
+                            'glpi_suppliers' => 'id'
                         ]
-                    ],
-                    'WHERE' => ['contracts_id' => $data['id']]
-                ]);
+                    ]
+                ],
+                'WHERE' => ['contracts_id' => $data['id']]
+            ]);
 
-                $out = "";
+            $suppliers = "";
 
-                foreach ($iterator_2 as $data_2) {
-                    $link_2 = $data_2['name'];
+            foreach ($iterator_2 as $data_2) {
+                $link_2 = $data_2['name'];
 
-                    if ($_SESSION['glpiis_ids_visible'] || empty($data_2['name'])) {
-                        $link_2 = sprintf(__("%1\$s (%2\$s)"), $link_2, $data_2['id']);
-                    }
-
-                    $out .= "<a href=\"" . Supplier::getFormURLWithID($data_2['id']) . "\">" . $link_2 . "</a><br>";
+                if ($_SESSION['glpiis_ids_visible'] || empty($data_2['name'])) {
+                    $link_2 = sprintf(__("%1\$s (%2\$s)"), $link_2, $data_2['id']);
                 }
 
-                echo "<td class='center'>" . $out . "</td>";
-                echo "<td class='center'>" . Dropdown::getDropdownName
-                    (
-                        'glpi_contracttypes',
-                        $data['contracttypes_id']
-                    ) . "</td>";
-                echo "<td>" . $data['num'] . "</td>";
-                echo "<td class='left'>" . $data['begin_date'] . "</td>";
+                $suppliers .= "<a href=\"" . Supplier::getFormURLWithID($data_2['id']) . "\">" .
+                    htmlescape($link_2) . "</a><br>";
+            }
 
-                echo "<td class='left'>";
-                echo Dropdown::getDropdownName(
-                    Entity::getTable(),
-                    $data['entities_id']
+            $expiry = '';
+            if ($data['notice'] > 0) {
+                $expiry = Infocom::getWarrantyExpir(
+                    $data['begin_date'],
+                    $data['duration'],
+                    $data['notice'],
+                    true
                 );
-                echo "</td>";
-
-                echo "<td class='left'>" . $data['comment'] . "</td>";
-
-                echo "<td>";
-                if ($data["notice"] > 0) {
-                    echo Infocom::getWarrantyExpir($data['begin_date'], $data['duration'], $data['notice'], true);
-                }
-                echo "</td>";
-
-                echo "</tr>";
             }
 
-            if ($iterator->count() > 10) {
-                echo $header_begin . $header_bottom . $header_end;
-            }
-            echo "</table>";
-
-            if ($canedit && $number) {
-                $massive_action_params['ontop'] = false;
-                Html::showMassiveActions($massive_action_params);
-                Html::closeForm();
-            }
-
-            echo "</div>";
+            $entries[] = [
+                'itemtype'   => self::class,
+                'id'         => $data['linkid'],
+                'row_class'  => !empty($data['is_deleted']) ? 'tab_bg_2_2' : '',
+                'name'       => $name,
+                'supplier'   => $suppliers,
+                'type'       => Dropdown::getDropdownName('glpi_contracttypes', $data['contracttypes_id']),
+                'num'        => $data['num'],
+                'begin_date' => $data['begin_date'],
+                'entity'     => Dropdown::getDropdownName(Entity::getTable(), $data['entities_id']),
+                'comment'    => $data['comment'],
+                'expiry'     => $expiry,
+            ];
         }
+
+        TemplateRenderer::getInstance()->display('@gdprropa/record_contract.html.twig', [
+            'canedit'                    => $canedit,
+            'rand'                       => $rand,
+            'record_id'                  => $id,
+            'form_url'                   => Toolbox::getItemTypeFormURL(self::class),
+            'add_label'                  => _sx('button', 'Add'),
+            'contracttypes_not_set_info' => self::showContractTypesNotSetInfo(
+                $contracttypes,
+                $record->fields['entities_id']
+            ),
+            'dropdown_options'           => [
+                'name'          => 'contracts_id',
+                'entity'        => $record->fields['is_recursive'] ?
+                    getSonsOf('glpi_entities', $record->fields['entities_id']) : $record->fields['entities_id'],
+                'entity_sons'   => !$record->fields['is_recursive'],
+                'used'          => $used,
+                'expired'       => Config::getConfig('system', 'allow_select_expired_contracts'),
+                'nochecklimit'  => true,
+                'contracttypes' => $contracttypes,
+            ],
+            'columns'                    => [
+                'name'       => __("Name"),
+                'supplier'   => __("Supplier"),
+                'type'       => __("Type"),
+                'num'        => __("Number"),
+                'begin_date' => __("Begin date"),
+                'entity'     => __("Introduced in", 'gdprropa'),
+                'comment'    => __("Comment"),
+                'expiry'     => __("Expiry"),
+            ],
+            'entries'                    => $entries,
+            'formatters'                 => [
+                'name'     => 'raw_html',
+                'supplier' => 'raw_html',
+                'expiry'   => 'raw_html',
+            ],
+            'total_number'               => $number,
+            'showmassiveactions'         => $canedit && $number,
+            'massiveactionparams'        => [
+                'container'     => 'mass' . str_replace('\\', '', self::class) . $rand,
+                'num_displayed' => min($_SESSION['glpilist_limit'], $number),
+            ],
+        ]);
 
         return true;
     }
@@ -408,60 +354,93 @@ class Record_Contract extends CommonDBRelation
             }
         }
 
-        $entrest = "";
-        $idrest = "";
-        $expired = "";
-        $contracttypes = "";
-        if ($p['entity'] >= 0) {
-            $entrest = getEntitiesRestrictRequest("AND", "glpi_contracts", "entities_id", $p['entity'], true);
+        $query = [
+            'SELECT' => [
+                'glpi_contracts.id AS id',
+                'glpi_contracts.name AS contracts_name',
+                'glpi_contracts.num AS contracts_num',
+                'glpi_contracts.entities_id AS entities_id',
+                'glpi_contracts.begin_date AS contracts_begin_date',
+                'glpi_contracts.max_links_allowed AS max_links_allowed',
+                'glpi_contracttypes.name AS contracttypes_names',
+                new QueryExpression(
+                    'GROUP_CONCAT(DISTINCT `glpi_suppliers`.`name`) AS `suppliers_names`'
+                ),
+            ],
+            'FROM' => 'glpi_contracts',
+            'INNER JOIN' => [
+                'glpi_contracttypes' => [
+                    'ON' => [
+                        'glpi_contracttypes' => 'id',
+                        'glpi_contracts'     => 'contracttypes_id',
+                    ],
+                ],
+            ],
+            'LEFT JOIN' => [
+                'glpi_entities' => [
+                    'ON' => [
+                        'glpi_contracts' => 'entities_id',
+                        'glpi_entities'  => 'id',
+                    ],
+                ],
+                'glpi_contracts_suppliers' => [
+                    'ON' => [
+                        'glpi_contracts'           => 'id',
+                        'glpi_contracts_suppliers' => 'contracts_id',
+                    ],
+                ],
+                'glpi_suppliers' => [
+                    'ON' => [
+                        'glpi_contracts_suppliers' => 'suppliers_id',
+                        'glpi_suppliers'           => 'id',
+                    ],
+                ],
+            ],
+            'WHERE' => [
+                'glpi_contracts.is_deleted'  => 0,
+                'glpi_contracts.is_template' => 0,
+            ],
+            'GROUPBY' => 'glpi_contracts.id',
+            'ORDER' => [
+                'glpi_entities.completename',
+                'glpi_contracts.name ASC',
+                'glpi_contracts.begin_date DESC',
+            ],
+        ];
+
+        if (!($p['entity'] < 0)) {
+            $query['WHERE'][] = getEntitiesRestrictCriteria(
+                'glpi_contracts',
+                'entities_id',
+                $p['entity'],
+                true
+            );
         }
         if (count($p['used'])) {
-            $idrest = " AND `glpi_contracts`.`id` NOT IN (" . implode(",", $p['used']) . ") ";
+            $query['WHERE'][] = ['NOT' => ['glpi_contracts.id' => array_values($p['used'])]];
         }
         if (!$p['expired']) {
-            $expired = " AND (DATEDIFF(ADDDATE(`glpi_contracts`.`begin_date`, INTERVAL
+            $query['WHERE'][] = new QueryExpression(
+                "DATEDIFF(ADDDATE(`glpi_contracts`.`begin_date`, INTERVAL
                         `glpi_contracts`.`duration` MONTH), CURDATE()) > '0'
                         OR `glpi_contracts`.`begin_date` IS NULL
                         OR (`glpi_contracts`.`duration` = 0
                         AND DATEDIFF(`glpi_contracts`.`begin_date`, CURDATE() ) < '0' )
-                        OR `glpi_contracts`.`renewal` = 1)";
+                        OR `glpi_contracts`.`renewal` = 1"
+            );
         }
         if (isset($p['contracttypes']) && count($p['contracttypes'])) {
-            $contracttypes = " AND `glpi_contracts`.`contracttypes_id` IN (" . implode(",", $p['contracttypes']) . ")";
+            $query['WHERE'][] = [
+                'glpi_contracts.contracttypes_id' => array_values($p['contracttypes'])
+            ];
         }
-        $query = "SELECT
-                  `glpi_contracts`.`id` AS `id`,
-                  `glpi_contracts`.`name` AS `contracts_name`,
-                  `glpi_contracts`.`num` AS `contracts_num`,
-                  `glpi_contracts`.`entities_id` AS `entities_id`,
-                  `glpi_contracts`.`begin_date` AS `contracts_begin_date`,
-                  `glpi_contracts`.`max_links_allowed` AS `max_links_allowed`,
-                  `glpi_contracttypes`.`name` AS `contracttypes_names`,
-                  GROUP_CONCAT(DISTINCT `glpi_suppliers`.`name`) `suppliers_names`
-               FROM `glpi_contracttypes`, `glpi_contracts`
-                  LEFT JOIN `glpi_entities`
-                     ON (`glpi_contracts`.`entities_id` = `glpi_entities`.`id`)
-                  LEFT JOIN `glpi_contracts_suppliers`
-                     ON (`glpi_contracts`.`id` = `glpi_contracts_suppliers`.`contracts_id`)
-                  LEFT JOIN `glpi_suppliers`
-                     ON (`glpi_contracts_suppliers`.`suppliers_id` = `glpi_suppliers`.`id`)
-               WHERE
-                  `glpi_contracts`.`is_deleted` = 0 AND
-                  `glpi_contracts`.`is_template` = 0 AND
-                  `glpi_contracts`.`contracttypes_id` = `glpi_contracttypes`.`id`
-                  $contracttypes
-                  $entrest $idrest $expired
-               GROUP BY
-                  `glpi_contracts`.`id`
-               ORDER BY `glpi_entities`.`completename`,
-                  `glpi_contracts`.`name` ASC,
-                  `glpi_contracts`.`begin_date` DESC";
-        $result = $DB->query($query);
+
+        $result = $DB->request($query);
 
         $group = '';
         $prev = -1;
         $values = [];
-        while ($data = $DB->fetchAssoc($result)) {
+        foreach ($result as $data) {
             if (
                 $p['nochecklimit'] ||
                 ($data['max_links_allowed'] == 0) ||
@@ -586,11 +565,13 @@ class Record_Contract extends CommonDBRelation
         ];
 
         if (!$get_expired) {
-            $query['WHERE'][] = "DATEDIFF(ADDDATE(`glpi_contracts`.`begin_date`,
+            $query['WHERE'][] = new QueryExpression(
+                "DATEDIFF(ADDDATE(`glpi_contracts`.`begin_date`,
                 INTERVAL `glpi_contracts`.`duration` MONTH), CURDATE()) > '0' OR
                 `glpi_contracts`.`begin_date` IS NULL OR (`glpi_contracts`.`duration` = 0 AND
                 DATEDIFF(`glpi_contracts`.`begin_date`, CURDATE() ) < '0' ) OR
-                `glpi_contracts`.`renewal` = 1";
+                `glpi_contracts`.`renewal` = 1"
+            );
         }
         return $DB->request($query);
     }

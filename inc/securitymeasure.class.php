@@ -45,6 +45,7 @@ namespace GlpiPlugin\Gdprropa;
 
 use CommonDropdown;
 use Dropdown;
+use Glpi\DBAL\QueryExpression;
 use Session;
 
 class SecurityMeasure extends CommonDropdown
@@ -203,41 +204,47 @@ class SecurityMeasure extends CommonDropdown
 
         if (!$error) {
             $entities = getAncestorsOf('glpi_entities', $p['entity']);
-            if (is_array($p['entity'])) {
-                foreach ($p['entity'] as $ent) {
-                    $entities[] = $ent;
-                }
-                $entitiesStr2 = implode(',', $p['entity']);
-            } else {
-                $entitiesStr2 = (string)$p['entity'];
-            }
             $entities = array_unique($entities);
-            $entitiesStr = implode(',', $entities);
+            $entities_ids = array_values($entities);
+            $entity_ids = is_array($p['entity'])
+                ? array_values($p['entity'])
+                : [(int) $p['entity']];
 
-
-            $query = '
-                SELECT
-                   `glpi_plugin_gdprropa_securitymeasures`.`id`,
-                   `glpi_plugin_gdprropa_securitymeasures`.`name`,
-                   `glpi_plugin_gdprropa_securitymeasures`.`type`,
-                   `glpi_plugin_gdprropa_securitymeasures`.`entities_id`,
-                   `glpi_entities`.`completename`
-                FROM
-                   `glpi_plugin_gdprropa_securitymeasures`
-                LEFT JOIN
-                   `glpi_entities` ON (`glpi_plugin_gdprropa_securitymeasures`.`entities_id` = `glpi_entities`.`id`)
-                WHERE
-                   (
-                      (`glpi_plugin_gdprropa_securitymeasures`.`is_recursive` = 1 AND
-                       `glpi_plugin_gdprropa_securitymeasures`.`entities_id` IN
-                            (' . $entitiesStr . ')
-                      ) OR (
-                       `glpi_plugin_gdprropa_securitymeasures`.`entities_id` IN (' . $entitiesStr2 . ')
-                      )
-                   )
-                ORDER BY
-                   FIELD(`glpi_plugin_gdprropa_securitymeasures`.`entities_id`, 4) DESC,
-                   `glpi_plugin_gdprropa_securitymeasures`.`type`';
+            $query = [
+                'SELECT' => [
+                    'glpi_plugin_gdprropa_securitymeasures.id',
+                    'glpi_plugin_gdprropa_securitymeasures.name',
+                    'glpi_plugin_gdprropa_securitymeasures.type',
+                    'glpi_plugin_gdprropa_securitymeasures.entities_id',
+                    'glpi_entities.completename',
+                ],
+                'FROM' => 'glpi_plugin_gdprropa_securitymeasures',
+                'LEFT JOIN' => [
+                    'glpi_entities' => [
+                        'ON' => [
+                            'glpi_plugin_gdprropa_securitymeasures' => 'entities_id',
+                            'glpi_entities'                          => 'id',
+                        ],
+                    ],
+                ],
+                'WHERE' => [
+                    'OR' => [
+                        [
+                            'glpi_plugin_gdprropa_securitymeasures.is_recursive'  => 1,
+                            'glpi_plugin_gdprropa_securitymeasures.entities_id'   => $entities_ids,
+                        ],
+                        [
+                            'glpi_plugin_gdprropa_securitymeasures.entities_id'   => $entity_ids,
+                        ],
+                    ],
+                ],
+                'ORDER' => [
+                    new QueryExpression(
+                        'FIELD(`glpi_plugin_gdprropa_securitymeasures`.`entities_id`, 4) DESC'
+                    ),
+                    'glpi_plugin_gdprropa_securitymeasures.type',
+                ],
+            ];
 
             $types = self::getAllTypesArray();
 
