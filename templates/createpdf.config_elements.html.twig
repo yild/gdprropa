@@ -1,0 +1,187 @@
+{#
+ # ---------------------------------------------------------------------
+ # GDPR Records of Processing Activities plugin for GLPI
+ # Copyright © 2020-2025 by Yild.
+ #
+ # https://github.com/yild/gdprropa
+ # ---------------------------------------------------------------------
+ #}
+
+{% set report_type = config['report_type']|default(report_single_record) %}
+
+<tr class="tab_bg_1">
+    <td width="25%">{{ __("Show 'introduced in'", 'gdprropa') }}</td>
+    <td width="75%">
+        {% do call('Dropdown::showYesNo', ['show_inherited_from', config['show_inherited_from']]) %}
+    </td>
+</tr>
+
+<tr class="tab_bg_1">
+    <td>{{ __("Show comments", 'gdprropa') }}</td>
+    <td>
+        {% do call('Dropdown::showYesNo', ['show_comments', config['show_comments']]) %}
+    </td>
+</tr>
+
+{% if report_type != report_single_record %}
+    <tr class="tab_bg_1">
+        <td>{{ __("Show deleted records", 'gdprropa') }}</td>
+        <td>
+            {% do call('Dropdown::showYesNo', ['show_deleted_records_for_entity', config['show_deleted_records_for_entity']]) %}
+        </td>
+    </tr>
+    <tr class="tab_bg_1">
+        <td>{{ __("Show legal representative and DPO for each record", 'gdprropa') }}</td>
+        <td>
+            {% do call('Dropdown::showYesNo', ['show_representative_dpo_per_record', config['show_representative_dpo_per_record']]) %}
+        </td>
+    </tr>
+{% endif %}
+
+{% if is_gdprowner_plugin_active %}
+    <tr class="tab_bg_1">
+        <td>{{ __("Show record owner information", 'gdprropa') }}</td>
+        <td>
+            {% do call('Dropdown::showYesNo', ['show_record_owner', config['show_record_owner']]) %}
+        </td>
+    </tr>
+
+    <tr class="tab_bg_1">
+        <td>{{ __("Show assets owners", 'gdprropa') }}</td>
+        <td>
+            {% do call('Dropdown::showYesNo', ['show_assets_owners', config['show_assets_owners']]) %}
+        </td>
+    </tr>
+{% endif %}
+
+<tr class="tab_bg_1">
+    <td>{{ __("Show full personal data category list", 'gdprropa') }}</td>
+    <td>
+        {% do call('Dropdown::showYesNo', ['show_full_personaldatacategorylist', config['show_full_personaldatacategorylist']]) %}
+    </td>
+</tr>
+
+<tr class="tab_bg_1">
+    <td>{{ __("Show expired contracts", 'gdprropa') }}</td>
+    <td>
+        {% do call('Dropdown::showYesNo', ['show_expired_contracts', config['show_expired_contracts']]) %}
+    </td>
+</tr>
+
+<tr class="tab_bg_1">
+    <td>{{ __("Show contracts types header if empty list", 'gdprropa') }}</td>
+    <td>
+        {% do call('Dropdown::showYesNo', ['show_contracs_types_header_if_empty', config['show_contracs_types_header_if_empty']]) %}
+    </td>
+</tr>
+
+<tr class="tab_bg_1">
+    <td>{{ __("Show 'is deleted' information in info header", 'gdprropa') }}</td>
+    <td>
+        {% do call('Dropdown::showYesNo', ['show_is_deleted_header', config['show_is_deleted_header']]) %}
+    </td>
+</tr>
+
+<tr class="tab_bg_1">
+    <td>{{ __("Show print date/time", 'gdprropa') }}</td>
+    <td>
+        {% do call('Dropdown::showYesNo', ['show_print_date_time', config['show_print_date_time']]) %}
+    </td>
+</tr>
+
+<tr class="tab_bg_1">
+    <td>{{ __("Page orientation", 'gdprropa') }}</td>
+    <td colspan="2">
+        {% do call('Dropdown::showFromArray', ['page_orientation', {
+            'P': __("Portrait", 'gdprropa'),
+            'L': __("Landscape", 'gdprropa'),
+        }, {
+            'value': config['page_orientation'],
+            'display': true,
+        }]) %}
+    </td>
+</tr>
+
+<tr class="tab_bg_1">
+    <td>{{ __("Show record status in info header", 'gdprropa') }}</td>
+    <td>
+        {% do call('Dropdown::showYesNo', ['show_status_in_header', config['show_status_in_header']]) %}
+    </td>
+</tr>
+
+<tr class="tab_bg_1">
+    <td colspan="2">
+        <table width="100%" align="left"><tbody>
+            <tr>
+                <td width="50%">
+                    <table><tbody>
+                        <tr class="tab_bg_1">
+                            <td width="75%">{{ __("Show legal representative", 'gdprropa') }}</td>
+                            <td width="25%">
+                                {% do call('Dropdown::showYesNo', ['show_representative[show]', config['show_representative']['show']]) %}
+                            </td>
+                        </tr>
+                        <tr class="tab_bg_1">
+                            <td style="padding-left: 50px;">{{ __("Show title", 'gdprropa') }}</td>
+                            <td>
+                                {% do call('Dropdown::showYesNo', ['show_representative[show_title]', config['show_representative']['show_title']]) %}
+                            </td>
+                        </tr>
+                        <tr class="tab_bg_1">
+                            <td style="padding-left: 50px;">{{ __("Show address", 'gdprropa') }}</td>
+                            <td>
+                                {% do call('Dropdown::showYesNo', ['show_representative[show_address]', config['show_representative']['show_address']]) %}
+                            </td>
+                        </tr>
+                        <tr class="tab_bg_1">
+                            <td style="padding-left: 50px;">{{ __("Show phone", 'gdprropa') }}</td>
+                            <td>
+                                {% do call('Dropdown::showYesNo', ['show_representative[show_phone]', config['show_representative']['show_phone']]) %}
+                            </td>
+                        </tr>
+                        <tr class="tab_bg_1">
+                            <td style="padding-left: 50px;">{{ __("Show email", 'gdprropa') }}</td>
+                            <td>
+                                {% do call('Dropdown::showYesNo', ['show_representative[show_email]', config['show_representative']['show_email']]) %}
+                            </td>
+                        </tr>
+                    </tbody></table>
+                </td>
+                <td width="50%">
+                    <table><tbody>
+                        <tr class="tab_bg_1">
+                            <td width="75%">{{ __("Show DPO", 'gdprropa') }}</td>
+                            <td width="25%">
+                                {% do call('Dropdown::showYesNo', ['show_dpo[show]', config['show_dpo']['show']]) %}
+                            </td>
+                        </tr>
+                        <tr class="tab_bg_1">
+                            <td style="padding-left: 50px;">{{ __("Show title", 'gdprropa') }}</td>
+                            <td>
+                                {% do call('Dropdown::showYesNo', ['show_dpo[show_title]', config['show_dpo']['show_title']]) %}
+                            </td>
+                        </tr>
+                        <tr class="tab_bg_1">
+                            <td style="padding-left: 50px;">{{ __("Show address", 'gdprropa') }}</td>
+                            <td>
+                                {% do call('Dropdown::showYesNo', ['show_dpo[show_address]', config['show_dpo']['show_address']]) %}
+                            </td>
+                        </tr>
+                        <tr class="tab_bg_1">
+                            <td style="padding-left: 50px;">{{ __("Show phone", 'gdprropa') }}</td>
+                            <td>
+                                {% do call('Dropdown::showYesNo', ['show_dpo[show_phone]', config['show_dpo']['show_phone']]) %}
+                            </td>
+                        </tr>
+                        <tr class="tab_bg_1">
+                            <td style="padding-left: 50px;">{{ __("Show email", 'gdprropa') }}</td>
+                            <td>
+                                {% do call('Dropdown::showYesNo', ['show_dpo[show_email]', config['show_dpo']['show_email']]) %}
+                            </td>
+                        </tr>
+                    </tbody></table>
+                </td>
+            </tr>
+        </tbody></table>
+    </td>
+</tr>

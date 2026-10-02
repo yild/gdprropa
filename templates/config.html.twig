@@ -1,0 +1,154 @@
+{#
+ # ---------------------------------------------------------------------
+ # GDPR Records of Processing Activities plugin for GLPI
+ # Copyright © 2020-2025 by Yild.
+ #
+ # https://github.com/yild/gdprropa
+ # ---------------------------------------------------------------------
+ #}
+
+{% import 'components/form/fields_macros.html.twig' as fields %}
+{% import 'components/form/basic_inputs_macros.html.twig' as inputs %}
+
+<div class="center">
+    <form method="post" action="./config.form.php">
+        {{ inputs.hidden('_glpi_csrf_token', csrf_token()) }}
+        {{ inputs.hidden('entities_id', 0) }}
+        {{ inputs.hidden('id', config_id) }}
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">{{ __("Manage GDPR RoPA configuration", 'gdprropa') }}</h3>
+            </div>
+            <div class="card-body">
+                {{ fields.largeTitle(__("System configuration", 'gdprropa')) }}
+
+                {{ fields.dropdownYesNo('system[keep_is_special_category_strict]', config.system.keep_is_special_category_strict, __("Keep 'is special category' strict", 'gdprropa')) }}
+
+                {{ fields.dropdownYesNo('system[limit_retention_contracttypes]', config.system.limit_retention_contracttypes, __("Limit retention contracts list to those selected in controller info", 'gdprropa')) }}
+
+                {{ fields.dropdownYesNo('system[remove_software_when_paper_only]', config.system.remove_software_when_paper_only, __("Remove sofrware when record storage medium set to Paper only if any was assigned previously", 'gdprropa')) }}
+
+                {{ fields.dropdownYesNo('system[allow_select_expired_contracts]', config.system.allow_select_expired_contracts, __("Allow add expired contract (show expired on dropdown list)", 'gdprropa')) }}
+
+                {{ fields.dropdownYesNo('system[allow_software_from_every_entity]', config.system.allow_software_from_every_entity, __("Allow add software from any entity", 'gdprropa')) }}
+
+                {{ fields.dropdownYesNo('system[allow_controllerinfo_from_ancestor]', config.system.allow_controllerinfo_from_ancestor, __("Allow retrieve controller info from ancestor entity (set as recursive) when current entity controller info is not set", 'gdprropa')) }}
+
+                {{ fields.largeTitle(__("PDF creating configuration", 'gdprropa')) }}
+
+                {{ fields.dropdownArrayField('print[codepage]', config.print.codepage, ['UTF-8', 'ISO-8859-1', 'ISO-8859-2'], __("Codepage", 'gdprropa')) }}
+
+                {{ fields.dropdownArrayField('print[font_name]', config.print.font_name, core_tcpdf_fonts, __("Font name", 'gdprropa')) }}
+
+                {% set font_size_field %}
+                    {% do call('Dropdown::showNumber', ['print[font_size]', {
+                        'value': config.print.font_size,
+                        'min': 8,
+                        'max': 16,
+                        'step': 1,
+                        'unit': 'pt',
+                    }]) %}
+                {% endset %}
+                {{ fields.field('print[font_size]', font_size_field, __("Font size", 'gdprropa')) }}
+
+                {% set margin_left_field %}
+                    {% do call('Dropdown::showNumber', ['print[margin_left]', {
+                        'value': config.print.margin_left,
+                        'min': 5,
+                        'max': 50,
+                        'unit': 'mm',
+                    }]) %}
+                {% endset %}
+                {{ fields.field('print[margin_left]', margin_left_field, __("Margin left", 'gdprropa')) }}
+
+                {% set margin_top_field %}
+                    {% do call('Dropdown::showNumber', ['print[margin_top]', {
+                        'value': config.print.margin_top,
+                        'min': 5,
+                        'max': 50,
+                        'unit': 'mm',
+                    }]) %}
+                {% endset %}
+                {{ fields.field('print[margin_top]', margin_top_field, __("Margin top", 'gdprropa')) }}
+
+                {% set margin_right_field %}
+                    {% do call('Dropdown::showNumber', ['print[margin_right]', {
+                        'value': config.print.margin_right,
+                        'min': 5,
+                        'max': 50,
+                        'unit': 'mm',
+                    }]) %}
+                {% endset %}
+                {{ fields.field('print[margin_right]', margin_right_field, __("Margin right", 'gdprropa')) }}
+
+                {% set margin_bottom_field %}
+                    {% do call('Dropdown::showNumber', ['print[margin_bottom]', {
+                        'value': config.print.margin_bottom,
+                        'min': 5,
+                        'max': 50,
+                        'unit': 'mm',
+                    }]) %}
+                {% endset %}
+                {{ fields.field('print[margin_bottom]', margin_bottom_field, __("Margin bottom", 'gdprropa')) }}
+
+                {% set margin_header_field %}
+                    {% do call('Dropdown::showNumber', ['print[margin_header]', {
+                        'value': config.print.margin_header,
+                        'min': 10,
+                        'max': 30,
+                        'unit': 'mm',
+                    }]) %}
+                {% endset %}
+                {{ fields.field('print[margin_header]', margin_header_field, __("Header margin (from top)", 'gdprropa')) }}
+
+                {% set margin_footer_field %}
+                    {% do call('Dropdown::showNumber', ['print[margin_footer]', {
+                        'value': config.print.margin_footer,
+                        'min': 10,
+                        'max': 30,
+                        'unit': 'mm',
+                    }]) %}
+                {% endset %}
+                {{ fields.field('print[margin_footer]', margin_footer_field, __("Footer margin (from bottom)", 'gdprropa')) }}
+
+                {{ fields.dropdownYesNo('print[logo_show]', config.print.logo_show, __("Show logo", 'gdprropa')) }}
+
+                {{ fields.textField('print[logo_image]', config.print.logo_image, __("Logo image filename (located in /plugins/gdprropa/images/)", 'gdprropa'), {
+                    maxlength: 254,
+                }) }}
+            </div>
+            <div class="card-footer d-flex justify-content-center">
+                {% if config_id > 0 %}
+                    {{ inputs.submit('update', _x('button', 'Save'), 1) }}
+                {% else %}
+                    {{ inputs.submit('add', _x('button', 'Save'), 1) }}
+                {% endif %}
+            </div>
+        </div>
+    </form>
+
+    <br><br>
+
+    <form method="post" action="./config.form.php">
+        {{ inputs.hidden('_glpi_csrf_token', csrf_token()) }}
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">{{ __("Install sample data", 'gdprropa') }}</h3>
+            </div>
+            <div class="card-body">
+                <p><strong>{{ __("Sample data will be installed for current active entity.", 'gdprropa') }}</strong></p>
+
+                {{ fields.checkboxField('install_categories_of_data_subjects', 1, __("Categories of data subjects", 'gdprropa')) }}
+                {{ fields.checkboxField('install_legal_bases', 1, __("Legal bases", 'gdprropa')) }}
+                {{ fields.checkboxField('install_security_measures', 1, __("Security measures", 'gdprropa')) }}
+                {{ fields.checkboxField('install_contract_types', 1, __("Contract types", 'gdprropa')) }}
+                {{ fields.checkboxField('install_personal_data_types', 1, __("Personal data types", 'gdprropa')) }}
+            </div>
+            <div class="card-footer d-flex justify-content-center">
+                {{ inputs.submit('sampledata', __("Install", 'gdprropa'), 1) }}
+            </div>
+        </div>
+    </form>
+</div>

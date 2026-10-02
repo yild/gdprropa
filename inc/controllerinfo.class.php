@@ -45,11 +45,9 @@ namespace GlpiPlugin\Gdprropa;
 
 use CommonDBChild;
 use CommonGLPI;
-use ContractType;
 use Entity;
-use Html;
+use Glpi\Application\View\TemplateRenderer;
 use Session;
-use User;
 
 class ControllerInfo extends CommonDBChild
 {
@@ -108,18 +106,13 @@ class ControllerInfo extends CommonDBChild
 
     public function showForEntity(Entity $entity, $options = []): void
     {
-        global $CFG_GLPI;
-
-        $colsize1 = '15%';
-        $colsize2 = '35%';
-        $colsize3 = '15%';
-        $colsize4 = '35%';
-
         $this->getFromDBByCrit(['entities_id' => $entity->fields['id']]);
 
         if (!isset($this->fields['id'])) {
             $this->fields['id'] = -1;
         }
+
+        $this->fields['entities_id'] = $entity->fields['id'];
 
         $canedit = $this->can($this->fields['id'], UPDATE);
 
@@ -130,138 +123,28 @@ class ControllerInfo extends CommonDBChild
             return;
         }
 
-        $options['canedit'] = $canedit;
-        $options['formtitle'] = __("Manage entity Controller information", 'gdprropa');
-
-        $this->initForm($this->fields['id'], $options);
-        $this->showFormHeader($options);
-
-        echo "<tr class='tab_bg_3'><td colspan='4'><center><strong>";
-        echo __("GDPR Article 30 1a", 'gdprropa');
-        echo "</strong></center></td></tr>";
-
-        echo "<tr class='tab_bg_2'><td width='$colsize1'>";
-        echo __("Legal representative", 'gdprropa');
-        echo "</td><td width='$colsize2'>";
-        User::dropdown([
-            'right' => 'all',
-            'name' => 'users_id_representative',
-            'value' => array_key_exists(
-                'users_id_representative',
-                $this->fields
-            ) ? $this->fields['users_id_representative'] : null
-        ]);
-
-        echo "</td><td width='$colsize3'>";
-        echo __("Data Protection Officer", 'gdprropa');
-        echo "</td><td  width='$colsize4'>";
-        User::dropdown([
-            'right' => 'all',
-            'name' => 'users_id_dpo',
-            'value' => array_key_exists('users_id_dpo', $this->fields) ? $this->fields['users_id_dpo'] : null
-        ]);
-        echo "</td></tr>";
-
-        echo "</td><td width='$colsize1'>";
-        echo __("Controller Name", 'gdprropa');
-        echo "</td><td colspan='3'>";
         if ($this->fields['id'] <= 0) {
             $this->fields['controllername'] = '';
         }
-        $controller_name = Html::cleanInputText($this->fields['controllername']);
-        echo "<input type='text' style='width:98%' maxlength=250 name='controllername' required value='" .
-            $controller_name . "'/>";
-        echo "</td></tr>";
 
-        echo "<tr class='tab_bg_3'><td colspan='4'><center><strong>";
-        echo __("Controller configuration - contract types", 'gdprropa');
-        echo "</strong></center></td></tr>";
+        $options['canedit'] = $canedit;
+        $options['formtitle'] = __("Manage entity Controller information", 'gdprropa');
+        $options['entities_id'] = $entity->fields['id'];
 
-        echo "<tr class='tab_bg_2'><td width='$colsize1'>";
-        echo __("Joint Controller Contract Type", 'gdprropa');
-        echo "</td><td width='$colsize2'>";
-        ContractType::dropdown([
-            'width' => '75%',
-            'name' => 'contracttypes_id_jointcontroller',
-            'value' => array_key_exists('contracttypes_id_jointcontroller', $this->fields) ?
-                $this->fields['contracttypes_id_jointcontroller'] : null
-        ]);
-        echo "</td><td width='$colsize3'>";
-        echo __("Processor Contract Type", 'gdprropa');
-        echo "</td><td width='$colsize4'>";
-        ContractType::dropdown([
-            'width' => '75%',
-            'name' => 'contracttypes_id_processor',
-            'value' => array_key_exists('contracttypes_id_processor', $this->fields) ?
-                $this->fields['contracttypes_id_processor'] : null
-        ]);
-        echo "</td></tr>";
+        $this->initForm($this->fields['id'], $options);
 
-        echo "<tr class='tab_bg_2'><td width='$colsize1'>";
-        echo __("Thirdparty Contract Type", 'gdprropa');
-        echo "</td><td width='$colsize2'>";
-        ContractType::dropdown([
-            'width' => '75%',
-            'name' => 'contracttypes_id_thirdparty',
-            'value' => array_key_exists('contracttypes_id_thirdparty', $this->fields) ?
-                $this->fields['contracttypes_id_thirdparty'] : null
-        ]);
-        echo "</td><td width='$colsize3'>";
-        echo __("Internal Contract Type", 'gdprropa');
-        echo "</td><td width='$colsize4'>";
-        ContractType::dropdown([
-            'width' => '75%',
-            'name' => 'contracttypes_id_internal',
-            'value' => array_key_exists('contracttypes_id_internal', $this->fields) ?
-                $this->fields['contracttypes_id_internal'] : null
-        ]);
-        echo "</td></tr>";
-
-        echo "<tr class='tab_bg_2'><td width='$colsize1'>";
-        echo __("Other Contract Type", 'gdprropa');
-        echo "</td><td width='$colsize2'>";
-        ContractType::dropdown([
-            'width' => '75%',
-            'name' => 'contracttypes_id_other',
-            'value' => array_key_exists('contracttypes_id_other', $this->fields) ?
-                $this->fields['contracttypes_id_other'] : null
-        ]);
-        echo "</td><td width='$colsize3'>";
-        echo "</td><td width='$colsize4'>";
-        echo "</td></tr>";
-
-        echo "<tr class='tab_bg_1'>";
-        echo "<td class='center' colspan='4'>";
-        echo "<input type='hidden' name='entities_id' value='" . $entity->fields['id'] . "'/>";
-        echo "</td></tr>";
-
-        $this->showFormButtons($options);
-        Html::closeForm();
-
-        if ((Session::haveRight('plugin_gdprropa_createpdf', CREATE))) {
-            echo "<div class='firstbloc'>";
-            echo "<form method='GET' action=\"" . $CFG_GLPI['root_doc'] . "/plugins/gdprropa/front/createpdf.php\">";
-            echo "<table class='tab_cadre_fixe' id='mainformtable'>";
-            echo "<tbody>";
-            echo "<tr class='headerRow'>";
-            echo "<th colspan='3' class=''>" . __('PDF creation settings', 'gdprropa') . "</th>";
-            echo "</tr>";
-
-            $_config = CreatePDF::getDefaultPrintOptions();
-            $_config['report_type'] = CreatePDF::REPORT_FOR_ENTITY;
-            CreatePDF::showConfigFormElements($_config);
-
-            echo "</table>";
-            echo "<input type='hidden' name='report_type' value=\"" . CreatePDF::REPORT_FOR_ENTITY . "\">";
-            echo "<input type='hidden' name='entities_id' value='" . $entity->fields['id'] . "'>";
-            echo "<input type='hidden' name='action' value=\"print\">";
-            echo "<input type='submit' class='submit' name='createpdf' value='" .
-                __("Create Controller RoPA PDF for Entity", 'gdprropa') . "' />";
-            Html::closeForm();
-            echo "</div>";
+        $config = null;
+        if (Session::haveRight('plugin_gdprropa_createpdf', CREATE)) {
+            $config = CreatePDF::getDefaultPrintOptions();
+            $config['report_type'] = CreatePDF::REPORT_FOR_ENTITY;
         }
 
-        echo "<p></p>";
+        TemplateRenderer::getInstance()->display('@gdprropa/controllerinfo.html.twig', [
+            'item'   => $this,
+            'params' => $options,
+            'entity' => $entity,
+            'config' => $config,
+        ]);
     }
 
     public static function getFirstControllerInfo($entity_id, $allow_from_ancestors = true)

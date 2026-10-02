@@ -1,0 +1,31 @@
+{#
+ # ---------------------------------------------------------------------
+ # GDPR Records of Processing Activities plugin for GLPI
+ # Copyright © 2020-2025 by Yild.
+ #
+ # https://github.com/yild/gdprropa
+ # ---------------------------------------------------------------------
+ #}
+
+<form name="form" method="GET" action="{{ config('root_doc') }}/plugins/gdprropa/front/createpdf.php" enctype="multipart/form-data">
+    <div class="spaced" id="tabsbody">
+        <table class="tab_cadre_fixe" id="mainformtable">
+            <tbody>
+                <tr class="headerRow">
+                    <th colspan="3" class="">{{ __("PDF creation settings", 'gdprropa') }}</th>
+                </tr>
+                {% include '@gdprropa/createpdf.config_elements.html.twig' with {
+                    config: config,
+                    report_single_record: report_single_record,
+                    is_gdprowner_plugin_active: is_gdprowner_plugin_active,
+                } only %}
+            </tbody>
+        </table>
+    </div>
+    <input type="hidden" name="report_type" value="{{ report_type }}">
+    {% if report_type == report_single_record %}
+        <input type="hidden" name="record_id" value="{{ record_id }}">
+    {% endif %}
+    <input type="hidden" name="action" value="print">
+    <input type="submit" class="submit" name="createpdf" value="{{ type_name }}">
+</form>
