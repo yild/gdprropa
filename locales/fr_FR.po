@@ -1,0 +1,769 @@
+# French translations for GDPRROPA package.
+# Copyright (C) 2020-2025 Yild
+# This file is distributed under the same license as the GDPRROPA package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: GDPRROPA 1.1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-15 23:52+0200\n"
+"PO-Revision-Date: 2026-10-01 15:00+0200\n"
+"Last-Translator: GDPRROPA contributors\n"
+"Language-Team: French\n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "GDPR Record of Processing Activities"
+msgstr "Registre RGPD des activités de traitement"
+
+msgid "Create PDF"
+msgstr "Créer un PDF"
+
+msgid "Legal basis"
+msgid_plural "Legal bases"
+msgstr[0] "Base légale"
+msgstr[1] "Bases légales"
+
+msgid "Undefined"
+msgstr "Non défini"
+
+msgid "GDPR Article"
+msgstr "Article du RGPD"
+
+msgid "Local law regulation"
+msgstr "Réglementation locale"
+
+msgid "International regulation"
+msgstr "Réglementation internationale"
+
+msgid "Controller internal regulation"
+msgstr "Réglementation interne du responsable de traitement"
+
+msgid "Other regulation"
+msgstr "Autre réglementation"
+
+msgid "Type"
+msgstr "Type"
+
+msgid "Personal Data Category"
+msgid_plural "Personal Data Categories"
+msgstr[0] "Catégorie de données personnelles"
+msgstr[1] "Catégories de données personnelles"
+
+msgid "Special category"
+msgstr "Catégorie particulière"
+
+msgid "Category of data subjects"
+msgid_plural "Categories of data subjects"
+msgstr[0] "Catégorie de personnes concernées"
+msgstr[1] "Catégories de personnes concernées"
+
+msgid "Add Category of Data Subjects"
+msgstr "Ajouter une catégorie de personnes concernées"
+
+msgid "GDPR Article 30 1c"
+msgstr "Article 30 1c du RGPD"
+
+msgid "Introduced in"
+msgstr "Introduit dans"
+
+msgid "Data Retention"
+msgstr "Conservation des données"
+
+msgid "Manage data retention"
+msgstr "Gérer la conservation des données"
+
+msgid "GDPR Article 30 1f"
+msgstr "Article 30 1f du RGPD"
+
+msgid "Retention regulated by"
+msgstr "Conservation régie par"
+
+msgid "Additional information"
+msgstr "Informations complémentaires"
+
+msgid "Contract name"
+msgstr "Nom du contrat"
+
+msgid "Until contract is valid"
+msgstr "Jusqu'à la validité du contrat"
+
+msgid "Period"
+msgstr "Durée"
+
+msgid "After contract is terminated"
+msgstr "Après la fin du contrat"
+
+msgid "Legal bases"
+msgstr "Bases légales"
+
+msgid "Not required"
+msgstr "Non requis"
+
+msgid "Contractual term"
+msgstr "Durée contractuelle"
+
+msgid "Other regulations"
+msgstr "Autres réglementations"
+
+msgid "Year"
+msgid_plural "Years"
+msgstr[0] "Année"
+msgstr[1] "Années"
+
+msgid "Month"
+msgid_plural "Months"
+msgstr[0] "Mois"
+msgstr[1] "Mois"
+
+msgid "Day"
+msgid_plural "Days"
+msgstr[0] "Jour"
+msgstr[1] "Jours"
+
+msgid "Hour"
+msgid_plural "Hours"
+msgstr[0] "Heure"
+msgstr[1] "Heures"
+
+msgid "Add a personal data category"
+msgstr "Ajouter une catégorie de données personnelles"
+
+msgid "Selected item is already on list."
+msgstr "L'élément sélectionné figure déjà dans la liste."
+
+msgid "Cannot add child item if parent is already on the list."
+msgstr "Impossible d'ajouter un élément enfant si le parent figure déjà dans la liste."
+
+msgid ""
+"Cannot add Parent item if child is already on the list.<br>Remove child "
+"items before adding parent."
+msgstr ""
+"Impossible d'ajouter un élément parent si un enfant figure déjà dans la liste."
+"<br>Supprimez les éléments enfants avant d'ajouter le parent."
+
+msgid "Any special category"
+msgstr "Toute catégorie particulière"
+
+msgid "GDPR Controller Info"
+msgstr "Informations sur le responsable de traitement RGPD"
+
+msgid "Controller information not set."
+msgstr "Informations sur le responsable de traitement non définies."
+
+msgid "Manage entity Controller information"
+msgstr "Gérer les informations sur le responsable de traitement de l'entité"
+
+msgid "GDPR Article 30 1a"
+msgstr "Article 30 1a du RGPD"
+
+msgid "Legal representative"
+msgstr "Représentant légal"
+
+msgid "Data Protection Officer"
+msgstr "Délégué à la protection des données"
+
+msgid "Controller Name"
+msgstr "Nom du responsable de traitement"
+
+msgid "Controller configuration - contract types"
+msgstr "Configuration du responsable de traitement - types de contrat"
+
+msgid "Joint Controller Contract Type"
+msgstr "Type de contrat de responsable conjoint"
+
+msgid "Processor Contract Type"
+msgstr "Type de contrat de sous-traitant"
+
+msgid "Thirdparty Contract Type"
+msgstr "Type de contrat de tiers"
+
+msgid "Internal Contract Type"
+msgstr "Type de contrat interne"
+
+msgid "Other Contract Type"
+msgstr "Autre type de contrat"
+
+msgid "PDF creation settings"
+msgstr "Paramètres de création du PDF"
+
+msgid "Create Controller RoPA PDF for Entity"
+msgstr "Créer le PDF du registre du responsable de traitement pour l'entité"
+
+msgid "Config"
+msgid_plural "Config"
+msgstr[0] "Configuration"
+msgstr[1] "Configuration"
+
+msgid "Manage GDPR RoPA configuration"
+msgstr "Gérer la configuration du registre RGPD"
+
+msgid "System configuration"
+msgstr "Configuration système"
+
+msgid "Keep 'is special category' strict"
+msgstr "Conserver le contrôle strict de « catégorie particulière »"
+
+msgid "Limit retention contracts list to those selected in controller info"
+msgstr ""
+"Limiter la liste des contrats de conservation à ceux sélectionnés dans les "
+"informations du responsable de traitement"
+
+msgid ""
+"Remove sofrware when record storage medium set to Paper only if any was "
+"assigned previously"
+msgstr ""
+"Supprimer les logiciels lorsque le support de stockage de l'enregistrement "
+"est défini sur « Papier uniquement » si des logiciels étaient précédemment "
+"associés"
+
+msgid "Allow add expired contract (show expired on dropdown list)"
+msgstr ""
+"Autoriser l'ajout de contrats expirés (afficher les contrats expirés dans la "
+"liste déroulante)"
+
+msgid "Allow add software from any entity"
+msgstr "Autoriser l'ajout de logiciels de n'importe quelle entité"
+
+msgid ""
+"Allow retrieve controller info from ancestor entity (set as recursive) when "
+"current entity controller info is not set"
+msgstr ""
+"Autoriser la récupération des informations du responsable de traitement "
+"depuis une entité parente (définie comme récursive) lorsque celles de "
+"l'entité courante ne sont pas définies"
+
+msgid "PDF creating configuration"
+msgstr "Configuration de création du PDF"
+
+msgid "Codepage"
+msgstr "Page de code"
+
+msgid "Font name"
+msgstr "Nom de la police"
+
+msgid "Font size"
+msgstr "Taille de la police"
+
+msgid "Margin left"
+msgstr "Marge gauche"
+
+msgid "Margin top"
+msgstr "Marge supérieure"
+
+msgid "Margin right"
+msgstr "Marge droite"
+
+msgid "Margin bottom"
+msgstr "Marge inférieure"
+
+msgid "Header margin (from top)"
+msgstr "Marge de l'en-tête (depuis le haut)"
+
+msgid "Footer margin (from bottom)"
+msgstr "Marge du pied de page (depuis le bas)"
+
+msgid "Show logo"
+msgstr "Afficher le logo"
+
+msgid "Logo image filename (located in /plugins/gdprropa/images/)"
+msgstr "Nom du fichier image du logo (situé dans /plugins/gdprropa/images/)"
+
+msgid "Install sample data"
+msgstr "Installer des données d'exemple"
+
+msgid "Sample data will be installed for current active entity."
+msgstr "Les données d'exemple seront installées pour l'entité active actuelle."
+
+msgid "Categories of data subjects"
+msgstr "Catégories de personnes concernées"
+
+msgid "Security measures"
+msgstr "Mesures de sécurité"
+
+msgid "Contract types"
+msgstr "Types de contrat"
+
+msgid "Personal data types"
+msgstr "Types de données personnelles"
+
+msgid "Install"
+msgstr "Installer"
+
+msgid "Employees"
+msgstr "Employés"
+
+msgid "Company employees"
+msgstr "Employés de l'entreprise"
+
+msgid "Consumers"
+msgstr "Consommateurs"
+
+msgid "Company consumers/clients"
+msgstr "Consommateurs/clients de l'entreprise"
+
+msgid "N/A"
+msgstr "N/A"
+
+msgid "Article 6-1a"
+msgstr "Article 6-1a"
+
+msgid ""
+"The data subject has given consent to the processing of his or her personal "
+"data for one or more specific purposes."
+msgstr ""
+"La personne concernée a consenti au traitement de ses données à caractère "
+"personnel pour une ou plusieurs finalités spécifiques."
+
+msgid "Article 6-1b"
+msgstr "Article 6-1b"
+
+msgid ""
+"Processing is necessary for the performance of a contract to which the data "
+"subject is party or in order to take steps at the request of the data "
+"subject prior to entering into a contract."
+msgstr ""
+"Le traitement est nécessaire à l'exécution d'un contrat auquel la personne "
+"concernée est partie ou à l'exécution de mesures précontractuelles prises à "
+"la demande de celle-ci."
+
+msgid "Article 6-1c"
+msgstr "Article 6-1c"
+
+msgid ""
+"Processing is necessary for compliance with a legal obligation to which the "
+"controller is subject."
+msgstr ""
+"Le traitement est nécessaire au respect d'une obligation légale à laquelle le "
+"responsable du traitement est soumis."
+
+msgid "Article 6-1d"
+msgstr "Article 6-1d"
+
+msgid ""
+"Processing is necessary in order to protect the vital interests of the data "
+"subject or of another natural person."
+msgstr ""
+"Le traitement est nécessaire à la sauvegarde des intérêts vitaux de la "
+"personne concernée ou d'une autre personne physique."
+
+msgid "Article 6-1e"
+msgstr "Article 6-1e"
+
+msgid ""
+"Processing is necessary for the performance of a task carried out in the "
+"public interest or in the exercise of official authority vested in the "
+"controller."
+msgstr ""
+"Le traitement est nécessaire à l'exécution d'une mission d'intérêt public ou "
+"relevant de l'exercice de l'autorité publique dont est investi le "
+"responsable du traitement."
+
+msgid "Article 6-1f"
+msgstr "Article 6-1f"
+
+msgid ""
+"Processing is necessary for the purposes of the legitimate interests pursued "
+"by the controller or by a third party, except where such interests are "
+"overridden by the interests or fundamental rights and freedoms of the data "
+"subject which require protection of personal data, in particular where the "
+"data subject is a child."
+msgstr ""
+"Le traitement est nécessaire aux fins des intérêts légitimes poursuivis par "
+"le responsable du traitement ou par un tiers, à moins que ne prévalent les "
+"intérêts ou les libertés et droits fondamentaux de la personne concernée qui "
+"exigent une protection des données à caractère personnel, notamment lorsque "
+"la personne concernée est un enfant."
+
+msgid "DPO was appointed"
+msgstr "Un DPO a été désigné"
+
+msgid "Data Protection Officer was appointed"
+msgstr "Le délégué à la protection des données a été désigné"
+
+msgid "Computers Usage Policy"
+msgstr "Politique d'utilisation des ordinateurs"
+
+msgid "Internal policy regarding usage of computers"
+msgstr "Politique interne relative à l'utilisation des ordinateurs"
+
+msgid "24h Security"
+msgstr "Sécurité 24h/24"
+
+msgid "Securtiy personel on site for 24h"
+msgstr "Personnel de sécurité présent sur site 24h/24"
+
+msgid "UPS system"
+msgstr "Système onduleur"
+
+msgid "Uninterruptidle power supply is installed"
+msgstr "Une alimentation sans interruption est installée"
+
+msgid "Antivirus App"
+msgstr "Application antivirus"
+
+msgid "Computers have Antivirus app installed"
+msgstr "Les ordinateurs disposent d'une application antivirus installée"
+
+msgid "Firewall"
+msgstr "Pare-feu"
+
+msgid "Firewall protects internal network"
+msgstr "Le pare-feu protège le réseau interne"
+
+msgid "GDPR Joint Controller Contract"
+msgstr "Contrat de responsable conjoint RGPD"
+
+msgid "GDPR Processor Contract"
+msgstr "Contrat de sous-traitant RGPD"
+
+msgid "GDPR Thirdparty Contract"
+msgstr "Contrat de tiers RGPD"
+
+msgid "GDPR Internal Contract"
+msgstr "Contrat interne RGPD"
+
+msgid "GDPR Other Contract"
+msgstr "Autre contrat RGPD"
+
+msgid "Employees record"
+msgstr "Registre des employés"
+
+msgid "Employee personal data"
+msgstr "Données personnelles des employés"
+
+msgid "First name"
+msgstr "Prénom"
+
+msgid "Employee first name"
+msgstr "Prénom de l'employé"
+
+msgid "Last name"
+msgstr "Nom"
+
+msgid "Employee last name"
+msgstr "Nom de l'employé"
+
+msgid "Personal ID"
+msgstr "Identifiant personnel"
+
+msgid "Employee personal ID"
+msgstr "Identifiant personnel de l'employé"
+
+msgid "Processing activity"
+msgstr "Activité de traitement"
+
+msgid "Purpose (GDPR Article 30 1b)"
+msgstr "Finalité (Article 30 1b du RGPD)"
+
+msgid "Storage medium"
+msgstr "Support de stockage"
+
+msgid "PIA required"
+msgstr "AIPD requise"
+
+msgid "Consent required"
+msgstr "Consentement requis"
+
+msgid "First entry date"
+msgstr "Date de première saisie"
+
+msgid "Consent storage"
+msgstr "Stockage du consentement"
+
+msgid "Paper only"
+msgstr "Papier uniquement"
+
+msgid "Paper and electronic"
+msgstr "Papier et électronique"
+
+msgid "Electronic only"
+msgstr "Électronique uniquement"
+
+msgid "Purpose"
+msgstr "Finalité"
+
+msgid "PIA status"
+msgstr "Statut de l'AIPD"
+
+msgid "Add Legal Basis"
+msgstr "Ajouter une base légale"
+
+msgid "Contract"
+msgid_plural "Contracts"
+msgstr[0] "Contrat"
+msgstr[1] "Contrats"
+
+msgid "Joint controller contract type not set."
+msgstr "Type de contrat de responsable conjoint non défini."
+
+msgid "Processor contract type not set."
+msgstr "Type de contrat de sous-traitant non défini."
+
+msgid "Third country/internalional organization contract type not set."
+msgstr ""
+"Type de contrat de pays tiers/organisation internationale non défini."
+
+msgid "Internal contract type not set."
+msgstr "Type de contrat interne non défini."
+
+msgid "Other contract type not set."
+msgstr "Autre type de contrat non défini."
+
+#, php-format
+msgid "Go to %s tab at %s and assign contract type."
+msgstr "Accédez à l'onglet %s de %s et attribuez un type de contrat."
+
+msgid "Add Joint Controller/Processor"
+msgstr "Ajouter un responsable conjoint/sous-traitant"
+
+msgid "GDPR Article 30 1d, 1e"
+msgstr "Article 30 1d, 1e du RGPD"
+
+msgid "Joint controller contract"
+msgstr "Contrat de responsable conjoint"
+
+msgid "Processor contract"
+msgstr "Contrat de sous-traitant"
+
+msgid "Thirdparty contract"
+msgstr "Contrat de tiers"
+
+msgid "Internal contract"
+msgstr "Contrat interne"
+
+msgid "Other contract"
+msgstr "Autre contrat"
+
+msgid "Name (select from list)"
+msgstr "Nom (sélectionner dans la liste)"
+
+msgid "Software"
+msgstr "Logiciel"
+
+msgid "Add a software"
+msgstr "Ajouter un logiciel"
+
+msgid "Show 'introduced in'"
+msgstr "Afficher « introduit dans »"
+
+msgid "Show comments"
+msgstr "Afficher les commentaires"
+
+msgid "Show deleted records"
+msgstr "Afficher les enregistrements supprimés"
+
+msgid "Show legal representative and DPO for each record"
+msgstr "Afficher le représentant légal et le DPO pour chaque enregistrement"
+
+msgid "Show record owner information"
+msgstr "Afficher les informations du propriétaire de l'enregistrement"
+
+msgid "Show assets owners"
+msgstr "Afficher les propriétaires des actifs"
+
+msgid "Show full personal data category list"
+msgstr "Afficher la liste complète des catégories de données personnelles"
+
+msgid "Show expired contracts"
+msgstr "Afficher les contrats expirés"
+
+msgid "Show contracts types header if empty list"
+msgstr "Afficher l'en-tête des types de contrat si la liste est vide"
+
+msgid "Show 'is deleted' information in info header"
+msgstr "Afficher l'information « supprimé » dans l'en-tête d'information"
+
+msgid "Show print date/time"
+msgstr "Afficher la date/heure d'impression"
+
+msgid "Page orientation"
+msgstr "Orientation de la page"
+
+msgid "Portrait"
+msgstr "Portrait"
+
+msgid "Landscape"
+msgstr "Paysage"
+
+msgid "Show record status in info header"
+msgstr "Afficher le statut de l'enregistrement dans l'en-tête d'information"
+
+msgid "Show legal representative"
+msgstr "Afficher le représentant légal"
+
+msgid "Show title"
+msgstr "Afficher la civilité"
+
+msgid "Show address"
+msgstr "Afficher l'adresse"
+
+msgid "Show phone"
+msgstr "Afficher le téléphone"
+
+msgid "Show email"
+msgstr "Afficher l'e-mail"
+
+msgid "Show DPO"
+msgstr "Afficher le DPO"
+
+msgid "Controller name not set."
+msgstr "Nom du responsable de traitement non défini."
+
+msgid "Controller"
+msgstr "Responsable de traitement"
+
+msgid "Not found"
+msgstr "Introuvable"
+
+#, php-format
+msgid "print date/time: %1s"
+msgstr "date/heure d'impression : %1s"
+
+msgid "List of processing activities for which entity deals with personal data"
+msgstr ""
+"Liste des activités de traitement pour lesquelles l'entité traite des "
+"données personnelles"
+
+msgid "There are no activities."
+msgstr "Aucune activité."
+
+msgid "No"
+msgstr "Non"
+
+msgid "Description of the activity"
+msgstr "Description de l'activité"
+
+msgid "Record of Processing Activities"
+msgstr "Registre des activités de traitement"
+
+#, php-format
+msgid "GDPR Records of Processing Activity for entity:<br/>%1s"
+msgstr "Registre RGPD des activités de traitement pour l'entité :<br/>%1s"
+
+msgid "GDPR Records of Processing Activity"
+msgstr "Registre RGPD des activités de traitement"
+
+msgid "Legal representative not set."
+msgstr "Représentant légal non défini."
+
+msgid "DPO not set."
+msgstr "DPO non défini."
+
+msgid "The record is marked as DELETED"
+msgstr "L'enregistrement est marqué comme SUPPRIMÉ"
+
+#, php-format
+msgid "Record status: %s"
+msgstr "Statut de l'enregistrement : %s"
+
+msgid "Sheet for GDPR Record of Processing Activities"
+msgstr "Fiche du registre RGPD des activités de traitement"
+
+msgid "Processing Activity information"
+msgstr "Informations sur l'activité de traitement"
+
+msgid "Name"
+msgstr "Nom"
+
+msgid "Owner"
+msgstr "Propriétaire"
+
+msgid "No legal basis act(s)."
+msgstr "Aucune base légale."
+
+msgid "Content"
+msgstr "Contenu"
+
+msgid "No data subjects category/ies assigned."
+msgstr "Aucune catégorie de personnes concernées attribuée."
+
+msgid "Data retention not set."
+msgstr "Conservation des données non définie."
+
+#, php-format
+msgid "Data retention: %1$s after contract is terminated"
+msgstr "Conservation des données : %1$s après la fin du contrat"
+
+#, php-format
+msgid "Contract name/number: %1$s %2$s"
+msgstr "Nom/numéro du contrat : %1$s %2$s"
+
+#, php-format
+msgid "Begin date: %1$s"
+msgstr "Date de début : %1$s"
+
+#, php-format
+msgid "Comment: %1$s"
+msgstr "Commentaire : %1$s"
+
+msgid "Contract info"
+msgstr "Informations sur le contrat"
+
+msgid "Supplier"
+msgstr "Fournisseur"
+
+#, php-format
+msgid "Name: %1$s"
+msgstr "Nom : %1$s"
+
+msgid "Data retention is not required"
+msgstr "La conservation des données n'est pas requise"
+
+msgid "Contracts related to processing activity"
+msgstr "Contrats liés à l'activité de traitement"
+
+msgid "None."
+msgstr "Aucun."
+
+msgid "Expiration"
+msgstr "Expiration"
+
+msgid "Begin date:"
+msgstr "Date de début :"
+
+msgid "None assigned."
+msgstr "Aucun attribué."
+
+msgid "Complete name"
+msgstr "Nom complet"
+
+msgid "Software not assigned."
+msgstr "Aucun logiciel attribué."
+
+msgid "Publisher"
+msgstr "Éditeur"
+
+msgid "Not assigned"
+msgstr "Non attribué"
+
+msgid "None implemented."
+msgstr "Aucune mise en œuvre."
+
+msgid "Security Measure"
+msgid_plural "Security Measures"
+msgstr[0] "Mesure de sécurité"
+msgstr[1] "Mesures de sécurité"
+
+msgid "Add Security Measure"
+msgstr "Ajouter une mesure de sécurité"
+
+msgid "GDPR Article 30 1g"
+msgstr "Article 30 1g du RGPD"
+
+msgid "Organizational"
+msgstr "Organisationnelle"
+
+msgid "Physical"
+msgstr "Physique"
+
+msgid "IT"
+msgstr "Informatique"
+
+msgid "Create PDF for all records within active entity and its sons"
+msgstr ""
+"Créer un PDF pour tous les enregistrements de l'entité active et de ses "
+"sous-entités"
