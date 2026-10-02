@@ -271,22 +271,27 @@ class ControllerInfo extends CommonDBChild
 
         if (!$allow_from_ancestors) {
             return $controllerInfo;
-        } else {
-            if (
-                (isset($controllerInfo->fields['id'])) &&
-                (
-                    $controllerInfo->fields['is_recursive'] &&
-                    ($controllerInfo->fields['entities_id'] == $entity_id)
-                )
-            ) {
-                return $controllerInfo;
-            } else {
-                $ancestors = getAncestorsOf('glpi_entities', $entity_id);
-                foreach (array_reverse($ancestors) as $ancestor) {
-                    return ControllerInfo::getFirstControllerInfo($ancestor);
-                }
-            }
         }
+
+        if (
+            (isset($controllerInfo->fields['id'])) &&
+            (
+                $controllerInfo->fields['is_recursive'] &&
+                ($controllerInfo->fields['entities_id'] == $entity_id)
+            )
+        ) {
+            return $controllerInfo;
+        }
+
+        $ancestors = getAncestorsOf('glpi_entities', $entity_id);
+        foreach (array_reverse($ancestors) as $ancestor) {
+            if ((int) $ancestor === (int) $entity_id) {
+                continue;
+            }
+            return ControllerInfo::getFirstControllerInfo($ancestor);
+        }
+
+        return $controllerInfo;
     }
 
     public static function getContractTypes($entity_id, $compact = false): array
