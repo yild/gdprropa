@@ -1,0 +1,58 @@
+{#
+ # ---------------------------------------------------------------------
+ # GDPR Records of Processing Activities plugin for GLPI
+ # Copyright © 2020-2025 by Yild.
+ #
+ # https://github.com/yild/gdprropa
+ # ---------------------------------------------------------------------
+ #}
+
+{% extends "generic_show_form.html.twig" %}
+{% import 'components/form/fields_macros.html.twig' as fields %}
+
+{% block form_fields %}
+    {{ fields.textField('name', item.fields['name'], __("Processing activity", 'gdprropa'), {
+        required: true,
+        maxlength: 250,
+    }) }}
+
+    {{ fields.textareaField('content', item.fields['content'], __("Purpose (GDPR Article 30 1b)", 'gdprropa'), {
+        required: true,
+        maxlength: 1000,
+        rows: 3,
+        full_width: true,
+    }) }}
+
+    {{ fields.dropdownField('State', 'states_id', item.fields['states_id'], __('Status'), {
+        entity: item.fields['entities_id']|default(-1),
+    }) }}
+
+    {{ fields.dropdownArrayField('storage_medium', item.fields['storage_medium'], storage_mediums, __("Storage medium", 'gdprropa')) }}
+
+    {{ fields.dropdownYesNo('pia_required', item.fields['pia_required'], __("PIA required", 'gdprropa')) }}
+    <div id="gdprropa-pia-status" class="col-12 col-sm-6 mb-2">
+        {% include '@gdprropa/record.pia_status.html.twig' with {
+            pia_required: item.fields['pia_required'],
+            pia_status: item.fields['pia_status'],
+            pia_statuses: pia_statuses,
+        } only %}
+    </div>
+
+    {{ fields.dropdownYesNo('consent_required', item.fields['consent_required'], __("Consent required", 'gdprropa')) }}
+    <div id="gdprropa-consent-storage" class="col-12 glpi-full-width mb-2">
+        {% include '@gdprropa/record.consent_storage.html.twig' with {
+            consent_required: item.fields['consent_required'],
+            consent_storage: item.fields['consent_storage'],
+        } only %}
+    </div>
+
+    {{ fields.dateField('first_entry_date', item.fields['first_entry_date'], __("First entry date", 'gdprropa'), {
+        clearable: true,
+    }) }}
+
+    {{ fields.textareaField('additional_info', item.fields['additional_info'], __("Additional information", 'gdprropa'), {
+        maxlength: 1000,
+        rows: 3,
+        full_width: true,
+    }) }}
+{% endblock %}

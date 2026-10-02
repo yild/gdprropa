@@ -1,0 +1,29 @@
+{#
+ # ---------------------------------------------------------------------
+ # GDPR Records of Processing Activities plugin for GLPI
+ # Copyright © 2020-2025 by Yild.
+ #
+ # https://github.com/yild/gdprropa
+ # ---------------------------------------------------------------------
+ #}
+
+{% import 'components/form/fields_macros.html.twig' as fields %}
+
+<div class="ms-3">
+    {% if contract_types_not_set_info|length %}
+        {{ contract_types_not_set_info|raw }}
+    {% endif %}
+
+    <label class="form-label">{{ __("Contract name", 'gdprropa') }}</label>
+    {% do call('GlpiPlugin\\Gdprropa\\Record_Contract::getContractsDropdown', [contracts_dropdown_options]) %}
+
+    {{ fields.dropdownYesNo('contract_until_is_valid', contract_until_is_valid, __("Until contract is valid", 'gdprropa')) }}
+
+    <div id="gdprropa-retention-contract-after">
+        {% if show_contract_until_inputs %}
+            {% include '@gdprropa/record_retention.contract_until.html.twig' with {
+                data: contract_until_data,
+            } only %}
+        {% endif %}
+    </div>
+</div>

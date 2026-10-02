@@ -43,13 +43,15 @@
 
 namespace GlpiPlugin\Gdprropa;
 
-use Ajax;
 use CommonDBTM;
 use CommonGLPI;
 use Dropdown;
+use Glpi\Application\View\TemplateRenderer;
 
 class Record_Retention extends CommonDBTM
 {
+    public static $rightname = 'plugin_gdprropa_record';
+
     public $dohistory = true;
 
     public const RETENTION_TYPE_NONE = 0;
@@ -105,8 +107,6 @@ class Record_Retention extends CommonDBTM
 
     public function showForRecord(Record $record, $withtemplate = 0): bool
     {
-        global $CFG_GLPI;
-
         if ($record->fields['id']) {
             $this->getFromDBByCrit(['plugin_gdprropa_records_id' => $record->fields['id']]);
         }
@@ -120,59 +120,20 @@ class Record_Retention extends CommonDBTM
         }
 
         $canedit = Record::canUpdate() || ($this->fields['id'] <= 0 && Record::canCreate());
-        $rand = mt_rand(1, mt_getrandmax());
 
+        $options = [];
         $options['canedit'] = $canedit;
         $options['formtitle'] = __("Manage data retention", 'gdprropa');
 
         $this->initForm($this->fields['id'], $options);
-        $this->showFormHeader($options);
-
-        echo "<tr class='tab_bg_3'><td colspan='4'><center><strong>";
-        echo __("GDPR Article 30 1f", 'gdprropa');
-        echo "</strong></center></td></tr>";
-
-        echo "<tr class='tab_bg_2'><td width='16%'>";
-        echo __("Retention regulated by", 'gdprropa');
-        echo "</td><td width='84%'>";
-        $rand = self::dropdownTypes(
-            'type',
-            array_key_exists('type', $this->fields) ? $this->fields['type'] : null
-        );
-        echo "</td></tr>";
-        echo "<tr><td colspan='2'></td></tr>";
-
-        echo "<tr><td></td>";
-        echo "<td>";
-
-        $contract_id = 0;
-        if (array_key_exists('contracts_id', $this->fields)) {
-            $contract_id = $this->fields['contracts_id'];
-        }
 
         $this->fields['entities_id'] = $record->fields['entities_id'];
         $this->fields['is_record_recursive'] = $record->fields['is_recursive'];
 
-        $params = [
-            'type' => '__VALUE__',
-            'contracts_id' => $contract_id,
-            'id' => $this->fields['id'],
-            'entities_id' => $record->fields['entities_id'],
-            'is_record_recursive' => $record->fields['is_recursive'],
-        ];
-
-        Ajax::updateItemOnSelectEvent(
-            "dropdown_type$rand",
-            'retention_type_div',
-            $CFG_GLPI['root_doc'] . '/plugins/gdprropa/ajax/record_retention_retention_type_dropdown.php',
-            $params
-        );
-
-        echo "<div id='retention_type_div'>";
+        $type_form_html = '';
         if ($record->fields['id'] < 1 || array_key_exists('type', $this->fields)) {
+            ob_start();
             switch ($this->fields['type']) {
-                case Record_Retention::RETENTION_TYPE_NONE:
-                    break;
                 case Record_Retention::RETENTION_TYPE_CONTRACT:
                     self::showContractInputs($this->fields);
                     break;
@@ -183,161 +144,90 @@ class Record_Retention extends CommonDBTM
                     self::showOtherInputs($this->fields);
                     break;
             }
+            $type_form_html = ob_get_clean();
         }
-        echo "</div>";
 
-        echo "</td></tr>";
-
-        echo "<tr><td></td><td>" . __("Additional information", 'gdprropa') . "<br>";
-        echo "";
-        $additional_info = '';
-        if (array_key_exists('additional_info', $this->fields)) {
-            $additional_info = $this->fields['additional_info'];
-        }
-        echo "<textarea style='width:98%' name='additional_info' maxlength='1000' rows='3'>" .
-            $additional_info . "</textarea>";
-        echo "</td></tr>";
-
-        echo "<tr class='tab_bg_1'>";
-        echo "<td class='center' colspan='4'>";
-        echo "<input type='hidden' name='plugin_gdprropa_records_id' value='" . $record->fields['id'] . "' />";
-        echo "<input type='hidden' name='is_record_recursive' value='" . $record->fields['is_recursive'] . "' />";
-        echo "</td></tr>";
-
-        $this->showFormButtons($options);
+        TemplateRenderer::getInstance()->display('@gdprropa/record_retention.html.twig', [
+            'item'            => $this,
+            'params'          => $options,
+            'record'          => $record,
+            'current_type'    => array_key_exists('type', $this->fields) ? $this->fields['type'] : null,
+            'retention_types' => self::getAllTypesArray(),
+            'type_form_html'  => $type_form_html,
+        ]);
 
         return true;
     }
 
     public static function showContractInputs($data = []): void
     {
-        global $CFG_GLPI;
-
-        $rand = mt_rand(1, mt_getrandmax());
-
-        $value = null;
-        if (array_key_exists('contracts_id', $data)) {
-            $value = $data['contracts_id'];
-        }
-
-        echo "<table width='100%' border='0' cellpadding='0' cellspacing='0'>";
-        echo "<tr>";
-        echo "<td width='24%'>" . __("Contract name", 'gdprropa') . "</td>";
-        echo "<td width='76%'>";
+        $value = array_key_exists('contracts_id', $data) ? $data['contracts_id'] : null;
 
         $contractTypes = [];
+        $contract_types_not_set_info = '';
 
         if (Config::getConfig('system', 'limit_retention_contracttypes')) {
-            $contractTypes = ControllerInfo::getContractTypes($data['entities_id']);
-
-            $info = Record_Contract::showContractTypesNotSetInfo($contractTypes, $data['entities_id']);
-            if (!empty($info)) {
-                echo $info;
-            }
+            $entities_id = $data['entities_id'] ?? 0;
+            $contractTypes = ControllerInfo::getContractTypes($entities_id);
+            $contract_types_not_set_info = Record_Contract::showContractTypesNotSetInfo($contractTypes, $entities_id);
         }
 
-        Record_Contract::getContractsDropdown([
-            'name' => 'contracts_id',
-            'entity' => $data['is_record_recursive']
-                ? getSonsOf('glpi_entities', $data['entities_id']) : $data['entities_id'],
-            'entity_sons' => !$data['is_record_recursive'],
-            'expired' => Config::getConfig('system', 'allow_select_expired_contracts'),
-            'nochecklimit' => true,
-            'width' => '100%',
-            'value' => $value,
-            'contracttypes' => array_values($contractTypes),
-            'used' => [],
-        ]);
-
-        echo "</td></tr>";
-        echo "<tr>";
-        echo "<td>" . __("Until contract is valid", 'gdprropa') . "</td>";
-        echo "<td>";
-
-        $value = null;
+        $contract_until_is_valid = null;
         if (array_key_exists('contract_until_is_valid', $data)) {
-            $value = $data['contract_until_is_valid'];
-        } else {
-            if ($data['id'] < 0) {
-                $value = 0;
-            }
+            $contract_until_is_valid = $data['contract_until_is_valid'];
+        } elseif (isset($data['id']) && $data['id'] < 0) {
+            $contract_until_is_valid = 0;
         }
 
-        $rand = Dropdown::showYesNo('contract_until_is_valid', $value);
-        echo "</td></tr>";
-        echo "<tr>";
-        echo "<td colspan='2' style='padding-left: 50px;'>";
-
-        $params = ['checked' => '__VALUE__'];
-        Ajax::updateItemOnEvent(
-            "dropdown_contract_until_is_valid$rand",
-            'retention_contract_after',
-            $CFG_GLPI['root_doc'] . '/plugins/gdprropa/ajax/record_retention_contract_until_is_valid.php',
-            $params
+        $show_contract_until_inputs = (
+            (isset($data['id']) && $data['id'] < 1) ||
+            (array_key_exists('contract_until_is_valid', $data) && ($data['contract_until_is_valid'] != 1))
         );
 
-        echo "<div id='retention_contract_after'>";
-        if (
-            ($data['id'] < 1) ||
-            (array_key_exists('contract_until_is_valid', $data) && ($data['contract_until_is_valid'] != 1))
-        ) {
-            self::showContractUntilIsValidInputs($data);
-        }
-        echo "</div>";
-        echo "</tr></tr>";
-        echo "</table>";
+        $entities_id = $data['entities_id'] ?? 0;
+        $is_recursive = !empty($data['is_record_recursive']);
+
+        TemplateRenderer::getInstance()->display('@gdprropa/record_retention.contract.html.twig', [
+            'contract_types_not_set_info' => $contract_types_not_set_info,
+            'contracts_dropdown_options'  => [
+                'name'          => 'contracts_id',
+                'entity'        => $is_recursive ? getSonsOf('glpi_entities', $entities_id) : $entities_id,
+                'entity_sons'   => !$is_recursive,
+                'expired'       => Config::getConfig('system', 'allow_select_expired_contracts'),
+                'nochecklimit'  => true,
+                'width'         => '100%',
+                'value'         => $value,
+                'contracttypes' => array_values($contractTypes),
+                'used'          => [],
+            ],
+            'contract_until_is_valid'     => $contract_until_is_valid,
+            'contract_until_data'         => $data,
+            'show_contract_until_inputs'  => $show_contract_until_inputs,
+        ]);
     }
 
     public static function showContractUntilIsValidInputs($data = []): void
     {
-        echo "<table width='100%' border='0' cellpadding='0' cellspacing='0'>";
-        echo "<tr>";
-        echo "<td>" . __("Period", 'gdprropa') . "</td>";
-
-        echo "<td>";
-
-        $value = null;
-        if (array_key_exists('contract_retention_value', $data)) {
-            $value = $data['contract_retention_value'];
-        }
-        echo "<input type='number' name='contract_retention_value' value='$value'>&nbsp;&nbsp;";
-
-        $params = [];
-        if (array_key_exists('contract_retention_scale', $data)) {
-            $params['value'] = $data['contract_retention_scale'];
-        }
-        self::dropdownRetentionScheduleScales('contract_retention_scale', $params);
-        echo "</td>";
-        echo "</tr>";
-
-        echo "<tr>";
-        echo "<td>" . __("After contract is terminated", 'gdprropa') . "</td>";
-        echo "<td>";
-
-        $value = null;
-        if (array_key_exists('contract_after_end_of', $data)) {
-            $value = $data['contract_after_end_of'];
-        }
-        Dropdown::showYesNo('contract_after_end_of', $value);
-        echo "</td></tr>";
-        echo "</table>";
+        TemplateRenderer::getInstance()->display('@gdprropa/record_retention.contract_until.html.twig', [
+            'data' => $data,
+        ]);
     }
 
     public static function showLegalBasesInputs($data = []): void
     {
-        $value = null;
-        if (array_key_exists('plugin_gdprropa_legalbasisacts_id', $data)) {
-            $value = $data['plugin_gdprropa_legalbasisacts_id'];
-        }
+        $value = array_key_exists('plugin_gdprropa_legalbasisacts_id', $data)
+            ? $data['plugin_gdprropa_legalbasisacts_id'] : null;
 
-        echo __("Legal bases", 'gdprropa') . "&nbsp;&nbsp;&nbsp;";
-        LegalBasisAct::dropdown([
-            'name' => 'plugin_gdprropa_legalbasisacts_id',
-            'value' => $value,
-            'entity' => $data['is_record_recursive']
-                ? getSonsOf('glpi_entities', $data['entities_id']) : $data['entities_id'],
-            //         'entity_sons' => $data['is_record_recursive'],
-            'used' => [],
+        $entities_id = $data['entities_id'] ?? 0;
+        $is_recursive = !empty($data['is_record_recursive']);
+
+        TemplateRenderer::getInstance()->display('@gdprropa/record_retention.legalbasis.html.twig', [
+            'legalbasis_options' => [
+                'name'   => 'plugin_gdprropa_legalbasisacts_id',
+                'value'  => $value,
+                'entity' => $is_recursive ? getSonsOf('glpi_entities', $entities_id) : $entities_id,
+                'used'   => [],
+            ],
         ]);
     }
 

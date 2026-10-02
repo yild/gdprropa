@@ -1,0 +1,13 @@
+{#
+ # ---------------------------------------------------------------------
+ # GDPR Records of Processing Activities plugin for GLPI
+ # Copyright © 2020-2025 by Yild.
+ #
+ # https://github.com/yild/gdprropa
+ # ---------------------------------------------------------------------
+ #}
+
+<div class="ms-3">
+    <label class="form-label">{{ _n("Legal basis", "Legal bases", 1, 'gdprropa') }}</label>
+    {% do call('GlpiPlugin\\Gdprropa\\LegalBasisAct::dropdown', [legalbasis_options]) %}
+</div>

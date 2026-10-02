@@ -74,9 +74,9 @@ if (isset($_POST['add'])) {
     $record->checkGlobal(READ);
 
     if (Session::getCurrentInterface() == 'central') {
-        Html::header(Record::getTypeName(), $_SERVER['PHP_SELF'], 'management', Menu::class);
+        Html::header(Record::getTypeName(), Record::getSearchURL(false), 'management', Menu::class);
     } else {
-        Html::helpHeader(Record::getTypeName(), $_SERVER['PHP_SELF']);
+        Html::helpHeader(Record::getTypeName(), Record::getSearchURL(false));
     }
 
     $record->display($_GET);

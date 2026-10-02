@@ -1,0 +1,16 @@
+{#
+ # ---------------------------------------------------------------------
+ # GDPR Records of Processing Activities plugin for GLPI
+ # Copyright © 2020-2025 by Yild.
+ #
+ # https://github.com/yild/gdprropa
+ # ---------------------------------------------------------------------
+ #}
+
+{% if pia_required %}
+    <label class="form-label">{{ __('Status') }}</label>
+    {% do call('Dropdown::showFromArray', ['pia_status', pia_statuses, {
+        value: pia_status,
+        width: '100%',
+    }]) %}
+{% endif %}

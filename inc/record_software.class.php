@@ -49,7 +49,7 @@ use CommonGLPI;
 use DBmysqlIterator;
 use Dropdown;
 use Entity;
-use Html;
+use Glpi\Application\View\TemplateRenderer;
 use Manufacturer;
 use Software;
 use SoftwareCategory;
@@ -142,135 +142,60 @@ class Record_Software extends CommonDBRelation
             $used[$data['id']] = $data['id'];
         }
 
-        if ($canedit) {
-            echo "<div class='firstbloc'>";
-            echo "<form name='ticketitem_form$rand' id='ticketitem_form$rand' method='post'
-                    action='" . Toolbox::getItemTypeFormURL(__class__) . "'>";
-            echo "<input type='hidden' name='plugin_gdprropa_records_id' value='$id' />";
+        if (Config::getConfig('system', 'allow_software_from_every_entity')) {
+            $entity = 0;
+            $entity_sons = true;
+        } else {
+            $entity = $record->fields['is_recursive']
+                ? getSonsOf('glpi_entities', $record->fields['entities_id']) : $record->fields['entities_id'];
+            $entity_sons = $record->fields['is_recursive'];
+        }
 
-            echo "<table class='tab_cadre_fixe'>";
-            echo "<tr class='tab_bg_2'><th>" . __("Add a software", 'gdprropa') . "</th></tr>";
-            echo "<tr class='tab_bg_1'><td width='80%' class='center'>";
-
-            if (Config::getConfig('system', 'allow_software_from_every_entity')) {
-                $entity = 0;
-                $entity_sons = true;
-            } else {
-                $entity = $record->fields['is_recursive']
-                    ? getSonsOf('glpi_entities', $record->fields['entities_id']) : $record->fields['entities_id'];
-                $entity_sons = $record->fields['is_recursive'];
+        $entries = [];
+        foreach ($items_list as $data) {
+            $link = $data['name'];
+            if ($_SESSION['glpiis_ids_visible'] || empty($data['name'])) {
+                $link = sprintf(__("%1\$s (%2\$s)"), $link, $data['id']);
             }
+            $entries[] = [
+                'itemtype'  => static::class,
+                'id'        => $data['linkid'],
+                'name'      => '<a href="' . htmlescape(Software::getFormURLWithID($data['id'])) . '">' . htmlescape($link) . '</a>',
+                'entity'    => Dropdown::getDropdownName(Entity::getTable(), $data['entities_id']),
+                'publisher' => Dropdown::getDropdownName(Manufacturer::getTable(), $data['manufacturers_id']),
+                'category'  => Dropdown::getDropdownName(SoftwareCategory::getTable(), $data['softwarecategories_id']),
+            ];
+        }
 
-            Software::dropdown([
+        TemplateRenderer::getInstance()->display('@gdprropa/relation_list.html.twig', [
+            'canedit'               => $canedit,
+            'form_url'              => Toolbox::getItemTypeFormURL(static::class),
+            'record_id'             => $id,
+            'add_title'             => __("Add a software", 'gdprropa'),
+            'article'               => null,
+            'add_dropdown_callable' => Software::class . '::dropdown',
+            'add_dropdown_options'  => [
                 'addicon' => Software::canCreate(),
-                'name' => 'softwares_id',
-                'entity' => $entity_sons,
-                //            'entity_sons' => $entity_sons,
-                'used' => $used,
-            ]);
-//         Software::dropdown([
-//            'addicon'  => Software::canCreate(),
-//            'name' => 'softwares_id',
-//            'entity' => $entity,
-//            'entity_sons' => $entity_sons,
-//            'used' => $used,
-//         ]);
-            echo "</td></tr><tr><td width='20%' class='center'>";
-            echo "<input type='submit' name='add' value=\"" . _sx('button', 'Add') . "\" class='submit'>";
-            echo "</td></tr>";
-            echo "</table>";
-            Html::closeForm();
-            echo "</div>";
-        }
-
-        if ($iterator) {
-            echo "<div class='spaced'>";
-            if ($canedit && $number) {
-                $massive_action_form_id = 'mass' . str_replace('\\', '', static::class) . $rand;
-                Html::openMassiveActionsForm($massive_action_form_id);
-                $massive_action_params = [
-                    'container' => 'mass' . __class__ . $rand,
-                    'num_displayed' => min($_SESSION['glpilist_limit'], $number)
-                ];
-                Html::showMassiveActions($massive_action_params);
-            }
-            echo "<table class='tab_cadre_fixehov'>";
-
-            $header_begin = "<tr>";
-            $header_top = '';
-            $header_bottom = '';
-            $header_end = '';
-
-            if ($canedit && $number) {
-                $header_begin .= "<th width='10'>";
-                $header_top .= Html::getCheckAllAsCheckbox('mass' . __class__ . $rand);
-                $header_bottom .= Html::getCheckAllAsCheckbox('mass' . __class__ . $rand);
-                $header_end .= "</th>";
-            }
-
-            $header_end .= "<th>" . __("Name") . "</th>";
-            $header_end .= "<th>" . __("Entity") . "</th>";
-            $header_end .= "<th>" . __("Publisher") . "</th>";
-            $header_end .= "<th>" . __("Category") . "</th>";
-            $header_end .= "</tr>";
-
-            echo $header_begin . $header_top . $header_end;
-
-            foreach ($items_list as $data) {
-                echo "<tr class='tab_bg_1'>";
-
-                if ($canedit && $number) {
-                    echo "<td width='10'>";
-                    Html::showMassiveActionCheckBox(__class__, $data['linkid']);
-                    echo "</td>";
-                }
-
-                $link = $data['name'];
-                if ($_SESSION['glpiis_ids_visible'] || empty($data['name'])) {
-                    $link = sprintf(__("%1\$s (%2\$s)"), $link, $data['id']);
-                }
-                $name = "<a href=\"" . Software::getFormURLWithID($data['id']) . "\">" . $link . "</a>";
-
-                echo "<td class='left" . (isset($data['is_deleted']) && $data['is_deleted'] ? " tab_bg_2_2'" : "'");
-                echo ">" . $name . "</td>";
-
-                echo "<td class='left'>";
-                echo Dropdown::getDropdownName
-                    (
-                        Entity::getTable(),
-                        $data['entities_id']
-                    ) . "</td>";
-
-                echo "<td class='center'>";
-                echo Dropdown::getDropdownName
-                    (
-                        Manufacturer::getTable(),
-                        $data['manufacturers_id']
-                    ) . "</td>";
-
-                echo "<td class='center'>";
-                echo Dropdown::getDropdownName
-                    (
-                        SoftwareCategory::getTable(),
-                        $data['softwarecategories_id']
-                    ) . "</td>";
-
-                echo "</tr>";
-            }
-
-            if ($iterator->count() > 10) {
-                echo $header_begin . $header_bottom . $header_end;
-            }
-            echo "</table>";
-
-            if ($canedit && $number) {
-                $massive_action_params['ontop'] = false;
-                Html::showMassiveActions($massive_action_params);
-                Html::closeForm();
-            }
-
-            echo "</div>";
-        }
+                'name'    => 'softwares_id',
+                'entity'  => $entity_sons,
+                'used'    => $used,
+            ],
+            'columns'    => [
+                'name'      => __("Name"),
+                'entity'    => __("Entity"),
+                'publisher' => __("Publisher"),
+                'category'  => __("Category"),
+            ],
+            'formatters' => ['name' => 'raw_html'],
+            'entries'    => $entries,
+            'total_number' => $number,
+            'showmassiveactions' => ($canedit && $number),
+            'massiveactionparams' => [
+                'container'     => 'mass' . str_replace('\\', '', static::class) . $rand,
+                'num_displayed' => min($_SESSION['glpilist_limit'], $number),
+            ],
+            'datatable_id' => 'datatable_' . str_replace('\\', '', static::class) . $rand,
+        ]);
 
         return true;
     }
@@ -292,11 +217,19 @@ class Record_Software extends CommonDBRelation
         ]);
     }
 
-    public static function getListForItem(CommonDBTM $item): DBmysqlIterator
+    public static function getListForItem(CommonDBTM $item, int $start = 0, int $limit = 0, array $order = []): DBmysqlIterator
     {
         global $DB;
 
         $params = static::getListForItemParams($item, true);
+
+        if ($limit > 0) {
+            $params['START'] = $start;
+            $params['LIMIT'] = $limit;
+        }
+        if (count($order)) {
+            $params['ORDER'] = $order;
+        }
 
         return $DB->request($params);
     }

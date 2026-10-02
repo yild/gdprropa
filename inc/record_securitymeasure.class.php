@@ -49,7 +49,7 @@ use CommonGLPI;
 use DBmysqlIterator;
 use Dropdown;
 use Entity;
-use Html;
+use Glpi\Application\View\TemplateRenderer;
 use Toolbox;
 
 class Record_SecurityMeasure extends CommonDBRelation
@@ -114,123 +114,70 @@ class Record_SecurityMeasure extends CommonDBRelation
             $used[$data['id']] = $data['id'];
         }
 
-        if ($canedit) {
-            echo "<div class='firstbloc'>";
-            echo "<form name='ticketitem_form$rand' id='ticketitem_form$rand' method='post'
-                action='" . Toolbox::getItemTypeFormURL(__class__) . "'>";
-            echo "<input type='hidden' name='plugin_gdprropa_records_id' value='$id' />";
+        $entries = [];
+        foreach ($items_list as $data) {
+            $link = $data['name'];
+            if ($_SESSION['glpiis_ids_visible'] || empty($data['name'])) {
+                $link = sprintf(__("%1\$s (%2\$s)"), $link, $data['id']);
+            }
+            $types = SecurityMeasure::getAllTypesArray();
+            $entries[] = [
+                'itemtype' => static::class,
+                'id'       => $data['linkid'],
+                'name'     => '<a href="' . htmlescape(SecurityMeasure::getFormURLWithID($data['id'])) . '">' . htmlescape($link) . '</a>',
+                'type'     => $types[$data['type']] ?? '',
+                'entity'   => Dropdown::getDropdownName(Entity::getTable(), $data['entities_id']),
+                'comment'  => $data['comment'],
+            ];
+        }
 
-            echo "<table class='tab_cadre_fixe'>";
-            echo "<tr class='tab_bg_2'><th>" . __("Add Security Measure", 'gdprropa') . "</th></tr>";
-            echo "<tr class='tab_bg_3'><td><center><strong>";
-            echo __("GDPR Article 30 1g", 'gdprropa');
-            echo "</strong></center></td></tr>";
-            echo "<tr class='tab_bg_1'><td width='80%' class='center'>";
-
-            SecurityMeasure::dropdown([
-                'addicon' => SecurityMeasure::canCreate(),
-                'name' => 'plugin_gdprropa_securitymeasures_id',
-                'entity' => $record->fields['entities_id'],
+        TemplateRenderer::getInstance()->display('@gdprropa/relation_list.html.twig', [
+            'canedit'               => $canedit,
+            'form_url'              => Toolbox::getItemTypeFormURL(static::class),
+            'record_id'             => $id,
+            'add_title'             => __("Add Security Measure", 'gdprropa'),
+            'article'               => __("GDPR Article 30 1g", 'gdprropa'),
+            'add_dropdown_callable' => SecurityMeasure::class . '::dropdown',
+            'add_dropdown_options'  => [
+                'addicon'     => SecurityMeasure::canCreate(),
+                'name'        => 'plugin_gdprropa_securitymeasures_id',
+                'entity'      => $record->fields['entities_id'],
                 'entity_sons' => false,
-                'used' => $used,
-            ]);
-            echo "</td></tr><tr><td width='20%' class='center'>";
-            echo "<input type='submit' name='add' value=\"" . _sx('button', 'Add') . "\" class='submit'>";
-            echo "</td></tr>";
-            echo "</table>";
-            Html::closeForm();
-            echo "</div>";
-        }
-
-        if ($iterator) {
-            echo "<div class='spaced'>";
-            if ($canedit && $number) {
-                $massive_action_form_id = 'mass' . str_replace('\\', '', static::class) . $rand;
-                Html::openMassiveActionsForm($massive_action_form_id);
-                $massive_action_params = [
-                    'container' => 'mass' . __class__ . $rand,
-                    'num_displayed' => min($_SESSION['glpilist_limit'], $number)
-                ];
-                Html::showMassiveActions($massive_action_params);
-            }
-            echo "<table class='tab_cadre_fixehov'>";
-
-            $header_begin = "<tr>";
-            $header_top = '';
-            $header_bottom = '';
-            $header_end = '';
-
-            if ($canedit && $number) {
-                $header_begin .= "<th width='10'>";
-                $header_top .= Html::getCheckAllAsCheckbox('mass' . __class__ . $rand);
-                $header_bottom .= Html::getCheckAllAsCheckbox('mass' . __class__ . $rand);
-                $header_end .= "</th>";
-            }
-
-            $header_end .= "<th>" . __("Name") . "</th>";
-            $header_end .= "<th>" . __("Type", 'gdprropa') . "</th>";
-            $header_end .= "<th>" . __("Introduced in", 'gdprropa') . "</th>";
-            $header_end .= "<th>" . __("Comment") . "</th>";
-            $header_end .= "</tr>";
-
-            echo $header_begin . $header_top . $header_end;
-
-            foreach ($items_list as $data) {
-                echo "<tr class='tab_bg_1'>";
-
-                if ($canedit && $number) {
-                    echo "<td width='10'>";
-                    Html::showMassiveActionCheckBox(__class__, $data['linkid']);
-                    echo "</td>";
-                }
-
-                $link = $data['name'];
-                if ($_SESSION['glpiis_ids_visible'] || empty($data['name'])) {
-                    $link = sprintf(__("%1\$s (%2\$s)"), $link, $data['id']);
-                }
-                $name = "<a href=\"" .
-                    SecurityMeasure::getFormURLWithID($data['id']) . "\">" . $link . "</a>";
-
-                echo "<td class='left" . (isset($data['is_deleted']) && $data['is_deleted'] ? " tab_bg_2_2'" : "'");
-                echo ">" . $name . "</td>";
-
-                $types = SecurityMeasure::getAllTypesArray();
-
-                echo "<td class='center'>" . $types[$data['type']] . " </td>";
-
-                echo "<td class='left'>";
-                echo Dropdown::getDropdownName(
-                    Entity::getTable(),
-                    $data['entities_id']
-                );
-                echo "</td>";
-
-                echo "<td class='center'>" . $data['comment'] . "</td>";
-                echo "</tr>";
-            }
-
-            if ($iterator->count() > 10) {
-                echo $header_begin . $header_bottom . $header_end;
-            }
-            echo "</table>";
-
-            if ($canedit && $number) {
-                $massive_action_params['ontop'] = false;
-                Html::showMassiveActions($massive_action_params);
-                Html::closeForm();
-            }
-
-            echo "</div>";
-        }
+                'used'        => $used,
+            ],
+            'columns'    => [
+                'name'    => __("Name"),
+                'type'    => __("Type", 'gdprropa'),
+                'entity'  => __("Introduced in", 'gdprropa'),
+                'comment' => __("Comment"),
+            ],
+            'formatters' => ['name' => 'raw_html'],
+            'entries'    => $entries,
+            'total_number' => $number,
+            'showmassiveactions' => ($canedit && $number),
+            'massiveactionparams' => [
+                'container'     => 'mass' . str_replace('\\', '', static::class) . $rand,
+                'num_displayed' => min($_SESSION['glpilist_limit'], $number),
+            ],
+            'datatable_id' => 'datatable_' . str_replace('\\', '', static::class) . $rand,
+        ]);
 
         return true;
     }
 
-    public static function getListForItem(CommonDBTM $item): DBmysqlIterator
+    public static function getListForItem(CommonDBTM $item, int $start = 0, int $limit = 0, array $order = []): DBmysqlIterator
     {
         global $DB;
 
         $params = static::getListForItemParams($item, true);
+
+        if ($limit > 0) {
+            $params['START'] = $start;
+            $params['LIMIT'] = $limit;
+        }
+        if (count($order)) {
+            $params['ORDER'] = $order;
+        }
 
         return $DB->request($params);
     }
